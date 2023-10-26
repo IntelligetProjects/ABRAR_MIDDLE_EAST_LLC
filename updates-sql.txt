@@ -7,13 +7,3 @@ ALTER TABLE `v3items` ADD `cost_center_id` INT(11) NOT NULL DEFAULT '1';
 ALTER TABLE `v3suppliers` ADD `cost_center_id` INT(11) NOT NULL DEFAULT '1';
 ALTER TABLE `v3purchase_orders` ADD `cost_center_id` INT(11) NOT NULL DEFAULT '1';
 ALTER TABLE `v3payroll` ADD `cost_center_id` INT(11) NOT NULL DEFAULT '1';
-
-
-"cost_center_id" => $this->login_user->cost_center_id,
-
-
-  //add filter by cost center id
-        if($this->login_user->cost_center_id > 0){
-            $cost_center_id = $this->login_user->cost_center_id;
-            $where .= " AND $clients_table.cost_center_id = $cost_center_id";
-        }
