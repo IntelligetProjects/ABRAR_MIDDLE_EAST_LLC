@@ -90,7 +90,7 @@ class Crud_model extends CI_Model {
         }
 
         //add cost center id if the table has it
-        if($this->has_cost_center){
+        if($this->has_cost_center && !$id){
             $data["cost_center_id"] = $this->login_user->cost_center_id;
         }
 

@@ -42,10 +42,13 @@ class Invoice_items_model extends Crud_model {
     function get_item_suggestion($keyword = "") {
         $items_table = $this->db->dbprefix('items');
         
+        $user_cost_center_id = $this->login_user->cost_center_id;
+
 
         $sql = "SELECT $items_table.title
         FROM $items_table
         WHERE $items_table.deleted=0  AND $items_table.title LIKE '%$keyword%'
+        AND $items_table.cost_center_id = $user_cost_center_id
         LIMIT 10 
         ";
         return $this->db->query($sql)->result();
@@ -55,11 +58,13 @@ class Invoice_items_model extends Crud_model {
 
         $items_table = $this->db->dbprefix('items');
         
+        $user_cost_center_id = $this->login_user->cost_center_id;
 
         $sql = "SELECT $items_table.*
         FROM $items_table
         -- WHERE $items_table.deleted=0  AND $items_table.title LIKE '%$item_name%'
         WHERE $items_table.deleted=0  AND $items_table.title = '$item_name'
+        AND $items_table.cost_center_id = $user_cost_center_id
         ORDER BY id DESC LIMIT 1
         ";
         
