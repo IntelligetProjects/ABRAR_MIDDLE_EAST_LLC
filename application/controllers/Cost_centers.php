@@ -96,9 +96,9 @@ class Cost_centers extends MY_Controller {
 
     private function _make_row($data) {
 
-        $op = [];
+        $op = "";
         if($this->can_edit()){
-           $op =  modal_anchor(get_uri("cost_centers/modal_form"), "<i class='fa fa-pencil'></i>", array("class" => "edit", "title" => lang('edit_cost_center'), "data-post-id" => $data->id));
+           $op .=  modal_anchor(get_uri("cost_centers/modal_form"), "<i class='fa fa-pencil'></i>", array("class" => "edit", "title" => lang('edit_cost_center'), "data-post-id" => $data->id));
         }
 
         if($this->can_delete($data->id)){
@@ -112,11 +112,12 @@ class Cost_centers extends MY_Controller {
     }
 
     private function can_edit(){
-        if ($this->login_user->user_type == "staff") {
-            if ($this->login_user->is_admin) {
-                return true;
-            }
-        }
+        return false;
+        // if ($this->login_user->user_type == "staff") {
+        //     if ($this->login_user->is_admin) {
+        //         return true;
+        //     }
+        // }
     }
 
     private function can_delete($id){

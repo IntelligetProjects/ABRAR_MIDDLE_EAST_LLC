@@ -6,7 +6,7 @@ class Invoices_model extends Crud_model {
 
     function __construct() {
         $this->table = 'invoices';
-        parent::__construct($this->table,true);
+        parent::__construct($this->table,true, true);
         $this->init_activity_log($this->table, $this->table);
     }
 
@@ -115,7 +115,7 @@ class Invoices_model extends Crud_model {
         }
 
         //add filter by cost center id
-        if($this->login_user->cost_center_id > 0){
+        if( !can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0 ){
             $cost_center_id = $this->login_user->cost_center_id;
             $where .= " AND $invoices_table.cost_center_id = $cost_center_id";
         }

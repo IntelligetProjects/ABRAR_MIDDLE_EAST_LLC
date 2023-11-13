@@ -33,8 +33,9 @@
 
     if ($estimate_total_summary->estimate_subtotal && (!$estimate_total_summary->discount_total || ($estimate_total_summary->discount_total !== 0 && $estimate_total_summary->discount_type == "before_tax"))) {
         //when there is discount and type is before tax or no discount
-        echo $discount_row;
-        if($estimate_status == "draft") {
+        if(isset($discount_row)) echo $discount_row;
+
+        if(isset($discount_change) && $estimate_status == "draft") {
             echo $discount_change;
         }
     }

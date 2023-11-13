@@ -438,6 +438,7 @@ class Expenses extends MY_Controller {
 
     //prepare a row of expnese list
     private function _make_row($data, $custom_fields) {
+        set_row_data_currency_rate($data->currency_rate_at_creation); //SET CURRENCY RATE
 
         $description = $data->description;
         if ($data->project_title) {
@@ -554,6 +555,7 @@ class Expenses extends MY_Controller {
 
         $row_data[] = $rowe;
 
+        unset_row_data_currency_rate(); //UNSET CURRENCY RATE
         return $row_data;
     }
 

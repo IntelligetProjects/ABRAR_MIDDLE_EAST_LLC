@@ -354,6 +354,8 @@ class Estimates extends MY_Controller {
     /* prepare a row of estimate list table */
 
     private function _make_row($data, $custom_fields) {
+        set_row_data_currency_rate($data->currency_rate_at_creation); //SET CURRENCY RATE
+
         $estimate_url = "";
         if ($this->login_user->user_type == "staff") {
             $estimate_url = anchor(get_uri("estimates/view/" . $data->id), get_estimate_id($data->id));
@@ -396,6 +398,7 @@ class Estimates extends MY_Controller {
 
         $row_data[] = $rowe;
 
+        unset_row_data_currency_rate(); //UNSET CURRENCY RATE
         return $row_data;
     }
 
@@ -441,12 +444,14 @@ class Estimates extends MY_Controller {
 
     function view($estimate_id = 0) {
         $this->access_allowed_members();
-
+        
         if ($estimate_id) {
-
             $view_data = get_estimate_making_data($estimate_id);
 
             if ($view_data) {
+                set_row_data_currency_rate($view_data['estimate_info']->currency_rate_at_creation); //SET CURRENCY RATE
+                // var_dump($view_data['estimate_info']->currency_rate_at_creation);
+                // die();
                 $view_data['estimate_status_label'] = $this->_get_estimate_status_label($view_data["estimate_info"]);
                 $view_data['estimate_status'] = $this->_get_estimate_status_label($view_data["estimate_info"], false);
 
@@ -459,6 +464,8 @@ class Estimates extends MY_Controller {
                 $view_data["estimate_id"] = $estimate_id;
 
                 $this->template->rander("estimates/view", $view_data);
+                
+               
             } else {
                 show_404();
             }

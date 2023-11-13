@@ -73,6 +73,7 @@ class Transactions extends MY_Controller
 
     private function _make_row($data)
     {
+        set_row_data_currency_rate($data->currency_rate_at_creation); //SET CURRENCY RATE
 
         $cr_amount = round($data->credit, 3);
         $dr_amount = round($data->debit, 3);
@@ -153,6 +154,7 @@ class Transactions extends MY_Controller
 
         $row_data[] = $rowe;
 
+        unset_row_data_currency_rate(); //UNSET CURRENCY RATE
         return $row_data;
     }
 

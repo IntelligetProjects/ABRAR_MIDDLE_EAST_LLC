@@ -1575,7 +1575,7 @@ class Projects extends MY_Controller {
 
 
     private function _make_row($data, $custom_fields) {
-
+        set_row_data_currency_rate($data->currency_rate_at_creation); //SET CURRENCY RATE
 
 
         $progress = $data->total_points ? round(($data->completed_points / $data->total_points) * 100) : 0;
@@ -1715,7 +1715,7 @@ class Projects extends MY_Controller {
         $row_data[] = $optoins;
 
 
-
+        unset_row_data_currency_rate(); //UNSET CURRENCY RATE
         return $row_data;
 
     }

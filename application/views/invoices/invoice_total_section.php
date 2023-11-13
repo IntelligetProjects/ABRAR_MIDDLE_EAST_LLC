@@ -46,7 +46,7 @@
     if ($invoice_total_summary->invoice_subtotal && ($invoice_total_summary->discount_total || !$invoice_total_summary->discount_total || ($invoice_total_summary->discount_total !== 0 && $invoice_total_summary->discount_type == "before_tax"))) {
         //when there is discount and type is before tax or no discount
         echo $discount_row;
-        if($approval_status == "not_approved") {
+        if(isset($discount_change) && $approval_status == "not_approved") {
             echo $discount_change;
         }
     }

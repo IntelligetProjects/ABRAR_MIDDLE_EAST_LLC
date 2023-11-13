@@ -1,16 +1,19 @@
 <?php
 
-class Clients_model extends Crud_model {
+class Clients_model extends Crud_model
+{
 
     private $table = null;
 
-    function __construct() {
+    function __construct()
+    {
         $this->table = 'clients';
-        parent::__construct($this->table,true);
+        parent::__construct($this->table, true);
         $this->init_activity_log($this->table, $this->table);
     }
 
-    function get_details($options = array()) {
+    function get_details($options = array())
+    {
         $clients_table = $this->db->dbprefix('clients');
         $projects_table = $this->db->dbprefix('projects');
         $users_table = $this->db->dbprefix('users');
@@ -70,7 +73,7 @@ class Clients_model extends Crud_model {
 
 
         //add filter by cost center id
-        if($this->login_user->cost_center_id > 0){
+        if ( !can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0) {
             $cost_center_id = $this->login_user->cost_center_id;
             $where .= " AND $clients_table.cost_center_id = $cost_center_id";
         }
@@ -116,7 +119,8 @@ class Clients_model extends Crud_model {
         WHERE $clients_table.deleted=0 $where";
         return $this->db->query($sql);
     }
-    function get_sales_retuen_sum($client_id){
+    function get_sales_retuen_sum($client_id)
+    {
         $sale_return_items_table = $this->db->dbprefix('sale_return_items');
         $sale_returns_table = $this->db->dbprefix('sale_returns');
         $purchase_order_items_table = $this->db->dbprefix('invoice_items');
@@ -138,13 +142,13 @@ class Clients_model extends Crud_model {
        LEFT JOIN (SELECT $taxes_table.* FROM $taxes_table) AS tax_table2 ON tax_table2.id = $purchase_order_items_table.tax_id2
 
        WHERE $sale_return_items_table.deleted=0 AND $sale_returns_table.client_id =$client_id AND $sale_returns_table.deleted=0";
-    //    WHERE $sale_return_items_table.deleted=0 AND $sale_return_items_table.sale_return_id=$purchase_order_id AND $sale_returns_table.deleted=0";
-       $item = $this->db->query($item_sql)->row();
+        //    WHERE $sale_return_items_table.deleted=0 AND $sale_return_items_table.sale_return_id=$purchase_order_id AND $sale_returns_table.deleted=0";
+        $item = $this->db->query($item_sql)->row();
 
         $result = new stdClass();
         $result->purchase_order_subtotal = $item->purchase_order_subtotal;
-        $result->tax_name = /*$estimate->tax_name*/lang("tax");
-        $result->tax_name2 = /*$estimate->tax_name2*/lang("tax2");
+        $result->tax_name = /*$estimate->tax_name*/ lang("tax");
+        $result->tax_name2 = /*$estimate->tax_name2*/ lang("tax2");
 
         $purchase_order_subtotal = $result->purchase_order_subtotal;
 
@@ -158,13 +162,14 @@ class Clients_model extends Crud_model {
         // $discount_percentage = empty($total_invoice) ? 0 : $discount/$total_invoice;
         $result->item_discount = $item->item_discount;
         // $result->discount = number_format($discount_percentage * $result->purchase_order_subtotal, 3, ".", "");
-        $result->discount = number_format( $item->item_discount, 3, ".", "");
+        $result->discount = number_format($item->item_discount, 3, ".", "");
 
         $result->total = number_format($result->purchase_order_total + $result->tax  - $result->discount, 3, ".", "");
 
         return $result;
     }
-    function get_payments_sum($client_id = 0){
+    function get_payments_sum($client_id = 0)
+    {
         $invoice_payments_table = $this->db->dbprefix('invoice_payments');
         $invoices_table = $this->db->dbprefix('invoices');
 
@@ -175,13 +180,14 @@ class Clients_model extends Crud_model {
         $total_payment = $this->db->query($payment_sql)->row();
         return $total_payment;
     }
-    function get_invoices_sum($client_id = 0) {
+    function get_invoices_sum($client_id = 0)
+    {
         $invoice_items_table = $this->db->dbprefix('invoice_items');
         $invoice_payments_table = $this->db->dbprefix('invoice_payments');
         $invoices_table = $this->db->dbprefix('invoices');
         $clients_table = $this->db->dbprefix('clients');
         $taxes_table = $this->db->dbprefix('taxes');
- 
+
         $item_sql = "SELECT SUM(IF($invoice_items_table.discount_amount_type='percentage',$invoice_items_table.total*$invoice_items_table.discount_amount/100,$invoice_items_table.discount_amount)) AS item_discount ,SUM($invoice_items_table.total) AS invoice_subtotal, SUM($invoice_items_table.total*tax_table.percentage*0.01) AS tax,SUM(tax_table.percentage*0.01) AS pure_tax, SUM($invoice_items_table.total*tax_table2.percentage*0.01) AS tax2,
         SUM(($invoice_items_table.total-IF($invoice_items_table.discount_amount_type='percentage',$invoice_items_table.total*$invoice_items_table.discount_amount/100,$invoice_items_table.discount_amount))*tax_table.percentage*0.01) AS tax_after_discount
         FROM $invoice_items_table
@@ -191,10 +197,11 @@ class Clients_model extends Crud_model {
         WHERE $invoice_items_table.deleted=0 AND $invoice_items_table.invoice_id=$invoices_table.id AND $invoices_table.deleted=0 AND $invoices_table.client_id=$client_id";
         $item = $this->db->query($item_sql)->row();
 
-        // $payment_sql = "SELECT SUM($invoice_payments_table.amount) AS total_paid
-        // FROM $invoice_payments_table
-        // WHERE $invoice_payments_table.deleted=0 AND $invoice_payments_table.invoice_id=$invoices_table.id  AND $invoice_payments_table.status= 'approved'";
-        // $payment = $this->db->query($payment_sql)->row();
+        $payment_sql = "SELECT SUM($invoice_payments_table.amount) AS total_paid
+        FROM $invoice_payments_table
+        LEFT JOIN $invoices_table ON $invoice_payments_table.invoice_id=$invoices_table.id
+        WHERE $invoice_payments_table.deleted=0 AND $invoice_payments_table.status= 'approved'";
+        $payment = $this->db->query($payment_sql)->row();
 
         $invoice_sql = "SELECT $invoices_table.*, tax_table.percentage AS tax_percentage, tax_table.title AS tax_name,
             tax_table2.percentage AS tax_percentage2, tax_table2.title AS tax_name2
@@ -210,32 +217,32 @@ class Clients_model extends Crud_model {
 
         $result = new stdClass();
         $result->invoice_subtotal = $item->invoice_subtotal;
-        $result->tax_percentage = $invoice->tax_percentage;
-        $result->tax_percentage2 = $invoice->tax_percentage2;
-         $result->tax_name = /*$estimate->tax_name*/lang("tax");
-        $result->tax_name2 = /*$estimate->tax_name2*/lang("tax2");
+        $result->tax_percentage = $invoice ? $invoice->tax_percentage : 0.00;
+        $result->tax_percentage2 = $invoice ? $invoice->tax_percentage2 : 0.00;
+        $result->tax_name = /*$estimate->tax_name*/ lang("tax");
+        $result->tax_name2 = /*$estimate->tax_name2*/ lang("tax2");
 
         $result->tax = 0;
         $result->tax2 = 0;
-     
+
         $invoice_subtotal = $result->invoice_subtotal;
         $invoice_subtotal_for_taxes = $invoice_subtotal;
         //if ($invoice->discount_type == "before_tax") {
-            $invoice_subtotal_for_taxes = $invoice_subtotal - ($invoice->discount_amount_type == "percentage" ? ($result->invoice_subtotal * ($invoice->discount_amount / 100)) : $invoice->discount_amount);
+        // $invoice_subtotal_for_taxes = $invoice_subtotal - ($invoice->discount_amount_type == "percentage" ? ($result->invoice_subtotal * ($invoice->discount_amount / 100)) : $invoice->discount_amount);
         //}
 
         //if ($invoice->tax_percentage) {
-            $result->tax = $item->tax;
-            $result->pure_tax = $item->pure_tax;
-            $result->tax_after_discount = $item->tax_after_discount;
-            $result->item_discount = $item->item_discount;
-            $bill_tax=$item->pure_tax * ($item->invoice_subtotal-$item->item_discount);
-            // echo $bill_tax; die();
+        $result->tax = $item->tax;
+        $result->pure_tax = $item->pure_tax;
+        $result->tax_after_discount = $item->tax_after_discount;
+        $result->item_discount = $item->item_discount;
+        $bill_tax = $item->pure_tax * ($item->invoice_subtotal - $item->item_discount);
+        // echo $bill_tax; die();
         //}
         //if ($invoice->tax_percentage2) {
-            $result->tax2 = $item->tax2;
+        $result->tax2 = $item->tax2;
         //}
-       
+
 
         $result->total_paid = $payment->total_paid;
 
@@ -245,20 +252,27 @@ class Clients_model extends Crud_model {
 
         $result->discount_total = 0;
 
+        if ($invoice) {
+            $result->discount_total = $invoice->discount_amount_type == "percentage" ? ($invoice_subtotal * ($invoice->discount_amount / 100)) : $invoice->discount_amount;
+        } else {
+            $result->discount_total =  0.00;
+        }
 
-        $result->discount_total = $invoice->discount_amount_type == "percentage" ? ($invoice_subtotal * ($invoice->discount_amount / 100)) : $invoice->discount_amount;
 
-        $result->discount_type = $invoice->discount_type;
-        $result->tax = $item->pure_tax * ($result->invoice_subtotal - $result->discount_total );
+        $result->discount_type =  $invoice ?
+            $invoice->discount_type
+            : 0.00;
+        $result->tax = $item->pure_tax * ($result->invoice_subtotal - $result->discount_total);
 
+        $result->invoice_total = $item->invoice_subtotal + $item->tax_after_discount + $result->tax2 - $item->item_discount;
         $result->total_after_discount = number_format($result->invoice_total, 2, ".", "") - number_format($result->discount_total, 2, ".", "");
-        $result->invoice_total = $item->invoice_subtotal + $item->tax_after_discount + $result->tax2-$item->item_discount;
-       
-        $result->balance_due = $result->invoice_total - number_format($payment->total_paid, 2, ".", "") ;   
+
+        $result->balance_due = $result->invoice_total - number_format($payment->total_paid, 2, ".", "");
         return $result;
     }
 
-    function get_primary_contact($client_id = 0, $info = false) {
+    function get_primary_contact($client_id = 0, $info = false)
+    {
         $users_table = $this->db->dbprefix('users');
 
         $sql = "SELECT $users_table.id, $users_table.first_name, $users_table.last_name
@@ -274,7 +288,8 @@ class Clients_model extends Crud_model {
         }
     }
 
-    function add_remove_star($project_id, $user_id, $type = "add") {
+    function add_remove_star($project_id, $user_id, $type = "add")
+    {
         $clients_table = $this->db->dbprefix('clients');
 
         $action = " CONCAT($clients_table.starred_by,',',':$user_id:') ";
@@ -290,7 +305,8 @@ class Clients_model extends Crud_model {
         return $this->db->query($sql);
     }
 
-    function get_starred_clients($user_id) {
+    function get_starred_clients($user_id)
+    {
         $clients_table = $this->db->dbprefix('clients');
 
         $sql = "SELECT $clients_table.id,  $clients_table.company_name
@@ -300,7 +316,8 @@ class Clients_model extends Crud_model {
         return $this->db->query($sql);
     }
 
-    function delete_client_and_sub_items($client_id) {
+    function delete_client_and_sub_items($client_id)
+    {
         $clients_table = $this->db->dbprefix('clients');
         $general_files_table = $this->db->dbprefix('general_files');
         $users_table = $this->db->dbprefix('users');
@@ -328,7 +345,8 @@ class Clients_model extends Crud_model {
         return true;
     }
 
-    function is_duplicate_company_name($company_name, $id = 0) {
+    function is_duplicate_company_name($company_name, $id = 0)
+    {
 
         $result = $this->get_all_where(array("company_name" => $company_name, "deleted" => 0));
         if ($result->num_rows() && $result->row()->id != $id) {
@@ -338,7 +356,8 @@ class Clients_model extends Crud_model {
         }
     }
 
-    function is_duplicate_phone($phone, $id = 0) {
+    function is_duplicate_phone($phone, $id = 0)
+    {
 
         $result = $this->get_all_where(array("phone" => $phone, "deleted" => 0));
         if ($result->num_rows() && $result->row()->id != $id) {
@@ -348,7 +367,8 @@ class Clients_model extends Crud_model {
         }
     }
 
-    function get_leads_kanban_details($options = array()) {
+    function get_leads_kanban_details($options = array())
+    {
         $clients_table = $this->db->dbprefix('clients');
         $lead_source_table = $this->db->dbprefix('lead_source');
         $users_table = $this->db->dbprefix('users');
@@ -376,7 +396,7 @@ class Clients_model extends Crud_model {
         }
 
         $users_where = "$users_table.client_id=$clients_table.id AND $users_table.deleted=0 AND $users_table.user_type='lead'";
-        
+
         $this->db->query('SET SQL_BIG_SELECTS=1');
 
         $sql = "SELECT $clients_table.id, $clients_table.company_name, $clients_table.sort, IF($clients_table.sort!=0, $clients_table.sort, $clients_table.id) AS new_sort, $clients_table.lead_status_id, $clients_table.owner_id,
@@ -397,5 +417,4 @@ class Clients_model extends Crud_model {
 
         return $this->db->query($sql);
     }
-
 }

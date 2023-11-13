@@ -153,7 +153,7 @@
             ?>
 
             <!-- currency  -->
-            <li class="view-currecny-option top_tooltip" data-toggle="tooltip" data-original-title='<?= lang("change_view_currency") ?>' data-placement="bottom">
+            <!-- <li class="view-currecny-option top_tooltip" data-toggle="tooltip" data-original-title='<?= lang("change_view_currency") ?>' data-placement="bottom">
                 <?php echo js_anchor("<i class='fa fa-money'></i>", array("id" => "view-currecny-icon", "class" => "dropdown-toggle", "data-toggle" => "dropdown")); ?>
 
                 <ul class="dropdown-menu p0" style="height: 120px; overflow-y: scroll; min-width: 170px;">
@@ -175,7 +175,7 @@
                         ?>
                     </li>
                 </ul>
-            </li>
+            </li> -->
             <!-- currency  -->
 
             <?php if (!in_array("language", $hidden_topbar_menus) && (($this->login_user->user_type == "staff" && !get_setting("disable_language_selector_for_team_members")) || ($this->login_user->user_type == "client" && !get_setting("disable_language_selector_for_clients")))) { ?>

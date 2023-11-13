@@ -1,7 +1,8 @@
 <?php
 
 //extend from this model to execute basic db operations
-class Crud_model extends CI_Model {
+class Crud_model extends CI_Model
+{
 
     private $table;
     private $log_activity = false;
@@ -11,19 +12,25 @@ class Crud_model extends CI_Model {
     private $log_for2 = "";
     private $log_for_key2 = "";
     private $has_cost_center = false;
+    private $changable_currency_rate = false;
 
-    function __construct($table = null, $has_cost_center = false) {
-        $this->use_table($table);
-        $this->has_cost_center = $has_cost_center;
+    function __construct($table = null, $has_cost_center = false, $changable_currency_rate = false)
+    {
+        $this->use_table($table, $has_cost_center, $changable_currency_rate);
+        // $this->has_cost_center = $has_cost_center;
 
         $this->db->query("SET sql_mode = ''");
     }
 
-    protected function use_table($table) {
+    protected function use_table($table, $has_cost_center = false, $changable_currency_rate = false)
+    {
         $this->table = $table;
+        $this->has_cost_center = $has_cost_center;
+        $this->changable_currency_rate = $changable_currency_rate;
     }
 
-    protected function init_activity_log($log_type = "", $log_type_title_key = "", $log_for = "", $log_for_key = 0, $log_for2 = "", $log_for_key2 = 0) {
+    protected function init_activity_log($log_type = "", $log_type_title_key = "", $log_for = "", $log_for_key = 0, $log_for2 = "", $log_for_key2 = 0)
+    {
         if ($log_type) {
             $this->log_activity = true;
             $this->log_type = $log_type;
@@ -35,11 +42,13 @@ class Crud_model extends CI_Model {
         }
     }
 
-    function get_one($id = 0) {
+    function get_one($id = 0)
+    {
         return $this->get_one_where(array('id' => $id));
     }
 
-    function get_one_where($where = array()) {
+    function get_one_where($where = array())
+    {
         $result = $this->db->get_where($this->table, $where, 1);
         if ($result->num_rows()) {
             return $result->row();
@@ -53,7 +62,8 @@ class Crud_model extends CI_Model {
         }
     }
 
-    function get_all($include_deleted = false) {
+    function get_all($include_deleted = false)
+    {
         $where = array("deleted" => 0);
         if ($include_deleted) {
             $where = array();
@@ -61,7 +71,8 @@ class Crud_model extends CI_Model {
         return $this->get_all_where($where);
     }
 
-    function get_all_where($where = array(), $limit = 1000000, $offset = 0, $sort_by_field = null) {
+    function get_all_where($where = array(), $limit = 1000000, $offset = 0, $sort_by_field = null)
+    {
         $where_in = get_array_value($where, "where_in");
         if ($where_in) {
             foreach ($where_in as $key => $value) {
@@ -74,14 +85,15 @@ class Crud_model extends CI_Model {
             $this->db->order_by($sort_by_field, 'ASC');
         }
 
-        if($this->has_cost_center){
+        if (!can_view_all_cost_centers_data() && $this->has_cost_center) {
             $where["cost_center_id"] = $this->login_user->cost_center_id;
         }
 
         return $this->db->get_where($this->table, $where, $limit, $offset);
     }
 
-    function save(&$data = array(), $id = 0) {
+    function save(&$data = array(), $id = 0)
+    {
         //unset custom created by field if it's defined for activity log
         $activity_log_created_by_app = false;
         if (get_array_value($data, "activity_log_created_by_app")) {
@@ -90,8 +102,16 @@ class Crud_model extends CI_Model {
         }
 
         //add cost center id if the table has it
-        if($this->has_cost_center && !$id){
+        if ($this->has_cost_center && !$id) {
             $data["cost_center_id"] = $this->login_user->cost_center_id;
+
+            if ($this->changable_currency_rate) {
+                $cur_rate  = $this->Cost_centers_model->get_currency_rate($this->login_user->cost_center_id);
+                if (!$cur_rate) {
+                    throw new RuntimeException("Cannot find currency rate for cost center ID = " . $this->login_user->cost_center_id);
+                }
+                $data["currency_rate_at_creation"] = $cur_rate->rate;
+            }
         }
 
         if ($id) {
@@ -184,7 +204,8 @@ class Crud_model extends CI_Model {
         }
     }
 
-    function update_where($data = array(), $where = array()) {
+    function update_where($data = array(), $where = array())
+    {
         if (count($where)) {
             if ($this->db->update($this->table, $data, $where)) {
                 $id = get_array_value($where, "id");
@@ -197,7 +218,8 @@ class Crud_model extends CI_Model {
         }
     }
 
-    function delete($id = 0, $undo = false) {
+    function delete($id = 0, $undo = false)
+    {
         $data = array('deleted' => 1);
         if ($undo === true) {
             $data = array('deleted' => 0);
@@ -237,7 +259,8 @@ class Crud_model extends CI_Model {
         return $success;
     }
 
-    function get_dropdown_list($option_fields = array(), $key = "id", $where = array()) {
+    function get_dropdown_list($option_fields = array(), $key = "id", $where = array())
+    {
         $where["deleted"] = 0;
         $list_data = $this->get_all_where($where, 0, 0, $option_fields[0])->result();
         $result = array();
@@ -252,7 +275,8 @@ class Crud_model extends CI_Model {
     }
 
     //prepare a query string to get custom fields like as a normal field
-    protected function prepare_custom_field_query_string($related_to, $custom_fields, $related_to_table) {
+    protected function prepare_custom_field_query_string($related_to, $custom_fields, $related_to_table)
+    {
 
         $join_string = "";
         $select_string = "";
@@ -273,7 +297,8 @@ class Crud_model extends CI_Model {
     }
 
     //get query of clients data according to to currency
-    protected function _get_clients_of_currency_query($currency, $invoices_table, $clients_table) {
+    protected function _get_clients_of_currency_query($currency, $invoices_table, $clients_table)
+    {
         $default_currency = get_setting("default_currency");
         $currency = $currency ? $currency : $default_currency;
 
@@ -283,7 +308,8 @@ class Crud_model extends CI_Model {
     }
 
     //get query of clients data according to to currency
-    protected function _get_suppliers_of_currency_query($currency, $purchase_orders_table, $suppliers_table) {
+    protected function _get_suppliers_of_currency_query($currency, $purchase_orders_table, $suppliers_table)
+    {
         $default_currency = get_setting("default_currency");
         $currency = $currency ? $currency : $default_currency;
 
@@ -293,7 +319,8 @@ class Crud_model extends CI_Model {
     }
 
     //get total invoice value calculation query
-    protected function _get_invoice_value_calculation_query($invoices_table) {
+    protected function _get_invoice_value_calculation_query($invoices_table)
+    {
         // $invoices_table=  strtolower($invoices_table);
         // $invoices_table=  'almukhainiproforma_invoices';
         $select_invoice_value = "IFNULL(items_table.invoice_value,0)";
@@ -314,13 +341,14 @@ class Crud_model extends CI_Model {
                 IF($invoices_table.discount_type='before_tax',  ($before_tax_1+ $before_tax_2), ($after_tax_1 + $after_tax_2))
                 - $discount_amount
                )";
-               
-// echo $invoice_value_calculation_query;die();
+
+        // echo $invoice_value_calculation_query;die();
         return $invoice_value_calculation_query;
     }
 
-        //get total invoice value calculation query
-    protected function _get_purchase_order_value_calculation_query($invoices_table) {
+    //get total invoice value calculation query
+    protected function _get_purchase_order_value_calculation_query($invoices_table)
+    {
         $select_invoice_value = "IFNULL(items_table.purchase_order_value,0)";
 
 
@@ -330,7 +358,8 @@ class Crud_model extends CI_Model {
 
         return $invoice_value_calculation_query;
     }
-    protected function _get_material_request_value_calculation_query($invoices_table) {
+    protected function _get_material_request_value_calculation_query($invoices_table)
+    {
         $select_invoice_value = "IFNULL(items_table.material_request_value,0)";
 
 
@@ -341,11 +370,11 @@ class Crud_model extends CI_Model {
         return $invoice_value_calculation_query;
     }
 
-    protected function _get_invoice_tax_value_calculation_query($invoices_table) {
+    protected function _get_invoice_tax_value_calculation_query($invoices_table)
+    {
         $select_invoice_value = "IFNULL(items_table.invoice_value,0)";
         $discount_amount = "IF($invoices_table.discount_amount_type='percentage', IFNULL($invoices_table.discount_amount,0)/100* $select_invoice_value, $invoices_table.discount_amount)";
         $invoice_value =  "($select_invoice_value - $discount_amount)";
         return "IF( $invoice_value * 0.01 *tax_table.percentage > 0, $invoice_value *0.01*tax_table.percentage,items_table.tax)";
-     }
-
+    }
 }

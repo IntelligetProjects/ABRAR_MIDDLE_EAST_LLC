@@ -3,17 +3,21 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Team_members extends MY_Controller {
+class Team_members extends MY_Controller
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->access_only_team_members();
     }
-    
-    function chart_array() {
+
+    function chart_array()
+    {
         ////////////////
-        $rows = $this->Users_model->get_details(array("deleted" => 0, "user_type"=>"staff", "status"=> "active"))->result();
-        function buildTree($list_data, $superior_id = -1) {
+        $rows = $this->Users_model->get_details(array("deleted" => 0, "user_type" => "staff", "status" => "active"))->result();
+        function buildTree($list_data, $superior_id = -1)
+        {
             $branch = array();
 
 
@@ -24,8 +28,8 @@ class Team_members extends MY_Controller {
                     if ($children) {
                         $data->children = $children;
                     }
-                    $image_url = get_avatar($data->image); 
-                    $branch[] = array("id" => $data->id, "name" => $data->first_name." ".$data->last_name, 'title' => $data->job_title, "img" => $image_url, "children" => $children);
+                    $image_url = get_avatar($data->image);
+                    $branch[] = array("id" => $data->id, "name" => $data->first_name . " " . $data->last_name, 'title' => $data->job_title, "img" => $image_url, "children" => $children);
                 }
             }
 
@@ -36,7 +40,7 @@ class Team_members extends MY_Controller {
 
         return $tree;
 
-        
+
         /////////////////////////
         /*var datascource = {
           'id' : '123',
@@ -80,7 +84,8 @@ class Team_members extends MY_Controller {
         };*/
     }
 
-    private function can_view_salary_chart(){
+    private function can_view_salary_chart()
+    {
         if ($this->login_user->user_type == "staff") {
             if ($this->login_user->is_admin) {
                 return true;
@@ -89,7 +94,8 @@ class Team_members extends MY_Controller {
             }
         }
     }
-    private function can_add_team_member() {
+    private function can_add_team_member()
+    {
         if ($this->login_user->user_type == "staff") {
             if ($this->login_user->is_admin) {
                 return true;
@@ -98,7 +104,8 @@ class Team_members extends MY_Controller {
             }
         }
     }
-    private function can_view_team_members_contact_info() {
+    private function can_view_team_members_contact_info()
+    {
         if ($this->login_user->user_type == "staff") {
             if ($this->login_user->is_admin) {
                 return true;
@@ -108,7 +115,8 @@ class Team_members extends MY_Controller {
         }
     }
 
-    private function can_view_team_members_social_links() {
+    private function can_view_team_members_social_links()
+    {
         if ($this->login_user->user_type == "staff") {
             if ($this->login_user->is_admin) {
                 return true;
@@ -118,7 +126,8 @@ class Team_members extends MY_Controller {
         }
     }
 
-    private function update_only_allowed_members($user_id) {
+    private function update_only_allowed_members($user_id)
+    {
         if ($this->can_update_team_members_info($user_id)) {
             return true; //own profile
         } else {
@@ -129,7 +138,8 @@ class Team_members extends MY_Controller {
     //only admin can change other user's info
     //none admin users can only change his/her own info
     //allowed members can update other members info    
-    private function can_update_team_members_info($user_id) {
+    private function can_update_team_members_info($user_id)
+    {
         $access_info = $this->get_access_info("team_member_update_permission");
 
         if ($this->login_user->id === $user_id) {
@@ -146,7 +156,8 @@ class Team_members extends MY_Controller {
 
     //only admin can change other user's info
     //none admin users can only change his/her own info
-    private function only_admin_or_own($user_id) {
+    private function only_admin_or_own($user_id)
+    {
         if ($user_id && ($this->login_user->is_admin || $this->login_user->id === $user_id)) {
             return true;
         } else {
@@ -154,7 +165,8 @@ class Team_members extends MY_Controller {
         }
     }
 
-    public function index() {
+    public function index()
+    {
         if (!$this->can_view_team_members_list()) {
             redirect("forbidden");
         }
@@ -169,7 +181,8 @@ class Team_members extends MY_Controller {
 
     /* open new member modal */
 
-    function modal_form() {
+    function modal_form()
+    {
         if (!$this->can_add_team_member()) {
             redirect("forbidden");
         }
@@ -180,7 +193,7 @@ class Team_members extends MY_Controller {
         $view_data['role_dropdown'] = $this->_get_roles_dropdown();
         // $view_data['nationality'] = array("" => "-") + $this->Nationality_model->get_dropdown_list(array("title"));
         $view_data['nationality'] = array("" => "-") + $this->_get_nationality_dropdown();
-       
+
         $id = $this->input->post('id');
         $options = array(
             "id" => $id,
@@ -195,7 +208,8 @@ class Team_members extends MY_Controller {
 
     /* save new member */
 
-    function add_team_member() {
+    function add_team_member()
+    {
         if (!$this->can_add_team_member()) {
             redirect("forbidden");
         }
@@ -276,7 +290,7 @@ class Team_members extends MY_Controller {
                 $parser_data["LOGO_URL"] = get_logo_url();
 
                 $message = $this->parser->parse_string($email_template->message, $parser_data, TRUE);
-             
+
                 send_app_mail($this->input->post('email'), $email_template->subject, $message);
             }
         }
@@ -293,13 +307,15 @@ class Team_members extends MY_Controller {
 
     /* open invitation modal */
 
-    function invitation_modal() {
+    function invitation_modal()
+    {
         $this->access_only_admin();
         $this->load->view('team_members/invitation_modal');
     }
 
     //send a team member invitation to an email address
-    function send_invitation() {
+    function send_invitation()
+    {
         $this->access_only_admin();
 
         validate_submitted_data(array(
@@ -342,7 +358,8 @@ class Team_members extends MY_Controller {
     }
 
     //prepere the data for members list
-    function list_data() {
+    function list_data()
+    {
         if (!$this->can_view_team_members_list()) {
             redirect("forbidden");
         }
@@ -364,7 +381,8 @@ class Team_members extends MY_Controller {
     }
 
     //get a row data for member list
-    function _row_data($id) {
+    function _row_data($id)
+    {
         $custom_fields = $this->Custom_fields_model->get_available_fields_for_table("team_members", $this->login_user->is_admin, $this->login_user->user_type);
         $options = array(
             "id" => $id,
@@ -376,7 +394,8 @@ class Team_members extends MY_Controller {
     }
 
     //prepare team member list row
-    private function _make_row($data, $custom_fields) {
+    private function _make_row($data, $custom_fields)
+    {
         $image_url = get_avatar($data->image);
         $user_avatar = "<span class='avatar avatar-xs'><img src='$image_url' alt='...'></span>";
         $full_name = $data->first_name . " " . $data->last_name . " ";
@@ -410,7 +429,8 @@ class Team_members extends MY_Controller {
     }
 
     //delete a team member
-    function delete() {
+    function delete()
+    {
         $this->access_only_admin();
 
         validate_submitted_data(array(
@@ -427,14 +447,14 @@ class Team_members extends MY_Controller {
     }
 
     //show team member's details view
-    function view($id = 0, $tab = "") {
+    function view($id = 0, $tab = "")
+    {
         if ($id) {
-            $show_job_info=$this->get_access_info("job_info")->access_type;
+            $show_job_info = $this->get_access_info("job_info")->access_type;
             //if team member's list is disabled, but the user can see his/her own profile.
-            if( $show_job_info=="all"||$this->can_view_team_members_list()||$this->login_user->id == $id){
-
-            }else{
-                redirect("forbidden"); 
+            if ($show_job_info == "all" || $this->can_view_team_members_list() || $this->login_user->id == $id) {
+            } else {
+                redirect("forbidden");
             }
             // if (!$this->can_view_team_members_list() && $this->login_user->id != $id) {
             //     redirect("forbidden");
@@ -456,6 +476,7 @@ class Team_members extends MY_Controller {
                 $view_data['show_job_info'] = false;
 
                 $view_data['show_account_settings'] = false;
+                $view_data['account_setting'] = false;
                 $show_attendance_settings = false;
                 $show_attendance = false;
                 $show_leave = false;
@@ -465,14 +486,15 @@ class Team_members extends MY_Controller {
 
                 //admin can access all members attendance and leave
                 //none admin users can only access to his/her own information 
-                
+
                 if ($this->login_user->is_admin || $user_info->id === $this->login_user->id) {
-                   
+
                     $show_attendance = true;
                     $show_attendance_settings = true;
                     $show_leave = true;
                     $view_data['show_job_info'] = true;
                     $view_data['show_account_settings'] = true;
+                    
                 } else {
                     //none admin users but who has access to this team member's attendance and leave can access this info
                     $access_timecard = $this->get_access_info("attendance");
@@ -513,7 +535,7 @@ class Team_members extends MY_Controller {
                 if ($this->login_user->is_admin) {
                     $view_data['show_projects'] = true;
                 }
-                
+
                 $view_data['show_projects_count'] = false;
                 if ($this->can_manage_all_projects()) {
                     $view_data['show_projects_count'] = true;
@@ -522,15 +544,17 @@ class Team_members extends MY_Controller {
                 $view_data['tab'] = $tab; //selected tab
                 $view_data['user_info'] = $user_info;
                 $view_data['social_link'] = $this->Social_links_model->get_one($id);
-                if( $this->get_access_info("job_info")->access_type=="all"){
+                if ($this->get_access_info("job_info")->access_type == "all") {
                     $view_data['show_job_info'] = true;
-                   }
-                if( $this->get_access_info("account_setting")->access_type=="all"){
+                }
+                if ($this->get_access_info("account_setting")->access_type == "all") {
                     $view_data['account_setting'] = true;
-                   }
-                if( $this->get_access_info("final_settelment")->access_type=="all"){
+                }
+                if ($this->get_access_info("final_settelment")->access_type == "all") {
                     $view_data['final_settelment'] = true;
-                   }
+                }else{
+                    $view_data['final_settelment'] = false;
+                }
                 $this->template->rander("team_members/view", $view_data);
             } else {
                 show_404();
@@ -540,7 +564,7 @@ class Team_members extends MY_Controller {
             if (!$this->can_view_team_members_list()) {
                 redirect("forbidden");
             }
-            
+
 
             //we don't have any specific id to view. show the list of team_member
             $view_data['team_members'] = $this->Users_model->get_details(array("user_type" => "staff", "status" => "active"))->result();
@@ -549,10 +573,11 @@ class Team_members extends MY_Controller {
     }
 
     //show the job information of a team member
-    function job_info($user_id) {
+    function job_info($user_id)
+    {
         // $this->only_admin_or_own($user_id);
-        if ($this->login_user->is_admin||$this->get_access_info("job_info")->access_type=="all") {
-        }else{
+        if ($this->login_user->is_admin || $this->get_access_info("job_info")->access_type == "all") {
+        } else {
             redirect("forbidden");
         }
         $options = array("id" => $user_id);
@@ -567,20 +592,21 @@ class Team_members extends MY_Controller {
 
         $view_data['user_id'] = $user_id;
         $view_data['user_info'] = $user_info;
-        if( $this->get_access_info("job_info")->access_type=="all"){
+        if ($this->get_access_info("job_info")->access_type == "all") {
             $view_data['show_job_info'] = true;
-           }
+        }
         $this->load->view("team_members/job_info", $view_data);
     }
 
     //save job information of a team member
-    function save_job_info() {
+    function save_job_info()
+    {
         // $this->access_only_admin();
-        if ($this->login_user->is_admin||$this->get_access_info("job_info")->access_type=="all") {
-        }else{
+        if ($this->login_user->is_admin || $this->get_access_info("job_info")->access_type == "all") {
+        } else {
             redirect("forbidden");
         }
-       
+
         validate_submitted_data(array(
             "user_id" => "required|numeric"
         ));
@@ -618,7 +644,8 @@ class Team_members extends MY_Controller {
     }
 
     //show general information of a team member
-    function general_info($user_id) {
+    function general_info($user_id)
+    {
         $this->update_only_allowed_members($user_id);
 
         $view_data['user_info'] = $this->Users_model->get_one($user_id);
@@ -629,7 +656,8 @@ class Team_members extends MY_Controller {
     }
 
     //save general information of a team member
-    function save_general_info($user_id) {
+    function save_general_info($user_id)
+    {
         $this->update_only_allowed_members($user_id);
 
         validate_submitted_data(array(
@@ -672,7 +700,7 @@ class Team_members extends MY_Controller {
 
     function org_chart()
     {
-        
+
         $all_users = $this->Users_model->get_details()->result();
         $user_data = array();
         foreach ($all_users as $key => $user) {
@@ -681,29 +709,30 @@ class Team_members extends MY_Controller {
 
         $tree = $this->chart_array();
 
-        $tree_json = json_encode( $tree, JSON_UNESCAPED_SLASHES );
-        $view_data['users_data'] = $tree_json;       
+        $tree_json = json_encode($tree, JSON_UNESCAPED_SLASHES);
+        $view_data['users_data'] = $tree_json;
 
         $this->template->rander("team_members/org_chart", $view_data);
     }
 
-    function getItemsByParent($ParentID){
+    function getItemsByParent($ParentID)
+    {
 
         $main_options = array("superior_id" => $ParentID);
         $all_users = $this->Users_model->get_details($main_options)->result();
         $Items = array();
 
-            foreach ($all_users as $key => $user) 
-            {
+        foreach ($all_users as $key => $user) {
 
-                $options = array("superior_id" => $user->id);
-                $row['children'] = $this->Users_model->get_details($options)->result();
-                $Items[] = $row;
-            }
+            $options = array("superior_id" => $user->id);
+            $row['children'] = $this->Users_model->get_details($options)->result();
+            $Items[] = $row;
+        }
         return $Items;
     }
 
-    function getNestedItems($id){
+    function getNestedItems($id)
+    {
         return $this->getItemsByParent($id);
     }
 
@@ -711,7 +740,8 @@ class Team_members extends MY_Controller {
 
 
     //show social links of a team member
-    function social_links($user_id) {
+    function social_links($user_id)
+    {
         //important! here id=user_id
         $this->update_only_allowed_members($user_id);
 
@@ -721,7 +751,8 @@ class Team_members extends MY_Controller {
     }
 
     //save social links of a team member
-    function save_social_links($user_id) {
+    function save_social_links($user_id)
+    {
         $this->update_only_allowed_members($user_id);
 
         $id = 0;
@@ -753,10 +784,11 @@ class Team_members extends MY_Controller {
     }
 
     //show account settings of a team member
-    function account_settings($user_id) {
+    function account_settings($user_id)
+    {
         // $this->only_admin_or_own($user_id);
-        if ($this->login_user->is_admin||$this->get_access_info("account_setting")->access_type=="all") {
-        }else{
+        if ($this->login_user->is_admin || $this->get_access_info("account_setting")->access_type == "all") {
+        } else {
             redirect("forbidden");
         }
 
@@ -767,11 +799,11 @@ class Team_members extends MY_Controller {
         $view_data['role_dropdown'] = $this->_get_roles_dropdown();
         $view_data['cost_centers_dropdown'] = array("" => "-") + $this->Cost_centers_model->get_dropdown_list(array("name"));
         $this->load->view("users/account_settings", $view_data);
-
     }
 
     //show my preference settings of a team member
-    function my_preferences() {
+    function my_preferences()
+    {
         $view_data["user_info"] = $this->Users_model->get_one($this->login_user->id);
 
         //language dropdown
@@ -785,7 +817,8 @@ class Team_members extends MY_Controller {
         $this->load->view("team_members/my_preferences", $view_data);
     }
 
-    function save_my_preferences() {
+    function save_my_preferences()
+    {
         //setting preferences
         $settings = array("notification_sound_volume", "disable_push_notification", "hidden_topbar_menus");
 
@@ -799,8 +832,8 @@ class Team_members extends MY_Controller {
                 $value = "";
             }
 
-                $this->Settings_model->save_setting("user_" . $this->login_user->id . "_" . $setting, $value, "user");
-            }
+            $this->Settings_model->save_setting("user_" . $this->login_user->id . "_" . $setting, $value, "user");
+        }
 
         //there was 2 settings in users table.
         //so, update the users table also
@@ -818,7 +851,8 @@ class Team_members extends MY_Controller {
         echo json_encode(array("success" => true, 'message' => lang('settings_updated')));
     }
 
-    function save_personal_language($language) {
+    function save_personal_language($language)
+    {
         if (!get_setting("disable_language_selector_for_team_members") && ($language || $language === "0")) {
 
             $language = clean_data($language);
@@ -828,7 +862,8 @@ class Team_members extends MY_Controller {
     }
 
     //prepare the dropdown list of roles
-    private function _get_roles_dropdown() {
+    private function _get_roles_dropdown()
+    {
         $role_dropdown = array(
             "0" => lang('team_member'),
             "admin" => lang('admin') //static role
@@ -839,8 +874,9 @@ class Team_members extends MY_Controller {
         }
         return $role_dropdown;
     }
-    private function _get_nationality_dropdown() {
-        $nationality_dropdown=[];
+    private function _get_nationality_dropdown()
+    {
+        $nationality_dropdown = [];
         $nationalitys = $this->Nationality_model->get_all()->result();
         foreach ($nationalitys as $nationality) {
             $nationality_dropdown[$nationality->title] = $nationality->title;
@@ -849,14 +885,15 @@ class Team_members extends MY_Controller {
     }
 
     //save account settings of a team member
-    function save_account_settings($user_id) {
-        if($this->db->dbprefix=='erp_demo'||$this->db->dbprefix=='new_erp_demo'){
+    function save_account_settings($user_id)
+    {
+        if ($this->db->dbprefix == 'erp_demo' || $this->db->dbprefix == 'new_erp_demo') {
             echo json_encode(array("success" => false, 'message' => lang('only_for_subscribed_client')));
             exit();
         };
         // $this->only_admin_or_own($user_id);
-        if ($this->login_user->is_admin||$this->get_access_info("account_setting")->access_type=="all") {
-        }else{
+        if ($this->login_user->is_admin || $this->get_access_info("account_setting")->access_type == "all") {
+        } else {
             redirect("forbidden");
         }
         if ($this->Users_model->is_email_exists($this->input->post('email'), $user_id)) {
@@ -899,7 +936,8 @@ class Team_members extends MY_Controller {
     }
 
     //save profile image of a team member
-    function save_profile_image($user_id = 0) {
+    function save_profile_image($user_id = 0)
+    {
         $this->update_only_allowed_members($user_id);
         $user_info = $this->Users_model->get_one($user_id);
 
@@ -936,7 +974,8 @@ class Team_members extends MY_Controller {
     }
 
     //show projects list of a team member
-    function projects_info($user_id) {
+    function projects_info($user_id)
+    {
         if ($user_id) {
             $view_data['user_id'] = $user_id;
             $view_data["custom_field_headers"] = $this->Custom_fields_model->get_custom_field_headers_for_table("projects", $this->login_user->is_admin, $this->login_user->user_type);
@@ -945,7 +984,8 @@ class Team_members extends MY_Controller {
     }
 
     //show attendance list of a team member
-    function attendance_info($user_id) {
+    function attendance_info($user_id)
+    {
         if ($user_id) {
             $view_data['user_id'] = $user_id;
             $this->load->view("team_members/attendance_info", $view_data);
@@ -953,23 +993,27 @@ class Team_members extends MY_Controller {
     }
 
     //show weekly attendance list of a team member
-    function weekly_attendance() {
+    function weekly_attendance()
+    {
         $this->load->view("team_members/weekly_attendance");
     }
 
     //show weekly attendance list of a team member
-    function custom_range_attendance() {
+    function custom_range_attendance()
+    {
         $this->load->view("team_members/custom_range_attendance");
     }
 
     //show attendance summary of a team member
-    function attendance_summary($user_id) {
+    function attendance_summary($user_id)
+    {
         $view_data["user_id"] = $user_id;
         $this->load->view("team_members/attendance_summary", $view_data);
     }
 
     //show leave list of a team member
-    function leave_info($applicant_id) {
+    function leave_info($applicant_id)
+    {
         if ($applicant_id) {
             $view_data['applicant_id'] = $applicant_id;
             $this->load->view("team_members/leave_info", $view_data);
@@ -977,11 +1021,13 @@ class Team_members extends MY_Controller {
     }
 
     //show yearly leave list of a team member
-    function yearly_leaves() {
+    function yearly_leaves()
+    {
         $this->load->view("team_members/yearly_leaves");
     }
 
-    private function can_approve() {
+    private function can_approve()
+    {
         if ($this->login_user->user_type == "staff") {
             if ($this->login_user->is_admin || get_array_value($this->login_user->permissions, "expenses") == "all") {
                 return true;
@@ -990,20 +1036,22 @@ class Team_members extends MY_Controller {
     }
 
     //show yearly leave list of a team member
-    function expense_info($user_id) {
+    function expense_info($user_id)
+    {
         $view_data["user_id"] = $user_id;
         $view_data["can_approve"] = $this->can_approve();
-            if (!$this->login_user->is_admin) {
-            $view_data['can_create_module'] = get_array_value($this->login_user->permissions,'can_create_expenses');
-            } else {
-                 $view_data['can_create_module'] = 1; 
-            } 
+        if (!$this->login_user->is_admin) {
+            $view_data['can_create_module'] = get_array_value($this->login_user->permissions, 'can_create_expenses');
+        } else {
+            $view_data['can_create_module'] = 1;
+        }
         $this->load->view("team_members/expenses", $view_data);
     }
 
     /* load files tab */
 
-    function files($user_id) {
+    function files($user_id)
+    {
 
         $this->update_only_allowed_members($user_id);
 
@@ -1015,7 +1063,8 @@ class Team_members extends MY_Controller {
 
     /* file upload modal */
 
-    function file_modal_form() {
+    function file_modal_form()
+    {
         $view_data['model_info'] = $this->General_files_model->get_one($this->input->post('id'));
         $user_id = $this->input->post('user_id') ? $this->input->post('user_id') : $view_data['model_info']->user_id;
 
@@ -1027,7 +1076,8 @@ class Team_members extends MY_Controller {
 
     /* save file data and move temp file to parmanent file directory */
 
-    function save_file() {
+    function save_file()
+    {
 
 
         validate_submitted_data(array(
@@ -1078,7 +1128,8 @@ class Team_members extends MY_Controller {
 
     /* list of files, prepared for datatable  */
 
-    function files_list_data($user_id = 0) {
+    function files_list_data($user_id = 0)
+    {
         $options = array("user_id" => $user_id);
 
         $this->update_only_allowed_members($user_id);
@@ -1091,7 +1142,8 @@ class Team_members extends MY_Controller {
         echo json_encode(array("data" => $result));
     }
 
-    private function _make_file_row($data) {
+    private function _make_file_row($data)
+    {
         $file_icon = get_file_icon(strtolower(pathinfo($data->file_name, PATHINFO_EXTENSION)));
 
         $image_url = get_avatar($data->uploaded_by_user_image);
@@ -1100,7 +1152,7 @@ class Team_members extends MY_Controller {
         $uploaded_by = get_team_member_profile_link($data->uploaded_by, $uploaded_by);
 
         $description = "<div class='pull-left'>" .
-                js_anchor(remove_file_prefix($data->file_name), array('title' => "", "data-toggle" => "app-modal", "data-sidebar" => "0", "data-url" => get_uri("team_members/view_file/" . $data->id)));
+            js_anchor(remove_file_prefix($data->file_name), array('title' => "", "data-toggle" => "app-modal", "data-sidebar" => "0", "data-url" => get_uri("team_members/view_file/" . $data->id)));
 
         if ($data->description) {
             $description .= "<br /><span>" . $data->description . "</span></div>";
@@ -1113,7 +1165,8 @@ class Team_members extends MY_Controller {
         $options .= js_anchor("<i class='fa fa-times fa-fw'></i>", array('title' => lang('delete_file'), "class" => "delete", "data-id" => $data->id, "data-action-url" => get_uri("team_members/delete_file"), "data-action" => "delete-confirmation"));
 
 
-        return array($data->id,
+        return array(
+            $data->id,
             "<div class='fa fa-$file_icon font-22 mr10 pull-left'></div>" . $description,
             convert_file_size($data->file_size),
             $uploaded_by,
@@ -1122,7 +1175,8 @@ class Team_members extends MY_Controller {
         );
     }
 
-    function view_file($file_id = 0) {
+    function view_file($file_id = 0)
+    {
         $file_info = $this->General_files_model->get_details(array("id" => $file_id))->row();
 
         if ($file_info) {
@@ -1151,7 +1205,8 @@ class Team_members extends MY_Controller {
 
     /* download a file */
 
-    function download_file($id) {
+    function download_file($id)
+    {
 
         $file_info = $this->General_files_model->get_one($id);
 
@@ -1168,19 +1223,22 @@ class Team_members extends MY_Controller {
 
     /* upload a post file */
 
-    function upload_file() {
+    function upload_file()
+    {
         upload_file_to_temp();
     }
 
     /* check valid file for user */
 
-    function validate_file() {
+    function validate_file()
+    {
         return validate_post_file($this->input->post("file_name"));
     }
 
     /* delete a file */
 
-    function delete_file() {
+    function delete_file()
+    {
 
         $id = $this->input->post('id');
         $info = $this->General_files_model->get_one($id);
@@ -1202,23 +1260,25 @@ class Team_members extends MY_Controller {
         }
     }
 
-    function attendance_settings($user_id) {
+    function attendance_settings($user_id)
+    {
 
         $this->only_admin_or_own($user_id);
         if ($user_id) {
             if (isset($_COOKIE['Device'])) {
                 $view_data['status'] = "active";
-                $view_data['status_label'] = "label-success";         
-                } else {
+                $view_data['status_label'] = "label-success";
+            } else {
                 $view_data['status'] = "inactive";
-                $view_data['status_label'] = "label-warning"; 
+                $view_data['status_label'] = "label-warning";
             }
             $view_data['user_id'] = $user_id;
             $this->load->view("users/attendance_settings", $view_data);
         }
     }
 
-    function save_attendance_settings() {
+    function save_attendance_settings()
+    {
 
         $this->only_admin_or_own($this->login_user->id);
 
@@ -1238,22 +1298,22 @@ class Team_members extends MY_Controller {
         }
     }
 
-        function employees_salary_chart()
+    function employees_salary_chart()
     {
         if (!$this->can_view_salary_chart()) {
             redirect("forbidden");
         }
-        
+
         $this->template->rander("team_members/salary_chart");
     }
 
-    
+
 
     function list_data_salary_chart()
     {
-        $options = array("payroll" => 1, "status"=>"active", "user_type"=>"staff");
+        $options = array("payroll" => 1, "status" => "active", "user_type" => "staff");
         $list_data = $this->Users_model->get_details($options)->result();
-        
+
         $result = array();
         foreach ($list_data as $data) {
             $result[] = $this->_make_row_salary_chart($data);
@@ -1273,25 +1333,23 @@ class Team_members extends MY_Controller {
             $user_avatar,
             get_team_member_profile_link($data->id, $full_name),
             $data->job_title,
-            bcdiv($data->salary,1,3),
-            bcdiv($data->housing,1,3),
-            bcdiv($data->transportation,1,3),
-            bcdiv($data->telephone,1,3),
-            bcdiv($data->utility,1,3),
-            bcdiv(get_gross_salary($data->id),1,3),
+            bcdiv($data->salary, 1, 3),
+            bcdiv($data->housing, 1, 3),
+            bcdiv($data->transportation, 1, 3),
+            bcdiv($data->telephone, 1, 3),
+            bcdiv($data->utility, 1, 3),
+            bcdiv(get_gross_salary($data->id), 1, 3),
             $data->date_of_hire,
-            bcdiv(get_employement_years($data->id),1,3),
-            bcdiv(get_gratuity($data->id),1,3),
-            bcdiv(get_company_pasi_share($data->id),1,3),
-            bcdiv(get_employee_pasi_share($data->id),1,3),
-            bcdiv(get_company_job_s_share($data->id),1,3),
-            bcdiv(get_employee_job_s_share($data->id),1,3)
+            bcdiv(get_employement_years($data->id), 1, 3),
+            bcdiv(get_gratuity($data->id), 1, 3),
+            bcdiv(get_company_pasi_share($data->id), 1, 3),
+            bcdiv(get_employee_pasi_share($data->id), 1, 3),
+            bcdiv(get_company_job_s_share($data->id), 1, 3),
+            bcdiv(get_employee_job_s_share($data->id), 1, 3)
         );
 
         return $row_data;
     }
-
-
 }
 
 /* End of file team_member.php */

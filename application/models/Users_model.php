@@ -132,7 +132,7 @@ class Users_model extends Crud_model
         }
 
         //add filter by cost center id
-        if ($this->login_user->cost_center_id > 0) {
+        if ( !$this->login_user->is_admin && $this->login_user->cost_center_id > 0 ) {
             $cost_center_id = $this->login_user->cost_center_id;
             $where .= " AND $users_table.cost_center_id = $cost_center_id";
         }

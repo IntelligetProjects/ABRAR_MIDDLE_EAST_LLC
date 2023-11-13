@@ -70,7 +70,7 @@ $(document).ready(function () {
                     //     value: $(this).attr('data-value'),
                     //     url: '<?php echo_uri("transactions/update_status") ?>/0' + '/' + $(this).attr('data-id'),
                     //     showbuttons: false,
-                    //     source: <?php echo json_encode($status) ?>,
+                        // source: <?php //echo json_encode($status) ?>,
                     //     success: function (response, newValue) {
                     //         if (response.success) {
                     //             // $("#transactions-table").appTable({reload: true, filterParams: filter});

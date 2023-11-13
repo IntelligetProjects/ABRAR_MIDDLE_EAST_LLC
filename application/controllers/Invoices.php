@@ -357,7 +357,7 @@ class Invoices extends MY_Controller
                     $this->Invoice_items_model->save($invoice_item_data);
                 }
             }
-            if ($invoice_status["approval_status"] == "approved") {
+            if (isset($invoice_status) && $invoice_status["approval_status"] == "approved") {
                 $info = $this->Invoices_model->get_details(array("id" => $invoice_id))->row();
 
                 $this->make_inv_entries($info);
@@ -537,6 +537,7 @@ class Invoices extends MY_Controller
             $result[] = $this->_make_row($data, $custom_fields);
         }
 
+
         echo json_encode(array("data" => $result));
     }
 
@@ -555,7 +556,8 @@ class Invoices extends MY_Controller
 
     private function _make_row($data, $custom_fields)
     {
-        // var_dump($data);
+        set_row_data_currency_rate($data->currency_rate_at_creation); //SET CURRENCY RATE
+
         $invoice_url = "";
         if ($this->login_user->user_type == "staff") {
             $invoice_url = anchor(get_uri("invoices/view/" . $data->id), get_invoice_id($data->id));
@@ -579,6 +581,7 @@ class Invoices extends MY_Controller
         } else {
             $file_url = '-';
         }
+
         $row_data = array(
             $data->id, $invoice_url,
             anchor(get_uri("clients/view/" . $data->client_id), $data->company_name . "</br>" . $data->phone),
@@ -602,6 +605,8 @@ class Invoices extends MY_Controller
 
         $row_data[] = $this->_make_options_dropdown($data->id);
 
+        
+        unset_row_data_currency_rate(); //UNSET CURRENCY RATE
         return $row_data;
     }
 
@@ -774,8 +779,10 @@ class Invoices extends MY_Controller
 
         if ($invoice_id) {
             $view_data = get_invoice_making_data($invoice_id);
-
+    
             if ($view_data) {
+                set_row_data_currency_rate($view_data['invoice_info']->currency_rate_at_creation); //SET CURRENCY RATE
+
                 // var_dump($view_data["invoice_info"]);
                 $view_data['invoice_status'] = $this->_get_invoice_status_label($view_data["invoice_info"], false);
                 $view_data['approval_status'] = $this->_get_approval_status_label($view_data["invoice_info"], false);
@@ -791,6 +798,7 @@ class Invoices extends MY_Controller
                 $view_data["can_add_do"] = $this->can_add_do();
                 // var_dump( $view_data['invoice_status']);die();
                 $this->template->rander("invoices/view", $view_data);
+               
             } else {
                 show_404();
             }

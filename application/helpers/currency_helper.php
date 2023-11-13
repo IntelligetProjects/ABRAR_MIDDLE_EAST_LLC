@@ -9,7 +9,8 @@
  */
 if (!function_exists('to_currency')) {
 
-    function to_currency($number = 0, $currency = "", $no_of_decimals = 3) {
+    function to_currency($number = 0, $currency = "", $no_of_decimals = 3)
+    {
         $ci = get_instance();
         $decimal_separator = get_setting("decimal_sepsarator");
         $thousand_separator = get_setting("thousand_separator");
@@ -17,11 +18,11 @@ if (!function_exists('to_currency')) {
 
         set_default_view_curreny();
         $number = check_view_currency($number);
-        
-        if(get_setting("no_of_decimals")=="0"){
+
+        if (get_setting("no_of_decimals") == "0") {
             $no_of_decimals = 0;
         }
-           
+
         $negative_sign = "";
         if ($number < 0) {
             $number = $number * -1;
@@ -32,7 +33,7 @@ if (!function_exists('to_currency')) {
         // } else if ($currency == "no") {
         //     $currency = "";
         // }
-        $currency = '/'.$currency_symbol;
+        $currency = '/' . $currency_symbol;
 
         $currency_position = get_setting("currency_position");
         if (!$currency_position) {
@@ -61,24 +62,65 @@ if (!function_exists('to_currency')) {
             }
         }
     }
-
 }
 
 
 if (!function_exists('check_view_currency')) {
-    function check_view_currency($number = 0.0){
+    function check_view_currency($number = 0.0)
+    {
         $ci = get_instance();
-        $view_rate = $ci->session->userdata('view_currency_rate');
-        if($view_rate != 1){
-            return bcmul($number , $view_rate, 6);
-        }else{
+
+        if ($ci->session->userdata('row_data_currency_rate')  && $ci->session->userdata('row_data_currency_rate') != 1 && $ci->login_user->is_admin) {
+            //handle different currency for multiple currency view 
+            $row_currency_rate = $ci->session->userdata('row_data_currency_rate');
+            $number = bcmul($number, $row_currency_rate, 6);
             return $number;
+        } else {
+            $view_rate = $ci->session->userdata('view_currency_rate');
+            if ($view_rate != 1) {
+                return bcmul($number, $view_rate, 6);
+            } else {
+                return $number;
+            }
         }
     }
 }
 
+if (!function_exists('set_row_data_currency_rate')) {
+    function set_row_data_currency_rate($currency_rate_at_creation)
+    {
+        $ci = get_instance();
+        //check if user can view data from multiple cost centers
+        if ($ci->login_user->is_admin && $currency_rate_at_creation) {
+            //set row currency rate
+            $ci->session->set_userdata('row_data_currency_rate', $currency_rate_at_creation);
+        }
+    }
+}
+
+if (!function_exists('unset_row_data_currency_rate')) {
+    function unset_row_data_currency_rate()
+    {
+        $ci = get_instance();
+        //check if user can view data from multiple cost centers
+        if ($ci->session->userdata('row_data_currency_rate')) {
+            //set row currency rate
+            $ci->session->unset_userdata("row_data_currency_rate");
+        }
+    }
+}
+
+if (!function_exists('can_view_all_cost_centers_data')) {
+    function can_view_all_cost_centers_data()
+    {
+        $ci = get_instance();
+        return $ci->login_user->is_admin;
+    }
+}
+
 if (!function_exists('get_current_view_currency_id')) {
-    function get_current_view_currency_id(){
+    function get_current_view_currency_id()
+    {
         $ci = get_instance();
         $id = $ci->session->userdata('view_currency_id');
         return $id ? $id : 1;
@@ -87,15 +129,16 @@ if (!function_exists('get_current_view_currency_id')) {
 
 
 if (!function_exists('set_current_view_currency')) {
-    function set_current_view_currency($currency_id){
+    function set_current_view_currency($currency_id)
+    {
         $ci = get_instance();
         $currency = $ci->Currencies_model->get_one($currency_id);
-        if($currency){
+        if ($currency) {
             $ci->session->set_userdata('view_currency_id', $currency->id);
             $ci->session->set_userdata('view_currency_name', $currency->name);
             $ci->session->set_userdata('view_currency_symbol', $currency->symbol);
             $ci->session->set_userdata('view_currency_rate', $currency->rate);
-        }else{
+        } else {
             // $currency = $ci->Currencies_model->get_one(1); // get default curreny 
             $ci->session->set_userdata('view_currency_id', 1);
             $ci->session->set_userdata('view_currency_name', "OMR");
@@ -109,11 +152,13 @@ if (!function_exists('set_current_view_currency')) {
 }
 
 if (!function_exists('set_default_view_curreny')) {
-    function set_default_view_curreny(){
+    function set_default_view_curreny()
+    {
         $ci = get_instance();
-        if(!$ci->session->userdata('view_currency_rate')){
-            $ci->session->set_userdata('view_currency_name', "OMR");
-            $ci->session->set_userdata('view_currency_symbol', "/OMR");
+        if (!$ci->session->userdata('view_currency_rate')) {
+            $data =  $ci->Cost_centers_model->get_details(array("id" => $ci->login_user->cost_center_id))->row();
+            $ci->session->set_userdata('view_currency_name', $data->currency_name);
+            $ci->session->set_userdata('view_currency_symbol', $data->currency_symbol);
             $ci->session->set_userdata('view_currency_rate', 1);
         }
     }
@@ -127,12 +172,13 @@ if (!function_exists('set_default_view_curreny')) {
  */
 if (!function_exists('to_decimal_format')) {
 
-    function to_decimal_format($number = 0) {
+    function to_decimal_format($number = 0)
+    {
         $decimal_separator = get_setting("decimal_separator");
 
         $decimal = 0;
         if (is_numeric($number) && floor($number) != $number) {
-            $decimal = get_setting("no_of_decimals")=="0" ? 0 : 2;
+            $decimal = get_setting("no_of_decimals") == "0" ? 0 : 2;
         }
         if ($decimal_separator === ",") {
             return number_format($number, $decimal, ",", ".");
@@ -140,7 +186,6 @@ if (!function_exists('to_decimal_format')) {
             return number_format($number, $decimal, ".", ",");
         }
     }
-
 }
 
 /**
@@ -151,8 +196,9 @@ if (!function_exists('to_decimal_format')) {
  */
 if (!function_exists('unformat_currency')) {
 
-    function unformat_currency($currency = "") {
-// remove everything except a digit "0-9", a comma ",", and a dot "."
+    function unformat_currency($currency = "")
+    {
+        // remove everything except a digit "0-9", a comma ",", and a dot "."
         $new_money = preg_replace('/[^\d,-\.]/', '', $currency);
         $decimal_separator = get_setting("decimal_separator");
         if ($decimal_separator === ",") {
@@ -163,7 +209,6 @@ if (!function_exists('unformat_currency')) {
         }
         return $new_money;
     }
-
 }
 
 /**
@@ -173,7 +218,8 @@ if (!function_exists('unformat_currency')) {
  */
 if (!function_exists('get_international_currency_code_list')) {
 
-    function get_international_currency_code_list() {
+    function get_international_currency_code_list()
+    {
         return array(
             "AED",
             "AFN",
@@ -354,7 +400,6 @@ if (!function_exists('get_international_currency_code_list')) {
             "ZMW"
         );
     }
-
 };
 
 
@@ -365,14 +410,14 @@ if (!function_exists('get_international_currency_code_list')) {
  */
 if (!function_exists('get_international_currency_code_dropdown')) {
 
-    function get_international_currency_code_dropdown() {
+    function get_international_currency_code_dropdown()
+    {
         $result = array();
         foreach (get_international_currency_code_list() as $value) {
             $result[$value] = $value;
         }
         return $result;
     }
-
 };
 
 
@@ -383,11 +428,11 @@ if (!function_exists('get_international_currency_code_dropdown')) {
  */
 if (!function_exists('ignor_minor_value')) {
 
-    function ignor_minor_value($value) {
-        if(abs($value)<0.05){
+    function ignor_minor_value($value)
+    {
+        if (abs($value) < 0.05) {
             $value = 0;
         }
         return $value;
     }
-
 };

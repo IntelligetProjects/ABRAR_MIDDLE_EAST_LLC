@@ -221,11 +221,11 @@ class Tasks_model extends Crud_model
 
 
         //add filter by cost center id
-        if ($this->login_user->cost_center_id > 0) {
+        if (!can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0) {
             $cost_center_id = $this->login_user->cost_center_id;
             $where .= " AND $projects.cost_center_id = $cost_center_id";
         }
-        
+
         //prepare custom fild binding query
         $custom_fields = get_array_value($options, "custom_fields");
         $custom_field_query_info = $this->prepare_custom_field_query_string("tasks", $custom_fields, $tasks_table);
@@ -330,6 +330,12 @@ class Tasks_model extends Crud_model
             $extra_left_join = " LEFT JOIN $project_members_table ON $tasks_table.project_id= $project_members_table.project_id AND $project_members_table.deleted=0 AND $project_members_table.user_id=$project_member_id";
         }
 
+
+        //add filter by cost center id
+        if (!can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0) {
+            $cost_center_id = $this->login_user->cost_center_id;
+            $where .= " AND $projects.cost_center_id = $cost_center_id";
+        }
 
         $extra_select = ", 0 AS unread";
         $this->_set_unread_tasks_query($options, $tasks_table, $extra_select);
