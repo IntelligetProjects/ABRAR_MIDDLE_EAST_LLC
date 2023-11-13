@@ -287,6 +287,7 @@ class Transactions extends MY_Controller
         if ($transaction_id) {
             $options = array("id" => $transaction_id);
             $transactions_info = $this->Transactions_model->get_details_view($options)->row();
+            set_row_data_currency_rate($transactions_info->currency_rate_at_creation); //SET CURRENCY RATE
             // echo $transaction_id;
             // var_dump($transactions_info); die('hi');
             $view_data['transactions_info'] = $transactions_info;
@@ -409,8 +410,10 @@ class Transactions extends MY_Controller
             $account_parent,
             anchor(get_uri("accounts/view/" . $data->account), $data->acc_name),
             $data->narration . $branch,
-            number_format($debit, 3, ".", ","),
-            number_format($credit, 3, ".", ","),
+            // number_format($debit, 3, ".", ","),
+            // number_format($credit, 3, ".", ","),
+            to_currency($debit),
+            to_currency($credit),
         );
 
 
