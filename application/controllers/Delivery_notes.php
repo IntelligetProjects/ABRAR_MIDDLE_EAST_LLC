@@ -212,6 +212,7 @@ class Delivery_notes extends MY_Controller {
     /* prepare a row of invoice list table */
 
     private function _make_row($data) {
+        set_row_data_currency_rate($data->currency_rate_at_creation); //used for cost center
         
         $delivery_note_url = anchor(get_uri("delivery_notes/view/" . $data->id), get_delivery_note_id($data->id));
 
@@ -237,6 +238,7 @@ class Delivery_notes extends MY_Controller {
 
         $row_data[] =  $rowe;
 
+        unset_row_data_currency_rate();
         return $row_data;
     }
 
@@ -274,6 +276,8 @@ class Delivery_notes extends MY_Controller {
             $view_data = get_delivery_note_making_data($delivery_note_id);
 
             if ($view_data) {
+                set_row_data_currency_rate($view_data["delivery_note_info"]->currency_rate_at_creation);
+
                 $view_data['status'] = $this->_get_delivery_status_label($view_data["delivery_note_info"], false);
                 $view_data['status_label'] = $this->_get_delivery_status_label($view_data["delivery_note_info"]);
                 $view_data['can_approve'] = $this->can_approve();

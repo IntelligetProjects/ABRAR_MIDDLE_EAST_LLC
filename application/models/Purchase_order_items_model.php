@@ -25,7 +25,14 @@ class Purchase_order_items_model extends Crud_model {
             $where .= " AND $purchase_order_items_table.purchase_order_id=$purchase_order_id";
         }
 
+        //add filter by cost center id
+        if (!can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0) {
+            $cost_center_id = $this->login_user->cost_center_id;
+            $where .= " AND $purchase_orders_table.cost_center_id = $cost_center_id";
+        }
+
         $sql = "SELECT $purchase_order_items_table.*, (SELECT $suppliers_table.currency_symbol FROM $suppliers_table WHERE $suppliers_table.id=$purchase_orders_table.supplier_id limit 1) AS currency_symbol, tax_table.percentage AS tax_percentage, tax_table2.percentage AS tax_percentage2
+        ,$purchase_orders_table.currency_rate_at_creation
         FROM $purchase_order_items_table
         LEFT JOIN $purchase_orders_table ON $purchase_orders_table.id=$purchase_order_items_table.purchase_order_id
         LEFT JOIN (SELECT $taxes_table.* FROM $taxes_table) AS tax_table ON tax_table.id = $purchase_order_items_table.tax_id

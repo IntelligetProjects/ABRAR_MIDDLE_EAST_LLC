@@ -78,6 +78,7 @@ class Cheques extends MY_Controller {
 
     //prepare a row of expnese list
     private function _make_row($data) {
+        set_row_data_currency_rate($data->currency_rate_at_creation); // used for cost centre
 
         $description = $data->description;
         if ($data->project_title) {
@@ -186,6 +187,8 @@ class Cheques extends MY_Controller {
         
         $row_data[] = $rowe;
 
+        unset_row_data_currency_rate(); // used for cost centre
+
         return $row_data;
     }
 
@@ -215,6 +218,7 @@ class Cheques extends MY_Controller {
 
 
     private function _make_invoice_payment_row($data) {
+        set_row_data_currency_rate($data->currency_rate_at_creation); //used for cost center
         $invoice_url = "";
 
         if ($this->login_user->user_type == "staff") {
@@ -287,8 +291,9 @@ class Cheques extends MY_Controller {
         js_anchor(lang($data->cheque_transaction_id == 0 ? lang("not_cleared") : lang("cleared")), array('title' => lang("cheque_status"), "class" => "btn btn-default", "data-id" => $data->id, "data-value" => $data->cheque_transaction_id, "data-act" => "update-cheque_status"));
     }
         $row[] = $rowe;
-        return $row;
 
+        unset_row_data_currency_rate();
+        return $row;
     } 
 
     /* list of purchase_order payments, prepared for datatable  */
@@ -317,6 +322,7 @@ class Cheques extends MY_Controller {
     /* prepare a row of purchase_order payment list table */
 
     private function _make_purchase_payment_row($data) {
+        set_row_data_currency_rate($data->currency_rate_at_creation); //used for cost center
         $purchase_order_url = "";
 
 
@@ -387,6 +393,8 @@ class Cheques extends MY_Controller {
     }
 
         $row[] = $rowe;
+
+        unset_row_data_currency_rate();
         return $row;
     }
 

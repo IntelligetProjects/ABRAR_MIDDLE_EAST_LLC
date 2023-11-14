@@ -226,7 +226,8 @@ class Sale_returns extends MY_Controller {
     /* prepare a row of invoice list table */
 
     private function _make_row($data) {
-        
+        set_row_data_currency_rate($data->currency_rate_at_creation); //used for cost center
+
         $sale_return_url = anchor(get_uri("sale_returns/view/" . $data->id), get_sale_return_id($data->id));
 
         $invoice_url = anchor(get_uri("invoices/view/" . $data->invoice_id), get_invoice_id($data->invoice_id));
@@ -259,6 +260,8 @@ class Sale_returns extends MY_Controller {
         }
 
         $row_data[] =  $rowe;
+
+        unset_row_data_currency_rate();
 
         return $row_data;
     }

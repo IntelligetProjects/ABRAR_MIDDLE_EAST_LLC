@@ -62,9 +62,15 @@ class Delivery_notes_model extends Crud_model
         $now = get_my_local_time("Y-m-d");
         $status = get_array_value($options, "status");
 
+        //add filter by cost center id
+        if( !can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0 ){
+            $cost_center_id = $this->login_user->cost_center_id;
+            $where .= " AND $invoices_table.cost_center_id = $cost_center_id";
+        }
+
 
         $sql = "SELECT $delivery_notes_table.*, $clients_table.company_name, $projects_table.title AS project_title, log.user_id as log_user_id,
-           log.created_at as create_time, log.create_user as create_user
+           log.created_at as create_time, log.create_user as create_user, $invoices_table.currency_rate_at_creation
         FROM $delivery_notes_table
         LEFT JOIN $clients_table ON $clients_table.id= $delivery_notes_table.client_id
         LEFT JOIN $invoices_table ON $invoices_table.id= $delivery_notes_table.invoice_id

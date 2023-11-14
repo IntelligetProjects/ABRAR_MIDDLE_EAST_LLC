@@ -91,7 +91,7 @@ if (!function_exists('set_row_data_currency_rate')) {
     {
         $ci = get_instance();
         //check if user can view data from multiple cost centers
-        if ($ci->login_user->is_admin && $currency_rate_at_creation) {
+        if (can_view_all_cost_centers_data() && $currency_rate_at_creation) {
             //set row currency rate
             $ci->session->set_userdata('row_data_currency_rate', $currency_rate_at_creation);
         }
@@ -114,7 +114,7 @@ if (!function_exists('can_view_all_cost_centers_data')) {
     function can_view_all_cost_centers_data()
     {
         $ci = get_instance();
-        return $ci->login_user->is_admin;
+        return $ci->login_user->is_admin && $ci->login_user->cost_center_id == 1;
     }
 }
 

@@ -279,6 +279,8 @@ class Purchase_orders extends MY_Controller {
     /* prepare a row of purchase_order list table */
 
     private function _make_row($data) {
+        set_row_data_currency_rate($data->currency_rate_at_creation); //used for cost center
+
         $purchase_order_url = "";
         if ($this->login_user->user_type == "staff") {
             $purchase_order_url = anchor(get_uri("purchase_orders/view/" . $data->id), get_purchase_order_id($data->id));
@@ -306,6 +308,7 @@ class Purchase_orders extends MY_Controller {
 
         $row_data[] = $this->_make_options_dropdown($data->id);
 
+        unset_row_data_currency_rate(); //used for cost center
         return $row_data;
     }
 
@@ -570,6 +573,8 @@ class Purchase_orders extends MY_Controller {
     /* prepare a row of purchase_order item list table */
 
     private function _make_item_row($data) {
+        set_row_data_currency_rate($data->currency_rate_at_creation); // used for cost center id
+
         $item = "<div class='item-row strong mb5' data-id='$data->id'><i class='fa fa-bars pull-left move-icon'></i> $data->title</div>";
         if ($data->description) {
             $item .= "<span style='margin-left:25px'>" . nl2br($data->description) . "</span>";
@@ -588,7 +593,7 @@ class Purchase_orders extends MY_Controller {
         $do_type = isset($data->unit_type) ? ($data->unit_type ? $data->unit_type : "") : "";
         $do_quantity =  isset($do_qty) ? $do_qty : 0;
 
-        return array(
+        $row =  array(
             $data->sort,
             $item,
             to_decimal_format($data->quantity) . " " . $type,
@@ -601,6 +606,9 @@ class Purchase_orders extends MY_Controller {
             . js_anchor("<i class='fa fa-plus fa-fw'></i>", array('title' => lang('add'), "class" => "edit", "data-id" => $data->id, "data-qty" => $data->quantity,"data-action-url" => get_uri("purchase_orders/change_item_qty/plus"), "data-action" => "qty"))
             . js_anchor("<i class='fa fa-minus fa-fw'></i>", array('title' => lang('substract'), "class" => "delete", "data-id" => $data->id, "data-qty" => $data->quantity, "data-action-url" => get_uri("purchase_orders/change_item_qty/minus"), "data-action" => "qty"))
         );
+
+        unset_row_data_currency_rate();
+        return $row;
     }
 
     /* add and minus qty */

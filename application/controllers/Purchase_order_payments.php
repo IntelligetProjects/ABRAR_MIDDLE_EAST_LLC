@@ -230,6 +230,7 @@ class Purchase_order_payments extends MY_Controller {
     /* prepare a row of purchase_order payment list table */
 
     private function _make_payment_row($data) {
+        set_row_data_currency_rate($data->currency_rate_at_creation);
         $purchase_order_url = "";
 
 
@@ -309,6 +310,8 @@ class Purchase_order_payments extends MY_Controller {
             $rowe .= js_anchor("<i class='fa fa-times fa-fw'></i>", array('title' => lang('delete'), "class" => "delete", "data-id" => $data->id, "data-action-url" => get_uri("purchase_order_payments/delete_payment"), "data-action" => "delete"));
         }
         $row[] = $rowe;
+
+        unset_row_data_currency_rate();
         return $row;
     }
 

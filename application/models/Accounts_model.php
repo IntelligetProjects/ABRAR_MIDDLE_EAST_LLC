@@ -1,20 +1,22 @@
 <?php
 
-class Accounts_model extends Crud_model {
+class Accounts_model extends Crud_model
+{
 
     private $table = null;
 
-    function __construct() {
-        $this->table =$this->db->dbprefix('accounts');
+    function __construct()
+    {
+        $this->table = $this->db->dbprefix('accounts');
         parent::__construct($this->table);
-       
-    }   
+    }
 
 
-    function get_details($options = array()) {
+    function get_details($options = array())
+    {
 
         $where = "";
-       
+
         $parent = get_array_value($options, "parent_id");
         if ($parent) {
             if ($parent == 'root') {
@@ -33,10 +35,11 @@ class Accounts_model extends Crud_model {
         return $this->db->query($sql);
     }
 
-    function get_all_order_by_acc_code($options = array()) {
+    function get_all_order_by_acc_code($options = array())
+    {
 
         $where = "";
-       
+
         $parent = get_array_value($options, "parent_id");
         if ($parent) {
             if ($parent == 'root') {
@@ -102,7 +105,8 @@ class Accounts_model extends Crud_model {
     }*/
 
 
-    function get_direct_childern($options) {
+    function get_direct_childern($options)
+    {
 
         $accounts = array();
         $accounts = get_array_value($options, "accounts");
@@ -118,17 +122,25 @@ class Accounts_model extends Crud_model {
         return $this->db->query($sql)->row()->list;
     }
 
-    function get_profit_loss_data($start_date ='2000-01-01', $end_date ='2099-12-31'){
+    function get_profit_loss_data($start_date = '2000-01-01', $end_date = '2099-12-31')
+    {
         $invoice_items_table = $this->db->dbprefix('invoice_items');
-        $invoices_table= $this->db->dbprefix('invoices');
-        $taxes_table= $this->db->dbprefix('taxes');
-        $sale_returns_table= $this->db->dbprefix('sale_returns');
-        $sale_return_items_table= $this->db->dbprefix('sale_return_items');
-        $expenses_table= $this->db->dbprefix('expenses');
-        $taxes_table= $this->db->dbprefix('taxes');
-        $taxes_table= $this->db->dbprefix('taxes');
+        $invoices_table = $this->db->dbprefix('invoices');
+        $taxes_table = $this->db->dbprefix('taxes');
+        $sale_returns_table = $this->db->dbprefix('sale_returns');
+        $sale_return_items_table = $this->db->dbprefix('sale_return_items');
+        $expenses_table = $this->db->dbprefix('expenses');
+        $taxes_table = $this->db->dbprefix('taxes');
+        $taxes_table = $this->db->dbprefix('taxes');
         //Total invoices 
-        $sale_invoices_sql="
+        //add filter by cost center id
+        $invoice_cost_center_filter = "";
+        if ( $this->login_user->cost_center_id > 0) {
+            $cost_center_id = $this->login_user->cost_center_id;
+            $invoice_cost_center_filter .= " AND $invoices_table.cost_center_id = $cost_center_id";
+        }
+
+        $sale_invoices_sql = "
         SELECT 
         SUM($invoice_items_table.total - IF($invoice_items_table.discount_amount_type='percentage',$invoice_items_table.total*$invoice_items_table.discount_amount/100,$invoice_items_table.discount_amount)) AS total,
         SUM(($invoice_items_table.total - IF($invoice_items_table.discount_amount_type='percentage',$invoice_items_table.total*$invoice_items_table.discount_amount/100,$invoice_items_table.discount_amount))*$taxes_table.percentage*0.01) AS tax
@@ -137,11 +149,12 @@ class Accounts_model extends Crud_model {
         ON $invoices_table.id = $invoice_items_table.invoice_id 
         LEFT JOIN $taxes_table
         ON $taxes_table.id= $invoice_items_table.tax_id
-        WHERE approval_status ='approved' AND $invoices_table.deleted=0  AND $invoice_items_table.deleted=0 AND ($invoices_table.bill_date BETWEEN '$start_date' AND '$end_date')
+        WHERE approval_status ='approved' AND $invoices_table.deleted=0  AND $invoice_items_table.deleted=0 AND ($invoices_table.bill_date BETWEEN '$start_date' AND '$end_date') 
+        $invoice_cost_center_filter
         ";
         $sales = $this->db->query($sale_invoices_sql)->row();
         // Total Sales Return 
-        $sales_return_sql="
+        $sales_return_sql = "
         SELECT 
         SUM(($invoice_items_table.rate * $sale_return_items_table.quantity) - IF($invoice_items_table.discount_amount_type='percentage',$invoice_items_table.rate * $sale_return_items_table.quantity*$invoice_items_table.discount_amount/100,$invoice_items_table.discount_amount)) AS total,
         SUM((($invoice_items_table.rate * $sale_return_items_table.quantity) - IF($invoice_items_table.discount_amount_type='percentage',$invoice_items_table.rate * $sale_return_items_table.quantity*$invoice_items_table.discount_amount/100,$invoice_items_table.discount_amount))*$taxes_table.percentage*0.01) AS tax
@@ -155,50 +168,62 @@ class Accounts_model extends Crud_model {
         LEFT JOIN $taxes_table
         ON $taxes_table.id= $invoice_items_table.tax_id
         WHERE $sale_returns_table.`status` ='approved' AND $sale_returns_table.deleted=0  AND $sale_return_items_table.deleted=0 AND $invoice_items_table.deleted=0 AND ($sale_returns_table.date BETWEEN '$start_date' AND '$end_date')
+        $invoice_cost_center_filter
         ";
         $sales_return = $this->db->query($sales_return_sql)->row();
         // Total Cost of Goods 
-        $cog_sql="
+        $cog_sql = "
         SELECT 
         SUM($invoice_items_table.cost * $invoice_items_table.quantity) AS total_cost
         FROM $invoices_table
         INNER JOIN $invoice_items_table
         ON $invoices_table.id = $invoice_items_table.invoice_id 
         WHERE approval_status ='approved' AND $invoices_table.deleted=0  AND $invoice_items_table.deleted=0 AND ($invoices_table.bill_date BETWEEN '$start_date' AND '$end_date')
+        $invoice_cost_center_filter
         ";
         $cos = $this->db->query($cog_sql)->row();
         // Total Expenses 
-        $expenses_sql="
+
+        //add filter by cost center id
+        $expenses_cost_center_filter = "";
+        if ( $this->login_user->cost_center_id > 0) {
+            $cost_center_id = $this->login_user->cost_center_id;
+            $expenses_cost_center_filter .= " AND $expenses_table.cost_center_id = $cost_center_id";
+        }
+
+        $expenses_sql = "
         SELECT SUM($expenses_table.amount) AS total,
         SUM(($expenses_table.amount * $taxes_table.percentage)*0.01) AS tax
         FROM $expenses_table 
         LEFT JOIN  $taxes_table 
         ON  $expenses_table.tax_id=$taxes_table.id
         WHERE $expenses_table.status ='approved' AND ($expenses_table.expense_date BETWEEN '$start_date' AND '$end_date')
+        $expenses_cost_center_filter
         ";
         $expenses = $this->db->query($expenses_sql)->row();
         $result = new stdClass();
-        $result->gross_sales=number_format($sales->total, 3, ".", "");
-        $result->gross_sales_tax=number_format($sales->total +$sales->tax, 3, ".", "");
-        $result->sales_return=number_format($sales_return->total, 3, ".", "");
-        $result->sales_return_tax=number_format($sales_return->total +$sales_return->tax, 3, ".", "");
-        $result->net_sales=number_format($result->gross_sales-$result->sales_return, 3, ".", "");
-        $result->net_sales_tax=number_format($result->gross_sales_tax-$result->sales_return_tax, 3, ".", "");
-        $result->cog=number_format($cos->total_cost, 3, ".", "");
-        $result->gross_profit= number_format($result->net_sales - $result->cog, 3, ".", "");
-        $result->gross_profit_tax= number_format($result->net_sales_tax - $result->cog, 3, ".", "");
-        $result->expenses= number_format($expenses->total, 3, ".", "");
-        $result->expenses_tax= number_format($expenses->total+$expenses->tax, 3, ".", "");
-        $result->profit_befor_tax= number_format($result->gross_profit - $result->expenses, 3, ".", "");
-        $result->profit_after_tax= number_format($result->gross_profit_tax - $result->expenses_tax, 3, ".", "");
-        $result->income_from_operations=number_format(0, 3, ".", "");
+        $result->gross_sales = number_format($sales->total, 3, ".", "");
+        $result->gross_sales_tax = number_format($sales->total + $sales->tax, 3, ".", "");
+        $result->sales_return = number_format($sales_return->total, 3, ".", "");
+        $result->sales_return_tax = number_format($sales_return->total + $sales_return->tax, 3, ".", "");
+        $result->net_sales = number_format($result->gross_sales - $result->sales_return, 3, ".", "");
+        $result->net_sales_tax = number_format($result->gross_sales_tax - $result->sales_return_tax, 3, ".", "");
+        $result->cog = number_format($cos->total_cost, 3, ".", "");
+        $result->gross_profit = number_format($result->net_sales - $result->cog, 3, ".", "");
+        $result->gross_profit_tax = number_format($result->net_sales_tax - $result->cog, 3, ".", "");
+        $result->expenses = number_format($expenses->total, 3, ".", "");
+        $result->expenses_tax = number_format($expenses->total + $expenses->tax, 3, ".", "");
+        $result->profit_befor_tax = number_format($result->gross_profit - $result->expenses, 3, ".", "");
+        $result->profit_after_tax = number_format($result->gross_profit_tax - $result->expenses_tax, 3, ".", "");
+        $result->income_from_operations = number_format(0, 3, ".", "");
         return $result;
     }
-    function get_balance($acc, $start_date ='2000-01-01', $end_date ='2099-12-31', $branch_id = 0, $unit = ""){
+    function get_balance($acc, $start_date = '2000-01-01', $end_date = '2099-12-31', $branch_id = 0, $unit = "")
+    {
         $enteries = $this->db->dbprefix('enteries');
-        $transactions= $this->db->dbprefix('transactions');
+        $transactions = $this->db->dbprefix('transactions');
         $dr_balance = 0;
-        $cr_balance = 0; 
+        $cr_balance = 0;
 
         $list = $this->get_children($acc)->list;
 
@@ -229,7 +254,7 @@ class Accounts_model extends Crud_model {
 
         if ($branch_id && $unit != "retail") {
             $where .= " AND ent.branch_id= 909009";
-        } 
+        }
 
         $hoa = 100;
         $csa = 100;
@@ -240,12 +265,12 @@ class Accounts_model extends Crud_model {
             $csa = $central_store_retail_allocation;
             if ($branch_id) {
                 $where .= " AND ( ent.branch_id = $branch_id OR ent.unit = 'head_office' ) ";
-                if($branch_id = 4) {//g1
-                    $hoa = $head_office_retail_allocation*(0.01*$retail_g1_allocation);
-                } else if ($branch_id = 3) {//g2
-                    $hoa = $head_office_retail_allocation*(0.01*$retail_g2_allocation);
-                } else if ($branch_id = 6) {//qurum
-                    $hoa = $head_office_retail_allocation*(0.01*$retail_qurum_allocation);
+                if ($branch_id = 4) { //g1
+                    $hoa = $head_office_retail_allocation * (0.01 * $retail_g1_allocation);
+                } else if ($branch_id = 3) { //g2
+                    $hoa = $head_office_retail_allocation * (0.01 * $retail_g2_allocation);
+                } else if ($branch_id = 6) { //qurum
+                    $hoa = $head_office_retail_allocation * (0.01 * $retail_qurum_allocation);
                 } else {
                     $hoa = $head_office_retail_allocation;
                 }
@@ -289,12 +314,12 @@ class Accounts_model extends Crud_model {
         if ($unit == "retail") {
             $hoa_s = $head_office_salary_retail_allocation;
             if ($branch_id) {
-                if($branch_id = 4) {//g1
-                    $hoa_s = $head_office_salary_retail_allocation*(0.01*$retail_salary_g1_allocation);
-                } else if ($branch_id = 3) {//g2
-                    $hoa_s = $head_office_salary_retail_allocation*(0.01*$retail_salary_g2_allocation);
-                } else if ($branch_id = 6) {//qurum
-                    $hoa_s = $head_office_salary_retail_allocation*(0.01*$retail_salary_qurum_allocation);
+                if ($branch_id = 4) { //g1
+                    $hoa_s = $head_office_salary_retail_allocation * (0.01 * $retail_salary_g1_allocation);
+                } else if ($branch_id = 3) { //g2
+                    $hoa_s = $head_office_salary_retail_allocation * (0.01 * $retail_salary_g2_allocation);
+                } else if ($branch_id = 6) { //qurum
+                    $hoa_s = $head_office_salary_retail_allocation * (0.01 * $retail_salary_qurum_allocation);
                 } else {
                     $hoa_s = $head_office_salary_retail_allocation;
                 }
@@ -332,17 +357,17 @@ class Accounts_model extends Crud_model {
         ";
 
 
-        $sql= "SELECT SUM(ent.amount) amount, ent.type type, trans.deleted, trans.date, ent.deleted FROM 
+        $sql = "SELECT SUM(ent.amount) amount, ent.type type, trans.deleted, trans.date, ent.deleted FROM 
         (SELECT * FROM $enteries WHERE find_in_set ($enteries.account, '$list') AND $enteries.deleted = 0) ent  
         INNER JOIN
         (SELECT * FROM $transactions) trans
         ON (ent.trans_id = trans.id)
         WHERE trans.deleted = 0  AND ent.deleted = 0 $where GROUP BY ent.type";
-        
+
 
         $data = $this->db->query($sql)->result();
 
-        $query = $this->db->last_query();        
+        $query = $this->db->last_query();
 
         foreach ($data as $element) {
             if ($element->type == 'dr') {
@@ -372,14 +397,14 @@ class Accounts_model extends Crud_model {
             "query" => $query
         );
         return $result;
-
     }
 
-    function get_balance__($acc){
+    function get_balance__($acc)
+    {
         $enteries = $this->db->dbprefix('enteries');
         $transactions = $this->db->dbprefix('transactions');
         $dr_balance = 0;
-        $cr_balance = 0; 
+        $cr_balance = 0;
 
         $list = $this->get_children($acc)->list;
 
@@ -390,7 +415,7 @@ class Accounts_model extends Crud_model {
         }
 
 
-        $sql= "SELECT ent.account, SUM(IF(ent.type = dr, ent.amount, 0)) dr_amount, SUM(IF(ent.type = cr, ent.amount, 0)) cr_amount, trans.deleted, trans.date, ent.deleted FROM 
+        $sql = "SELECT ent.account, SUM(IF(ent.type = dr, ent.amount, 0)) dr_amount, SUM(IF(ent.type = cr, ent.amount, 0)) cr_amount, trans.deleted, trans.date, ent.deleted FROM 
         (SELECT * FROM $enteries WHERE find_in_set ($enteries.account, '$list') AND $enteries.deleted = 0) ent  
         INNER JOIN
         (SELECT * FROM $transactions) trans
@@ -399,7 +424,7 @@ class Accounts_model extends Crud_model {
 
         $data = $this->db->query($sql)->result();
 
-        $query = $this->db->last_query();        
+        $query = $this->db->last_query();
 
         foreach ($data as $element) {
             if ($element->type == 'dr') {
@@ -429,11 +454,11 @@ class Accounts_model extends Crud_model {
             "query" => $query
         );
         return $result;
-
     }
 
 
-    function get_entries($acc, $start_date = "", $end_date = "", $branch_id = 0, $unit = "", $concerned_person = 0){
+    function get_entries($acc, $start_date = "", $end_date = "", $branch_id = 0, $unit = "", $concerned_person = 0)
+    {
         $transactions = $this->db->dbprefix('transactions');
         $enteries = $this->db->dbprefix('enteries');
         if ($acc == 0) {
@@ -441,7 +466,7 @@ class Accounts_model extends Crud_model {
         } else {
             $list = $this->get_children($acc)->list;
         }
-        
+
         if ($list) {
             $list .= "," . $acc;
         } else {
@@ -464,56 +489,62 @@ class Accounts_model extends Crud_model {
         if ($concerned_person) {
             $where .= " AND $enteries.concerned_person = $concerned_person ";
         }
-      
+
         $sql = "SELECT *,    $transactions.id AS trans_id FROM   $transactions
                 INNER JOIN $enteries
                 ON ($enteries.trans_id =   $transactions.id)
                 WHERE $enteries.deleted = 0 AND   $transactions.deleted = 0 AND $enteries.account in ($list) $where ORDER BY $transactions.date ASC";
-        
+
         return $this->db->query($sql)->result();
     }
 
-    function get_involved_transactions($acc_list) {
+    function get_involved_transactions($acc_list)
+    {
         $enteries = $this->db->dbprefix('enteries');
         $sql = "SELECT GROUP_CONCAT(trans_id) as list from $enteries where $enteries.deleted=0 and  $enteries.account in ($acc_list)";
 
         return $this->db->query($sql)->row();
-
     }
 
 
-    function get_banking_accounts() {
-        $parent_id= get_setting("banks_accounts_parent");
+    function get_banking_accounts()
+    {
+        $parent_id = get_setting("banks_accounts_parent");
         $sql = "SELECT * FROM   $this->table
                 WHERE (acc_parent = $parent_id) and deleted = 0";
 
         return $this->db->query($sql)->result();
-
     }
 
-    function get_treasury_accounts() {
-        $parent_id= get_setting("cash_on_hand_accounts_parent");
+    function get_treasury_accounts()
+    {
+        $parent_id = get_setting("cash_on_hand_accounts_parent");
         $sql = "SELECT * FROM   $this->table
                 WHERE (acc_parent =  $parent_id) and deleted = 0";
         return $this->db->query($sql)->result();
     }
 
     //the parent id
-    function get_banking_accounts_id() {
+    function get_banking_accounts_id()
+    {
         return get_setting("banks_accounts_parent");
     }
-    function get_expense_accounts_id() {
+    function get_expense_accounts_id()
+    {
         return get_setting("expenses_accounts_parent");
     }
-    function get_client_accounts_id() {
+    function get_client_accounts_id()
+    {
         return get_setting("clients_accounts_parent");
     }
-    function get_treasury_accounts_id() {
+    function get_treasury_accounts_id()
+    {
         return get_setting("cash_on_hand_accounts_parent");
     }
 
 
-    function get_accounts_suggestion($keyword = "", $accounts = array(), $exclude_accounts = array()) {
+    function get_accounts_suggestion($keyword = "", $accounts = array(), $exclude_accounts = array())
+    {
         $where = "";
         if (is_array($accounts) && count($accounts)) {
             $accounts = join(",", $accounts);
@@ -535,7 +566,8 @@ class Accounts_model extends Crud_model {
         return $this->db->query($sql)->result();
     }
 
-    function get_children ($acc){
+    function get_children($acc)
+    {
         $enteries = $this->db->dbprefix('enteries');
         //get the list of account and sub childs
         $sqlSetting  = "SET SESSION GROUP_CONCAT_MAX_LEN = 99999999;";
@@ -551,10 +583,10 @@ class Accounts_model extends Crud_model {
 
         return $this->db->query($sql)->row();
     }
-    function get_children_l4 ($parent){
+    function get_children_l4($parent)
+    {
         // $sql = "SELECT parent.id,parent.acc_name,sub.acc_name from $this->table where acc_parent=$parent and  CHAR_LENGTH(acc_code)=5  ";
         $sql = "SELECT parent.acc_name,sub.id,sub.acc_name ,sub.acc_code from $this->table as parent INNER JOIN $this->table AS sub ON parent.id=sub.acc_parent WHERE parent.acc_parent=$parent AND sub.deleted =0 AND  CHAR_LENGTH(sub.acc_code)>=5";
         return $this->db->query($sql)->result();
     }
-
 }

@@ -64,12 +64,12 @@ class Invoice_payments_model extends Crud_model
         }
 
         //add filter by cost center id
-        if ($this->login_user->cost_center_id > 0) {
+        if ( !can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0) {
             $cost_center_id = $this->login_user->cost_center_id;
             $where .= " AND $invoices_table.cost_center_id = $cost_center_id";
         }
 
-        $sql = "SELECT $invoice_payments_table.*, $invoices_table.client_id, (SELECT $clients_table.currency_symbol FROM $clients_table WHERE $clients_table.id=$invoices_table.client_id limit 1) AS currency_symbol,  (SELECT $clients_table.company_name FROM $clients_table WHERE $clients_table.id=$invoices_table.client_id limit 1) AS company_name, $payment_methods_table.title AS payment_method_title, CONCAT($users_table.first_name,' ',$users_table.last_name) as user_name, $users_table.image as user_image
+        $sql = "SELECT $invoice_payments_table.*, $invoices_table.client_id, $invoices_table.currency_rate_at_creation, (SELECT $clients_table.currency_symbol FROM $clients_table WHERE $clients_table.id=$invoices_table.client_id limit 1) AS currency_symbol,  (SELECT $clients_table.company_name FROM $clients_table WHERE $clients_table.id=$invoices_table.client_id limit 1) AS company_name, $payment_methods_table.title AS payment_method_title, CONCAT($users_table.first_name,' ',$users_table.last_name) as user_name, $users_table.image as user_image
         FROM $invoice_payments_table
         LEFT JOIN $invoices_table ON $invoices_table.id=$invoice_payments_table.invoice_id
         LEFT JOIN $payment_methods_table ON $payment_methods_table.id = $invoice_payments_table.payment_method_id

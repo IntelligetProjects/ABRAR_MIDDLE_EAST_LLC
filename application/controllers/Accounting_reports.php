@@ -115,6 +115,7 @@ class Accounting_reports extends MY_Controller {
         //$view_data['units_dropdown'] = $this->_get_units_dropdown();
         $this->load->view("accounting_reports/profit_and_loss",$view_data); 
     }
+
     public function profit_and_loss_get_data() {
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');
@@ -168,6 +169,7 @@ class Accounting_reports extends MY_Controller {
         array_push($dx,$d);
         echo json_encode(array("data" => $dx));
     }
+    
     public function profit_and_loss_list_data() {
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');

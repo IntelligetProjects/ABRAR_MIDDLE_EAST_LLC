@@ -65,12 +65,12 @@ class Purchase_order_payments_model extends Crud_model
 
 
         //add filter by cost center id
-        if ($this->login_user->cost_center_id > 0) {
+        if (!can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0) {
             $cost_center_id = $this->login_user->cost_center_id;
             $where .= " AND $purchase_orders_table.cost_center_id = $cost_center_id";
         }
 
-        $sql = "SELECT $purchase_order_payments_table.*, $purchase_orders_table.supplier_id, (SELECT $suppliers_table.currency_symbol FROM $suppliers_table WHERE $suppliers_table.id=$purchase_orders_table.supplier_id limit 1) AS currency_symbol, $payment_methods_table.title AS payment_method_title,  (SELECT $suppliers_table.company_name FROM $suppliers_table WHERE $suppliers_table.id=$purchase_orders_table.supplier_id limit 1) AS company_name, CONCAT($users_table.first_name,' ',$users_table.last_name) as user_name, $users_table.image as user_image
+        $sql = "SELECT $purchase_order_payments_table.*, $purchase_orders_table.supplier_id, $purchase_orders_table.currency_rate_at_creation , (SELECT $suppliers_table.currency_symbol FROM $suppliers_table WHERE $suppliers_table.id=$purchase_orders_table.supplier_id limit 1) AS currency_symbol, $payment_methods_table.title AS payment_method_title,  (SELECT $suppliers_table.company_name FROM $suppliers_table WHERE $suppliers_table.id=$purchase_orders_table.supplier_id limit 1) AS company_name, CONCAT($users_table.first_name,' ',$users_table.last_name) as user_name, $users_table.image as user_image
         FROM $purchase_order_payments_table
         LEFT JOIN $purchase_orders_table ON $purchase_orders_table.id=$purchase_order_payments_table.purchase_order_id
         LEFT JOIN $payment_methods_table ON $payment_methods_table.id = $purchase_order_payments_table.payment_method_id
