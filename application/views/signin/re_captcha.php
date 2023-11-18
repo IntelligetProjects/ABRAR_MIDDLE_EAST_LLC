@@ -2,7 +2,7 @@
 $site_key = get_setting("re_captcha_site_key");
 // $secret_key = get_setting("re_captcha_secret_key");
 
-if ($site_key && $secret_key) {
+if ($site_key) {
     ?>
 
     <div class="form-group">
