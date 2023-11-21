@@ -75,8 +75,8 @@ if (get_setting("module_invoice") == "1"||get_setting("module_estimate") == "1")
 //$settings_menu["setup"][] = array("name" => "payment_methods", "url" => "payment_methods");
 $settings_menu["setup"][] = array("name" => "company", "url" => "settings/company");
 $settings_menu["setup"][] = array("name" => "taxes", "url" => "taxes");
-$settings_menu["setup"][] = array("name" => "currencies", "url" => "currencies");
-$settings_menu["setup"][] = array("name" => "cost_centers", "url" => "cost_centers");
+// $settings_menu["setup"][] = array("name" => "currencies", "url" => "currencies");
+// $settings_menu["setup"][] = array("name" => "cost_centers", "url" => "cost_centers");
 
 if (get_setting("module_lead") == "1") {
     $settings_menu["setup"][] = array("name" => "leads", "url" => "lead_status");
