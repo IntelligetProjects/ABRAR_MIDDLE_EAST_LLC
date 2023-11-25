@@ -797,7 +797,11 @@ class Team_members extends MY_Controller
             $view_data['user_info']->role_id = "admin";
         }
         $view_data['role_dropdown'] = $this->_get_roles_dropdown();
+
+     
         $view_data['cost_centers_dropdown'] = array("" => "-") + $this->Cost_centers_model->get_dropdown_list(array("name"));
+        
+
         $this->load->view("users/account_settings", $view_data);
     }
 
@@ -902,8 +906,12 @@ class Team_members extends MY_Controller
         }
         $account_data = array(
             "email" => $this->input->post('email'),
-            "cost_center_id" => $this->input->post('cost_center_id')
+          
         );
+
+        if( can_view_all_cost_centers_data() ){
+            $account_data["cost_center_id"] = $this->input->post('cost_center_id');
+        }
 
         if ($this->login_user->is_admin && $this->login_user->id != $user_id) {
             //only admin user has permission to update team member's role

@@ -84,7 +84,8 @@
                     <label for="cost_center_id" class=" col-md-2"><?php echo lang('cost_center'); ?></label>
                     <div class=" col-md-10">
                         <?php
-                        echo form_dropdown("cost_center_id", $cost_centers_dropdown, array($user_info->cost_center_id), "class='select2' id='cost_center_id'");
+                        $dis = !can_view_all_cost_centers_data() ? "disabled" : "";
+                        echo form_dropdown("cost_center_id", $cost_centers_dropdown, array($user_info->cost_center_id), "class='select2' id='cost_center_id' " . $dis);
                         ?>
                     </div>
                 </div>
