@@ -144,12 +144,16 @@ class Items_model extends Crud_model
         return $this->db->query($sql);
     }
 
-    function get_one_with_currency_data($id)
+    function get_one_with_currency_data($id = 0)
     {
         $items_table = $this->db->dbprefix('items');
 
         $currencies_table = $this->db->dbprefix('currencies');
         $cost_centers_table = $this->db->dbprefix('cost_centers');
+
+        if(!$id){
+            return $this->get_empty_table_object();
+        }
 
         $sql = "SELECT $items_table.*, $currencies_table.symbol AS currency_symbol 
                 FROM $items_table
@@ -158,6 +162,21 @@ class Items_model extends Crud_model
                 WHERE $items_table.deleted = 0 AND $items_table.id = $id
         ";
 
-        return $this->db->query($sql)->row();
+        $result =  $this->db->query($sql);
+
+        if ($result->num_rows()) {
+            return $result->row();
+        } else {
+            return $this->get_empty_table_object();
+        }
+    }
+
+    private function get_empty_table_object(){
+        $db_fields = $this->db->list_fields($this->table);
+            $fields = new stdClass();
+            foreach ($db_fields as $field) {
+                $fields->$field = "";
+            }
+            return $fields;
     }
 }

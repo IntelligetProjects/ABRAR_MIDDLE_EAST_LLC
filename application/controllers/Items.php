@@ -68,10 +68,11 @@ class Items extends MY_Controller
         $view_data['types_dropdown'] = array("" => "-", 'service' => lang('service'), 'product' => lang('product'));
 
         // $view_data['model_info'] = $this->Items_model->get_one($this->input->post('id'));
-        $model_info = $this->Items_model->get_one_with_currency_data($this->input->post('id'));
+        $id = $this->input->post('id');
+        $model_info = $this->Items_model->get_one_with_currency_data($id);
         $view_data['model_info'] = $model_info;
 
-        if($model_info->currency_symbol && $model_info->cost_center_id != $this->login_user->cost_center_id)
+        if($id && $model_info && $model_info->currency_symbol && $model_info->cost_center_id != $this->login_user->cost_center_id)
         $view_data['currency_note'] = '<br><p class="text-danger">*Note: price currency is '.$model_info->currency_symbol.'</p>';
         else $view_data['currency_note'] = "";
 
