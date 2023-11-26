@@ -8,7 +8,7 @@ class Items_model extends Crud_model
     function __construct()
     {
         $this->table = 'items';
-        parent::__construct($this->table,true);
+        parent::__construct($this->table, true);
         $this->init_activity_log($this->table, $this->table);
     }
 
@@ -31,6 +31,11 @@ class Items_model extends Crud_model
         $sale_returns_table = $this->db->dbprefix('sale_returns');
         $purchase_return_items_table = $this->db->dbprefix('purchase_return_items');
         $purchase_returns_table = $this->db->dbprefix('purchase_returns');
+        
+        $currencies_table = $this->db->dbprefix('currencies');
+        $cost_centers_table = $this->db->dbprefix('cost_centers');
+
+
         $where = "";
         $id = get_array_value($options, "id");
         if ($id) {
@@ -54,15 +59,28 @@ class Items_model extends Crud_model
         }
 
         //add filter by cost center id
-        if ( !can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0) {
+        if (!can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0) {
             $cost_center_id = $this->login_user->cost_center_id;
             $where .= " AND $items_table.cost_center_id = $cost_center_id";
         }
 
+        //if user can view all data get the current cost center currency rate
+        $join_currency_query = "";
+        $select_currency_rate = "";
+        if(can_view_all_cost_centers_data()){
+            $select_currency_rate = ",$currencies_table.rate AS currency_rate";
+            $join_currency_query = "
+            LEFT JOIN $cost_centers_table AS cs ON $items_table.cost_center_id = cs.id
+            LEFT JOIN $currencies_table ON cs.currency_id = $currencies_table.id
+            ";
+        }
+
         $sql = "SELECT $items_table.*, $item_categories_table.title AS category_title, purchased_qty, invoiced_qty, delivered_qty,shipment_qty, sale_return_qty, purchase_return_qty, log.user_id as log_user_id, ad_qty,
-           log.created_at as create_time, log.create_user as create_user
+        log.created_at as create_time, log.create_user as create_user
+        $select_currency_rate
         FROM $items_table
         LEFT JOIN $item_categories_table ON $items_table.category_id = $item_categories_table.id
+        $join_currency_query
 
         LEFT JOIN (SELECT item_id, sum(quantity) as purchased_qty 
                    FROM $purchased_order_items_table as detail
@@ -124,5 +142,22 @@ class Items_model extends Crud_model
 
         WHERE $items_table.deleted=0 $where";
         return $this->db->query($sql);
+    }
+
+    function get_one_with_currency_data($id)
+    {
+        $items_table = $this->db->dbprefix('items');
+
+        $currencies_table = $this->db->dbprefix('currencies');
+        $cost_centers_table = $this->db->dbprefix('cost_centers');
+
+        $sql = "SELECT $items_table.*, $currencies_table.symbol AS currency_symbol 
+                FROM $items_table
+                LEFT JOIN $cost_centers_table AS cs ON $items_table.cost_center_id = cs.id
+                LEFT JOIN $currencies_table ON cs.currency_id = $currencies_table.id
+                WHERE $items_table.deleted = 0 AND $items_table.id = $id
+        ";
+
+        return $this->db->query($sql)->row();
     }
 }

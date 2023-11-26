@@ -93,7 +93,7 @@
     </div>
 
     <div class="form-group">
-        <label for="item_cost" class=" col-md-3"><?php echo lang('cost_price'); ?></label>
+        <label for="item_cost" class=" col-md-3"><?php echo lang('cost_price'). $currency_note; ?></label>
         <div class="col-md-9">
             <?php
             echo form_input(array(
@@ -110,7 +110,8 @@
     </div>
     
     <div class="form-group">
-        <label for="item_rate" class=" col-md-3"><?php echo lang('rate'); ?></label>
+        
+        <label for="item_rate" class=" col-md-3"><?php echo lang('rate') . $currency_note ; ?></label>
         <div class="col-md-9">
             <?php
             echo form_input(array(

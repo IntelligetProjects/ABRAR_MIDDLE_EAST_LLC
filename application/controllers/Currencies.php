@@ -11,7 +11,8 @@ class Currencies extends MY_Controller {
     }
 
     function index() {
-        $this->template->rander("currencies/index");
+        $view_data["can_add"] = $this->can_add();
+        $this->template->rander("currencies/index", $view_data);
     }
 
     function modal_form() {
@@ -20,6 +21,7 @@ class Currencies extends MY_Controller {
             "id" => "numeric"
         ));
 
+        $view_data['currency_note'] = '<br><p class="text-info">*Exchange rate to OMR</p>';
         $view_data['model_info'] = $this->Currencies_model->get_one($this->input->post('id'));
         $this->load->view('currencies/modal_form', $view_data);
     }
@@ -35,8 +37,8 @@ class Currencies extends MY_Controller {
         
         $id = $this->input->post('id');
 
-        if(!$this->can_add() || ($id && !$this->can_edit($id)) ){
-            echo json_encode(array("success" => false, lang('forbidden')));
+        if(!$this->can_add() && ($id && !$this->can_edit($id)) ){
+            echo json_encode(array("success" => false, "msg" => lang('forbidden')));
             return;
         }
 
@@ -121,19 +123,21 @@ class Currencies extends MY_Controller {
     }
 
     private function can_delete($id){
-        if ($this->login_user->user_type == "staff") {
-            if ($this->login_user->is_admin && $id != 1) {
-                return true;
-            }
-        }
+        return false;
+        // if ($this->login_user->user_type == "staff") {
+        //     if ($this->login_user->is_admin && $id != 1) {
+        //         return true;
+        //     }
+        // }
     }
 
     private function can_add(){
-        if ($this->login_user->user_type == "staff") {
-            if ($this->login_user->is_admin) {
-                return true;
-            }
-        }
+        return false;
+        // if ($this->login_user->user_type == "staff") {
+        //     if ($this->login_user->is_admin) {
+        //         return true;
+        //     }
+        // }
     }
 
     public function set_current_view_currency_in_session($currency_id){

@@ -13,24 +13,6 @@ class Items extends MY_Controller
         $this->access_allowed_members();
     }
 
-    /*protected function validate_access_to_items() {
-        $access_invoice = $this->get_access_info("invoice");
-        $access_estimate = $this->get_access_info("estimate");
-
-        //don't show the items if invoice/estimate module is not enabled
-        if(!(get_setting("module_invoice") == "1" || get_setting("module_estimate") == "1" )){
-            redirect("forbidden");
-        }
-        
-        if ($this->login_user->is_admin) {
-            return true;
-        } else if ($access_invoice->access_type === "all" || $access_estimate->access_type === "all") {
-            return true;
-        } else {
-            redirect("forbidden");
-        }
-    }*/
-
     //load note list view
     function index()
     {
@@ -85,7 +67,13 @@ class Items extends MY_Controller
         $view_data['categories_dropdown'] = array("" => "-") + $this->Item_categories_model->get_dropdown_list(array("title"));
         $view_data['types_dropdown'] = array("" => "-", 'service' => lang('service'), 'product' => lang('product'));
 
-        $view_data['model_info'] = $this->Items_model->get_one($this->input->post('id'));
+        // $view_data['model_info'] = $this->Items_model->get_one($this->input->post('id'));
+        $model_info = $this->Items_model->get_one_with_currency_data($this->input->post('id'));
+        $view_data['model_info'] = $model_info;
+
+        if($model_info->currency_symbol && $model_info->cost_center_id != $this->login_user->cost_center_id)
+        $view_data['currency_note'] = '<br><p class="text-danger">*Note: price currency is '.$model_info->currency_symbol.'</p>';
+        else $view_data['currency_note'] = "";
 
         $this->load->view('items/modal_form', $view_data);
     }
@@ -234,7 +222,9 @@ class Items extends MY_Controller
 
     private function _make_item_row($data)
     {
-        // var_dump($data);die();
+        if(isset($data->currency_rate))
+            set_row_data_currency_rate($data->currency_rate); //SET CURRENCY RATE
+
         $type = $data->unit_type ? $data->unit_type : "";
         $stock = $data->purchased_qty - $data->invoiced_qty + $data->ad_qty - $data->purchase_return_qty + $data->sale_return_qty;
 
@@ -310,8 +300,8 @@ class Items extends MY_Controller
                 lang($data->item_type),
                 nl2br($data->description),
                 $type,
-                $data->cost,
-                $data->rate,
+                to_currency($data->cost),
+                to_currency($data->rate),
                 $purchase,
                 $shipment,
                 $data->invoiced_qty ? $data->invoiced_qty : 0,
@@ -336,6 +326,7 @@ class Items extends MY_Controller
 
         $row[] = $rowe;
 
+        unset_row_data_currency_rate(); //UNSET CURRENCY RATE
         return $row;
     }
 

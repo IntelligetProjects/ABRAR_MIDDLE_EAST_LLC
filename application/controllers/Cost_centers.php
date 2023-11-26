@@ -11,7 +11,8 @@ class Cost_centers extends MY_Controller {
     }
 
     function index() {
-        $this->template->rander("cost_centers/index");
+        $view_data["can_add"] = $this->can_add();
+        $this->template->rander("cost_centers/index",$view_data);
     }
 
     function modal_form() {
@@ -121,19 +122,21 @@ class Cost_centers extends MY_Controller {
     }
 
     private function can_delete($id){
-        if ($this->login_user->user_type == "staff") {
-            if ($this->login_user->is_admin && $id != 1) {
-                return true;
-            }
-        }
+        return false;
+        // if ($this->login_user->user_type == "staff") {
+        //     if ($this->login_user->is_admin && $id != 1) {
+        //         return true;
+        //     }
+        // }
     }
 
     private function can_add(){
-        if ($this->login_user->user_type == "staff") {
-            if ($this->login_user->is_admin) {
-                return true;
-            }
-        }
+        return false;
+        // if ($this->login_user->user_type == "staff") {
+        //     if ($this->login_user->is_admin) {
+        //         return true;
+        //     }
+        // }
     }
 
 }

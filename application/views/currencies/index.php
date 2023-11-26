@@ -11,9 +11,11 @@
             <div class="panel panel-default">
                 <div class="page-title clearfix">
                     <h4> <?php echo lang('currencies'); ?></h4>
-                    <div class="title-button-group">
+                    <?php if ($can_add) { ?>
+                    <div  class="title-button-group">
                         <?php echo modal_anchor(get_uri("currencies/modal_form"), "<i class='fa fa-plus-circle'></i> " . lang('add_currency'), array("class" => "btn btn-default", "title" => lang('add_currency'))); ?>
                     </div>
+                    <?php }?>
                 </div>
                 <div class="table-responsive">
                     <table id="currencies-table" class="display" cellspacing="0" width="100%">            

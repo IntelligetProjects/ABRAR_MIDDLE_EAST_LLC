@@ -11,9 +11,11 @@
             <div class="panel panel-default">
                 <div class="page-title clearfix">
                     <h4> <?php echo lang('cost_centers'); ?></h4>
+                    <?php if($can_add){ ?>
                     <div class="title-button-group">
                         <?php echo modal_anchor(get_uri("cost_centers/modal_form"), "<i class='fa fa-plus-circle'></i> " . lang('add_cost_center'), array("class" => "btn btn-default", "title" => lang('add_cost_center'))); ?>
                     </div>
+                    <?php }?>
                 </div>
                 <div class="table-responsive">
                     <table id="cost_centers-table" class="display" cellspacing="0" width="100%">            

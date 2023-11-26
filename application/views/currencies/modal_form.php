@@ -14,6 +14,7 @@
                 "autofocus" => true,
                 "data-rule-required" => true,
                 "data-msg-required" => lang("field_required"),
+                "readonly" => true,
             ));
             ?>
         </div>
@@ -30,13 +31,14 @@
                 "placeholder" => lang('symbol'),
                 "data-rule-required" => true,
                 "data-msg-required" => lang("field_required"),
+                "readonly" => true,
             ));
             ?>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="rate" class=" col-md-3"><?php echo lang('currency_rate'); ?></label>
+        <label for="rate" class=" col-md-3"><?php echo lang('currency_rate').$currency_note; ?></label>
         <div class=" col-md-9">
             <?php
             echo form_input(array(
@@ -67,6 +69,7 @@
                 $("#currencies-table").appTable({newData: result.data, dataId: result.id});
             }
         });
-        $("#title").focus();
+
+        // $("#title").hide();
     });
 </script>    

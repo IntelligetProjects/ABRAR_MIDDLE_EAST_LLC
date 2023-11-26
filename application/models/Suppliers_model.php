@@ -36,7 +36,7 @@ class Suppliers_model extends Crud_model
 
 
         //add filter by cost center id
-        if ($this->login_user->cost_center_id > 0) {
+        if (!can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0) {
             $cost_center_id = $this->login_user->cost_center_id;
             $where .= " AND $suppliers_table.cost_center_id = $cost_center_id";
         }
