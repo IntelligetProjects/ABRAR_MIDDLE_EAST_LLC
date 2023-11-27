@@ -29,10 +29,10 @@ $settings_menu = array(
 );
 
 //restricted settings
-if (get_setting("module_attendance") == "1") {
-    $settings_menu["access_permission"][] = array("name" => "ip_restriction", "url" => "settings/ip_restriction");
-    $settings_menu["access_permission"][] = array("name" => "attendance", "url" => "settings/attendance");
-}
+// if (get_setting("module_attendance") == "1") {
+    // $settings_menu["access_permission"][] = array("name" => "ip_restriction", "url" => "settings/ip_restriction");
+    // $settings_menu["access_permission"][] = array("name" => "attendance", "url" => "settings/attendance");
+// }
 
 if (get_setting("module_event") == "1") {
     // $settings_menu["setup"][] = array("name" => "events", "url" => "settings/events");

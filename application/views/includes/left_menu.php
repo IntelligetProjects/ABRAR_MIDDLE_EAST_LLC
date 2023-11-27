@@ -142,11 +142,11 @@ echo $this->project_permission();
                     $sales_submenu[] = array("name" => "sale_returns", "url" => "sale_returns", "class" => "fa-file-text");
                 }
 
-                if (get_setting("module_estimate") && get_setting("module_estimate_request") && ($this->login_user->is_admin || $access_estimate)) {
-                    $sales_submenu[] = array("name" => "estimate_requests", "url" => "estimate_requests");
-                    if ($this->login_user->is_admin || $access_estimate_request == "all") {
-                    $sales_submenu[] = array("name" => "estimate_forms", "url" => "estimate_requests/estimate_forms");}
-                } 
+                // if (get_setting("module_estimate") && get_setting("module_estimate_request") && ($this->login_user->is_admin || $access_estimate)) {
+                    // $sales_submenu[] = array("name" => "estimate_requests", "url" => "estimate_requests");
+                    // if ($this->login_user->is_admin || $access_estimate_request == "all") {
+                    // $sales_submenu[] = array("name" => "estimate_forms", "url" => "estimate_requests/estimate_forms");}
+                // } 
 
                 
                 if(!empty($sales_submenu)) {
@@ -175,9 +175,9 @@ echo $this->project_permission();
                     array("name" => "all_projects", "url" => "projects/all_projects"),
                     array("name" => "tasks", "url" => "projects/all_tasks")/*,
                     array("name" => "gantt", "url" => "projects/all_gantt")*/);
-                if (get_setting("module_project_timesheet")) {
-                    $project_submenu[] = array("name" => "timesheets", "url" => "projects/all_timesheets");
-                }
+                // if (get_setting("module_project_timesheet")) {
+                //     $project_submenu[] = array("name" => "timesheets", "url" => "projects/all_timesheets");
+                // }
                 //  }
                 // echo get_array_value($this->login_user->permissions, "can_manage_all_projects"); die('test');
                 if(get_array_value($this->login_user->permissions, "can_manage_all_projects") == "1"){
@@ -387,11 +387,11 @@ echo $this->project_permission();
 
 
 
-                if (get_setting("module_attendance") == "1" && ($this->login_user->is_admin || $access_timecard)) {
-                    $hr_submenu[] = array("name" => "attendance", "url" => "attendance", "class" => "fa-clock-o font-16");
-                } else if (get_setting("module_attendance") == "1") {
-                    $hr_submenu[] = array("name" => "attendance", "url" => "attendance/attendance_info", "class" => "fa-clock-o font-16");
-                }
+                // if (get_setting("module_attendance") == "1" && ($this->login_user->is_admin || $access_timecard)) {
+                //     $hr_submenu[] = array("name" => "attendance", "url" => "attendance", "class" => "fa-clock-o font-16");
+                // } else if (get_setting("module_attendance") == "1") {
+                //     $hr_submenu[] = array("name" => "attendance", "url" => "attendance/attendance_info", "class" => "fa-clock-o font-16");
+                // }
 
                 if (get_setting("module_leave") == "1" && ($this->login_user->is_admin || $access_leave)) {
                     $hr_submenu[] = array("name" => "leaves", "url" => "leaves", "class" => "fa-sign-out font-16", "devider" => true);
@@ -413,9 +413,7 @@ echo $this->project_permission();
                         $ticket_badge = count_new_tickets($specific_ticket_permission);
                     }
 
-                    // 
-
-                    $hr_submenu[] = array("name" => "tickets", "url" => "tickets", "class" => "fa-life-ring", "devider" => true, "badge" => $ticket_badge, "badge_class" => "badge-secondary");
+                    // $hr_submenu[] = array("name" => "tickets", "url" => "tickets", "class" => "fa-life-ring", "devider" => true, "badge" => $ticket_badge, "badge_class" => "badge-secondary");
                 }
 
 
