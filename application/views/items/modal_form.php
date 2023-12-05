@@ -102,8 +102,8 @@
                 "value" => $model_info->cost ? $model_info->cost : "",
                 "class" => "form-control",
                 "placeholder" => lang('cost_price'),
-                "data-rule-required" => true,
-                "data-msg-required" => lang("field_required"),
+                // "data-rule-required" => true,
+                // "data-msg-required" => lang("field_required"),
             ));
             ?>
         </div>
@@ -120,8 +120,8 @@
                 "value" => $model_info->rate ? $model_info->rate : "",
                 "class" => "form-control",
                 "placeholder" => lang('rate'),
-                "data-rule-required" => true,
-                "data-msg-required" => lang("field_required"),
+                // "data-rule-required" => true,
+                // "data-msg-required" => lang("field_required"),
             ));
             ?>
         </div>

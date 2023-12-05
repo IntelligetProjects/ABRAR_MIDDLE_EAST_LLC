@@ -205,23 +205,39 @@
                 </div>
             </div>
 
+            <!-- <div class="form-group">
+                <label for="bank_title" class=" col-md-2"><?php echo lang('bank_title'); ?></label>
+                <div class="col-md-10">
+                    <?php
+                    // $banks = array("bank_muscat" => lang("bank_muscat") ) + 
+                    // array("bank_sohar" => lang("bank_sohar") ) + 
+                    // array("bank_dhofar" => lang("bank_dhofar") ) + 
+                    // array("nbo" => lang("nbo") ) + 
+                    // array("oman_arab_bank" => lang("oman_arab_bank") ) + 
+                    // array("hsbc" => lang("hsbc") ) + 
+                    // array("ahli_bank" => lang("ahli_bank") ) + 
+                    // array("bank_nizwa" => lang("bank_nizwa") ) + 
+                    // array("alizz_islamic_bank" => lang("alizz_islamic_bank") );
+                    // echo form_dropdown("bank_title", $banks, $user_info->bank_title, "class='select2 validate-hidden' id='national' data-rule-required='true' data-msg-required='" . lang('field_required') . "' ");
+                    ?>
+                </div>
+            </div> -->
             <div class="form-group">
                 <label for="bank_title" class=" col-md-2"><?php echo lang('bank_title'); ?></label>
                 <div class="col-md-10">
                     <?php
-                    $banks = array("bank_muscat" => lang("bank_muscat") ) + 
-                    array("bank_sohar" => lang("bank_sohar") ) + 
-                    array("bank_dhofar" => lang("bank_dhofar") ) + 
-                    array("nbo" => lang("nbo") ) + 
-                    array("oman_arab_bank" => lang("oman_arab_bank") ) + 
-                    array("hsbc" => lang("hsbc") ) + 
-                    array("ahli_bank" => lang("ahli_bank") ) + 
-                    array("bank_nizwa" => lang("bank_nizwa") ) + 
-                    array("alizz_islamic_bank" => lang("alizz_islamic_bank") );
-                    echo form_dropdown("bank_title", $banks, $user_info->bank_title, "class='select2 validate-hidden' id='national' data-rule-required='true' data-msg-required='" . lang('field_required') . "' ");
+                    echo form_input(array(
+                        "id" => "bank_title",
+                        "name" => "bank_title",
+                        "value" => $user_info->bank_title,
+                        "class" => "form-control",
+                        "placeholder" => lang('bank_title'),
+                        "autocomplete" => "off"
+                    ));
                     ?>
                 </div>
             </div>
+
             <div class="form-group">
                 <label for="account_title" class=" col-md-2"><?php echo lang('bank_account_title'); ?></label>
                 <div class="col-md-10">
