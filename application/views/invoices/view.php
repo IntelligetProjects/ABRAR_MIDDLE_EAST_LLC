@@ -207,10 +207,10 @@ if ($can_approve) {
                 {
                     title: '<?php echo lang("delivered") ?>',
                     "class": "text-right  d_qty",
-                    "bSortable": false
+                    "bSortable": false,"visible": false
                 },
                 {
-                    title: '<?php echo lang("rate") ?>',
+                    title: '<?php echo lang("amount") ?>',
                     "class": "text-right ",
                     "bSortable": false
                 },
