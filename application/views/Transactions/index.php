@@ -30,6 +30,7 @@ $(document).ready(function () {
         filterParams: {pending: "<?php echo $pending ?>"},
         filterDropdown: [
                 {name: "manual_auto", class: "w200", options: <?php echo json_encode($source); ?>},
+                {name: "cost_center_id", class: "w200", options: <?php echo $cost_centers_dropdown; ?>},
             ],
         /*rangeDatepicker: [{startDate: {name: "start_date", value: "<?= $start_date ?>"}, endDate: {name: "end_date", value: "<?= $end_date ?>"}, showClearButton: true}],*/
         rangeDatepicker: [{startDate: {name: "start_date", value: moment().format("YYYY-MM-DD")}, endDate: {name: "end_date", value: moment().format("YYYY-MM-DD")}, showClearButton: true}],

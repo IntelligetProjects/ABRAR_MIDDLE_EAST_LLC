@@ -15,6 +15,17 @@ class Transactions extends MY_Controller
         }
     }
 
+    private function _get_cost_centers_dropdown() {
+        $cost_centers = $this->Cost_centers_model->get_all_where(array("deleted" => 0), 0, 0, "name")->result();
+
+        $cost_centers_dropdown = array(array("id" => "", "text" => "- " . lang("cost_center") . " -"));
+        foreach ($cost_centers as $cost_center) {
+            $cost_centers_dropdown[] = array("id" => $cost_center->id, "text" => $cost_center->name);
+        }
+
+        return json_encode($cost_centers_dropdown);
+    }
+
     function index($pending = "")
     {
         $view_data = array();
@@ -44,6 +55,10 @@ class Transactions extends MY_Controller
         $view_data["end_date"] = date("Y-m-d", strtotime($end_date));
         $view_data["source"] =  array(array("id" => "", "text" => "- " . lang("source") . " -"), array("id" => 1, "text" => "Manual"), array("id" => 2, "text" => "Auto"));
         $view_data["pending"] = $pending;
+
+
+        $view_data['cost_centers_dropdown'] = $this->_get_cost_centers_dropdown();
+
         // var_dump($view_data);die();
         $this->template->rander("Transactions/index", $view_data);
     }
@@ -56,7 +71,11 @@ class Transactions extends MY_Controller
         $end_date = $this->input->post('end_date');
         $manual_auto = $pending == "pending" ? 1 : $this->input->post('manual_auto');
 
-        $options = array("start_date" => $start_date, "end_date" => $end_date, "manual_auto" => $manual_auto);
+        $options = array("start_date" => $start_date,
+            "end_date" => $end_date,
+            "manual_auto" => $manual_auto,
+            "cost_center_id" => $this->input->post('cost_center_id')
+        );
         $list_data = $this->Transactions_model->get_details($options)->result();
 
         $result = array();

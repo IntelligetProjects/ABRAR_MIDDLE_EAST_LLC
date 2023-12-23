@@ -39,10 +39,15 @@ class Transactions_model extends Crud_model
             $where .= " AND ($this->table.date BETWEEN '$start_date' AND '$end_date') ";
         }
 
+        $cost_center_id = get_array_value($options, "cost_center_id");
+        if($cost_center_id){
+            $where .= " AND $this->table.cost_center_id = $cost_center_id";
+        }
+
         //add filter by cost center id
         if( !can_view_all_cost_centers_data() && $this->login_user->cost_center_id > 0 ){
-            $cost_center_id = $this->login_user->cost_center_id;
-            $where .= " AND $this->table.cost_center_id = $cost_center_id";
+            $user_cost_center_id = $this->login_user->cost_center_id;
+            $where .= " AND $this->table.cost_center_id = $user_cost_center_id";
         }
 
         $sql = "SELECT $this->table.*, a.credit, a.debit
@@ -74,6 +79,7 @@ class Transactions_model extends Crud_model
             ORDER BY type,date DESC
                     ";
         }
+
         return $this->db->query($sql);
     }
 
