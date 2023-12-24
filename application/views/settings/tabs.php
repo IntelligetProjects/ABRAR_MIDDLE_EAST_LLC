@@ -6,7 +6,7 @@ $settings_menu = array(
         array("name" => "general", "url" => "settings/general"),
         //array("name" => "email", "url" => "settings/email"),
         //array("name" => "email_templates", "url" => "email_templates"),
-        array("name" => "modules", "url" => "settings/modules"),
+        // array("name" => "modules", "url" => "settings/modules"),
         //array("name" => "cron_job", "url" => "settings/cron_job"),
         array("name" => "notifications", "url" => "settings/notifications"),
         //array("name" => "integration", "url" => "settings/integration"),

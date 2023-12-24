@@ -32,7 +32,7 @@
             columns: [
                 {title: '<?php echo lang("name"); ?>'},
                 {title: '<?php echo lang("symbol"); ?>'},
-                {title: '<?php echo lang("rate"); ?>'},
+                {title: '<?php echo lang("currency_rate"); ?>'},
                 {title: '<i class="fa fa-bars"></i>', "class": "text-center option w100"}
             ],
             onInitComplete: function () {
