@@ -53,9 +53,9 @@ class Accounting_reports extends MY_Controller {
         $unit = $this->input->post('unit');
         $status = $this->input->post('status');
         
-        $ids_array = array(1,2,3);
+        $ids_array = array(1,28,47);
         $list_data = $this->Accounts_model->get_all_where(array("deleted" => 0, "where_in" => array("id" => $ids_array)))->result();
-
+        // var_dump($list_data);
         if (!isset($status)) {
             $status = array();
         }
