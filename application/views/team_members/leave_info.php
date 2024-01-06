@@ -39,8 +39,8 @@ if (isset($page_type) && $page_type === "full") {
                             // {targets: [1], visible: false, searchable: false},
                             {title: '<?php echo lang("name") ?>'},
                             {title: '<?php echo lang("leave_type") ?>'},
-                            {title: '<?php echo lang("duration") ?>'},
                             {title: '<?php echo lang("date") ?>', "class": "w20p"},
+                            {title: '<?php echo lang("duration") ?>'},
                             {title: '<?php echo lang("type") ?>', "class": "w20p"},
                             {title: '<?php echo lang("status") ?>', "class": "w15p"},
                             {title: '<i class="fa fa-bars"></i>', "class": "text-center option w100"}
