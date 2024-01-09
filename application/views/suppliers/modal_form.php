@@ -91,76 +91,7 @@
 
     </div>
 </div>
-<!-- <div class="form-group">
-    <label for="city" class="<?php echo $label_column; ?>"><?php echo lang('city'); ?></label>
-    <div class="<?php echo $field_column; ?>">
-        <?php
-        echo form_input(array(
-            "id" => "city",
-            "name" => "city",
-            "value" => $model_info->city,
-            "class" => "form-control",
-            "placeholder" => lang('city')
-        ));
-        ?>
-    </div>
-</div>
-<div class="form-group">
-    <label for="state" class="<?php echo $label_column; ?>"><?php echo lang('state'); ?></label>
-    <div class="<?php echo $field_column; ?>">
-        <?php
-        echo form_input(array(
-            "id" => "state",
-            "name" => "state",
-            "value" => $model_info->state,
-            "class" => "form-control",
-            "placeholder" => lang('state')
-        ));
-        ?>
-    </div>
-</div>
-<div class="form-group">
-    <label for="zip" class="<?php echo $label_column; ?>"><?php echo lang('zip'); ?></label>
-    <div class="<?php echo $field_column; ?>">
-        <?php
-        echo form_input(array(
-            "id" => "zip",
-            "name" => "zip",
-            "value" => $model_info->zip,
-            "class" => "form-control",
-            "placeholder" => lang('zip')
-        ));
-        ?>
-    </div>
-</div>
-<div class="form-group">
-    <label for="country" class="<?php echo $label_column; ?>"><?php echo lang('country'); ?></label>
-    <div class="<?php echo $field_column; ?>">
-        <?php
-        echo form_input(array(
-            "id" => "country",
-            "name" => "country",
-            "value" => $model_info->country,
-            "class" => "form-control",
-            "placeholder" => lang('country')
-        ));
-        ?>
-    </div>
-</div>
-<div class="form-group">
-    <label for="website" class="<?php echo $label_column; ?>"><?php echo lang('website'); ?></label>
-    <div class="<?php echo $field_column; ?>">
-        <?php
-        echo form_input(array(
-            "id" => "website",
-            "name" => "website",
-            "value" => $model_info->website,
-            "class" => "form-control",
-            "placeholder" => lang('website')
-        ));
-        ?>
-    </div>
-</div> -->
+
 <div class="form-group">
     <label for="vat_number" class="<?php echo $label_column; ?>"><?php echo lang('vat_number'); ?></label>
     <div class="<?php echo $field_column; ?>">
@@ -176,55 +107,7 @@
     </div>
 </div>
 
-<!-- <div class="form-group">
-    <label for="note" class="<?php echo $label_column; ?>"><?php echo lang('note'); ?></label>
-    <div class="<?php echo $field_column; ?>">
-        <?php
-        echo form_textarea(array(
-            "id" => "note",
-            "name" => "note",
-            "value" => $model_info->note ? $model_info->note : "",
-            "class" => "form-control",
-            "placeholder" => lang('note')
-        ));
-        ?>
 
-    </div>
-</div>
-
-
-<?php
-if ($this->login_user->is_admin/* && get_setting("module_invoice")*/) { ?>
-    <div class="form-group">
-        <label for="currency" class="<?php echo $label_column; ?>"><?php echo lang('currency'); ?></label>
-        <div class="<?php echo $field_column; ?>">
-            <?php
-            echo form_input(array(
-                "id" => "currency",
-                "name" => "currency",
-                "value" => $model_info->currency,
-                "class" => "form-control",
-                "placeholder" => lang('keep_it_blank_to_use_default') . " (" . get_setting("default_currency") . ")"
-            ));
-            ?>
-        </div>
-    </div>    
-    <div class="form-group">
-        <label for="currency_symbol" class="<?php echo $label_column; ?>"><?php echo lang('currency_symbol'); ?></label>
-        <div class="<?php echo $field_column; ?>">
-            <?php
-            echo form_input(array(
-                "id" => "currency_symbol",
-                "name" => "currency_symbol",
-                "value" => $model_info->currency_symbol,
-                "class" => "form-control",
-                "placeholder" => lang('keep_it_blank_to_use_default') . " (" . get_setting("currency_symbol") . ")"
-            ));
-            ?>
-        </div>
-    </div> -->
-
-<?php } ?>
   
 </div>
 
