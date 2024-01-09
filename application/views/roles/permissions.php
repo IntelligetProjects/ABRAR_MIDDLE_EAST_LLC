@@ -1814,7 +1814,7 @@
                             </td>
                         </tr>
 
-                        <!-- <tr>
+                        <tr>
                             <td>
                                 <?php echo lang("can_access_eroom"); ?>
                             </td>
@@ -1842,7 +1842,7 @@
                                         <label for="eroom_yes"><?php echo lang("yes"); ?></label>
                                     </div>
                             </td>
-                        </tr> -->
+                        </tr>
 
                         <tr>
                             <td>
