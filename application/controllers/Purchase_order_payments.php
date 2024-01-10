@@ -280,8 +280,9 @@ class Purchase_order_payments extends MY_Controller {
             }
         }
 
+        
         $files = unserialize($data->files);
-        if (count($files)) {
+        if ($files && count($files)) {
                 $file_name = get_array_value($files[0], "file_name");
                 $img_path=base_url().'/files/timeline_files/'. $file_name;
                 $file_url="<a href=".$img_path." target='_blank'>Show</a>";
