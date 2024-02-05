@@ -387,11 +387,11 @@ echo $this->project_permission();
 
 
 
-                // if (get_setting("module_attendance") == "1" && ($this->login_user->is_admin || $access_timecard)) {
-                //     $hr_submenu[] = array("name" => "attendance", "url" => "attendance", "class" => "fa-clock-o font-16");
-                // } else if (get_setting("module_attendance") == "1") {
-                //     $hr_submenu[] = array("name" => "attendance", "url" => "attendance/attendance_info", "class" => "fa-clock-o font-16");
-                // }
+                if (get_setting("module_attendance") == "1" && ($this->login_user->is_admin || $access_timecard)) {
+                    $hr_submenu[] = array("name" => "attendance", "url" => "attendance", "class" => "fa-clock-o font-16");
+                } else if (get_setting("module_attendance") == "1") {
+                    $hr_submenu[] = array("name" => "attendance", "url" => "attendance/attendance_info", "class" => "fa-clock-o font-16");
+                }
 
                 if (get_setting("module_leave") == "1" && ($this->login_user->is_admin || $access_leave)) {
                     $hr_submenu[] = array("name" => "leaves", "url" => "leaves", "class" => "fa-sign-out font-16", "devider" => true);
