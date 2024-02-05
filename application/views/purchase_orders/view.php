@@ -133,8 +133,8 @@ if($can_approve_payment) {
                 {title: '<?php echo lang("item") ?> ', "bSortable": false},
                 {title: '<?php echo lang("QTY") ?>', "class": "text-right w15p qty",  "class": "w350","bSortable": false},
                 {title: '<?php echo lang("delivered QTY") ?>', "class": "text-right w15p qty", "bSortable": false},
-                {title: '<?php echo lang("price (OMR)") ?>', "class": "text-right w15p", "bSortable": false},
-                {title: '<?php echo lang("vat (OMR)") ?>', "class": "text-right w15p", "bSortable": false},
+                {title: '<?php echo lang("price") ?>', "class": "text-right w15p", "bSortable": false},
+                {title: '<?php echo lang("vat") ?>', "class": "text-right w15p", "bSortable": false},
                 {title: '<?php echo lang("total") ?>', "class": "text-right w15p total", "bSortable": false},
                 {visible: showInfo, searchable: showInfo, title: '<i class="fa fa-bars"></i>', "class": "text-center option w100", "bSortable": false}
             ],
