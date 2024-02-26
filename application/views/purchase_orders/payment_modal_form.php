@@ -208,6 +208,10 @@
         $("#cheque").hide();
         $("#bank").hide();
         $("#treasury").hide();
+        
+        setTimeout(function() {
+            $('#purchase_order_payment_method_id').change();
+        }, 1000)
 
         //load all 
         $("#purchase_order_payment_method_id").on("change", function () {

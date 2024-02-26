@@ -39,7 +39,7 @@ load_js(array(
             var height =  200,
                     width =  200,
             // var height = $selector.attr("data-height") || 200,
-            //         width = $selector.attr("data-width") || 200,
+            // width = $selector.attr("data-width") || 200,
                     previewCntainer = $selector.attr('data-preview-container'),
                     inputField = $selector.attr('data-input-field');
             $('#image-crop-button').attr('data-preview-container', previewCntainer);

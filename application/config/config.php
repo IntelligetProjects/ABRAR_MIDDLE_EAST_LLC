@@ -78,7 +78,7 @@ $uri_segments = explode('/', $url);
 
 
 
-$basic_url = $uri_segments[0]."/".$uri_segments[1]."/".$uri_segments[2]."/".$uri_segments[3]."/";
+$basic_url = $uri_segments[0]."/".$uri_segments[1]."/".$uri_segments[2]."/".$uri_segments[3]."/".$uri_segments[4]."/";
 
 
 

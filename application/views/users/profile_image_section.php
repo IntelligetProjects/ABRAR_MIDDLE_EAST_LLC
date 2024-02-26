@@ -163,14 +163,14 @@
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $.post( "https://system.teamway.om/tasgeelxxx/index.php/upload/check_upload", { product_domain: "<?php echo  $folder_domain ?>" }, function( data ) {
-        console.log( data.flag ); 
-        if(!data.flag){
-            $('#show_file').attr('href','https://system.teamway.om/tasgeelxxx/uploads/'+data.file);
-            $('#show_file').css('display','block');
-        }
-        }, "json");
+    // $(document).ready(function () {
+    //     $.post( "https://system.teamway.om/tasgeelxxx/index.php/upload/check_upload", { product_domain: "<?php echo  $folder_domain ?>" }, function( data ) {
+    //     console.log( data.flag ); 
+    //     if(!data.flag){
+    //         $('#show_file').attr('href','https://system.teamway.om/tasgeelxxx/uploads/'+data.file);
+    //         $('#show_file').css('display','block');
+    //     }
+    //     }, "json");
 
-    });
+    // });
 </script>    

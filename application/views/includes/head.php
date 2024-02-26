@@ -75,7 +75,7 @@
         "assets/css/app.all.css",
         "assets/css/tree.css",
         "assets/css/custom-style.css", //custom style should not be merged
-        "assets/js/apexchart/apexcharts.css",
+        // "assets/js/apexchart/apexcharts.css",
         "assets/chart/css/jquery.orgchart.css",
     ));
 

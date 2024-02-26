@@ -129,8 +129,12 @@ class Banking extends MY_Controller {
         validate_submitted_data(array(
             "id" => "numeric"
         ));
-
-        $view_data['from_to_dropdown'] = array("" => "-") + $this->Accounts_model->get_dropdown_list(array("acc_name","acc_code"), "id", array("deleted" => 0, "acc_parent" => 8));
+        $banks_accounts_parent = get_setting('banks_accounts_parent');
+        $cash_on_hand_accounts_parent = get_setting('cash_on_hand_accounts_parent');
+        // $view_data['from_to_dropdown'] = array("" => "-") + $this->Accounts_model->get_dropdown_list(array("acc_name","acc_code"), "id", array("deleted" => 0, "acc_parent" => 8));
+        $banks = array("" => "-") + $this->Accounts_model->get_dropdown_list(array("acc_name","acc_code"), "id", array("deleted" => 0, "acc_parent" => $banks_accounts_parent));
+        $safes =$this->Accounts_model->get_dropdown_list(array("acc_name","acc_code"), "id", array("deleted" => 0, "acc_parent" =>  $cash_on_hand_accounts_parent));
+        $view_data['from_to_dropdown'] = $banks+ $safes;
 
         $this->load->view('Accounts/transfer_money', $view_data);
 
@@ -157,7 +161,7 @@ class Banking extends MY_Controller {
 
             $data1 = array(
                             'account' => $this->input->post('from'),            
-                            'type' => 'dr',
+                            'type' => 'cr',
                             'amount' => $this->input->post('amount'),
                             'narration' => $this->input->post('narration'),
                             'trans_id' => $transaction_id
@@ -167,7 +171,7 @@ class Banking extends MY_Controller {
 
             $data2 = array(
                             'account' => $this->input->post('to'),            
-                            'type' => 'cr',
+                            'type' => 'dr',
                             'amount' => $this->input->post('amount'),
                             'narration' => $this->input->post('narration'),
                             'trans_id' => $transaction_id

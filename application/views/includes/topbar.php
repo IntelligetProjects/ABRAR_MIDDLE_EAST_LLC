@@ -128,7 +128,7 @@
                 width: 70%;
                 height: 0px;
             }
-            }
+            
 
             #inner-div {
                 display: inline-block;
@@ -316,32 +316,32 @@
 
         //console.log(product_domain);
 
-        $.ajax({
-            url: "https://system.teamway.om/tasgeelxxx/index.php/saas_erp/check_subscription",
-            type: 'POST',
-            data: jQuery.param({
-                product_domain: product_domain
-            }),
-            secure: true,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
-            success: function(result) {
-                if (result) {
-                    var resultObj = jQuery.parseJSON(result);
+        // $.ajax({
+        //     url: "https://system.teamway.om/tasgeelxxx/index.php/saas_erp/check_subscription",
+        //     type: 'POST',
+        //     data: jQuery.param({
+        //         product_domain: product_domain
+        //     }),
+        //     secure: true,
+        //     headers: {
+        //         'Access-Control-Allow-Origin': '*',
+        //     },
+        //     success: function(result) {
+        //         if (result) {
+        //             var resultObj = jQuery.parseJSON(result);
 
-                    if (resultObj.status == 'abt_expire') {
-                        jQuery('#page-container').prepend(resultObj.html);
-                    } else if (resultObj.status == 'expired') {
-                        jQuery('body').prepend(resultObj.html);
-                    }
-                }
-
-
+        //             if (resultObj.status == 'abt_expire') {
+        //                 jQuery('#page-container').prepend(resultObj.html);
+        //             } else if (resultObj.status == 'expired') {
+        //                 jQuery('body').prepend(resultObj.html);
+        //             }
+        //         }
 
 
-            }
-        });
+
+
+        //     }
+        // });
 
         //load message notifications
         var messageOptions = {},
@@ -353,7 +353,7 @@
         messageOptions.notificationStatusUpdateUrl = "<?php echo_uri('messages/update_notification_checking_status'); ?>";
         // messageOptions.checkNotificationAfterEvery = "<?php //echo get_setting('check_notification_after_every'); 
                                                             ?>";
-        messageOptions.checkNotificationAfterEvery = "300";
+        messageOptions.checkNotificationAfterEvery = "3000";
         messageOptions.icon = "fa-envelope-o";
         messageOptions.notificationSelector = $messageIcon;
         messageOptions.isMessageNotification = true;
@@ -375,7 +375,7 @@
         notificationOptions.notificationUrl = "<?php echo_uri('notifications/count_notifications'); ?>";
         notificationOptions.notificationStatusUpdateUrl = "<?php echo_uri('notifications/update_notification_checking_status'); ?>";
         // notificationOptions.checkNotificationAfterEvery = "<?php echo get_setting('check_notification_after_every'); ?>";
-        notificationOptions.checkNotificationAfterEvery = "300";
+        notificationOptions.checkNotificationAfterEvery = "3000";
         notificationOptions.icon = "fa-bell-o";
         notificationOptions.notificationSelector = $notificationIcon;
         notificationOptions.notificationType = "web";

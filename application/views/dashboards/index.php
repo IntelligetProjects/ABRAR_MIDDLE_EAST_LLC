@@ -291,16 +291,16 @@ if(localStorage.getItem('pass')!=0){
         $(".dashboard-menu, .dashboard-image").closest("a").attr("href", window.location.href);
 
 
-        $.post( "https://teamway.omantel.om/tasgeelxxx/index.php/upload/check_upload", { product_domain: "<?php echo  $folder_domain ?>" }, function( data ) {
-        console.log( data.flag ); 
-        if(data.flag){
-            $('#up').modal('show')
-        }
-        }, "json");
+        // $.post( "https://teamway.omantel.om/tasgeelxxx/index.php/upload/check_upload", { product_domain: "<?php echo  $folder_domain ?>" }, function( data ) {
+        // console.log( data.flag ); 
+        // if(data.flag){
+        //     $('#up').modal('show')
+        // }
+        // }, "json");
 
-        $.post( "<?php echo_uri('items/check_stock'); ?>", { }, function( data ) {
-        console.log( data ); 
-        }, "json");
+        // $.post( "<?php echo_uri('items/check_stock'); ?>", { }, function( data ) {
+        // console.log( data ); 
+        // }, "json");
 
     });
 </script>    
