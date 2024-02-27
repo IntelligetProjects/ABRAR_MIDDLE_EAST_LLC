@@ -8,10 +8,10 @@
  */
 if (!function_exists('echo_uri')) {
 
-    function echo_uri($uri = "") {
+    function echo_uri($uri = "")
+    {
         echo get_uri($uri);
     }
-
 }
 
 /**
@@ -22,12 +22,12 @@ if (!function_exists('echo_uri')) {
  */
 if (!function_exists('get_uri')) {
 
-    function get_uri($uri = "") {
+    function get_uri($uri = "")
+    {
         $ci = get_instance();
         $index_page = $ci->config->item('index_page');
         return base_url($index_page . '/' . $uri);
     }
-
 }
 
 /**
@@ -38,17 +38,18 @@ if (!function_exists('get_uri')) {
  */
 if (!function_exists('get_file_uri')) {
 
-    function get_file_uri($uri = "") {
+    function get_file_uri($uri = "")
+    {
         return base_url($uri);
     }
-
 }
 
 /*ONE SIGNAL NOTIFICATIONS SENDING FUNCTION*/
 
 
 if (!function_exists("send_onesignal")) {
-    function send_onesignal ($body, $link, $to, $notification_id, $imgUrl) {
+    function send_onesignal($body, $link, $to, $notification_id, $imgUrl)
+    {
         $ci = get_instance();
         $content      = array(
             "en" => $body
@@ -63,16 +64,16 @@ if (!function_exists("send_onesignal")) {
             'included_segments' => array(
                 'All'
             ),
-            
+
             'filters' => array(array('field' => 'tag', 'key' => 'user_id', 'relation' => '=', 'value' => $to)),
             'data' => array("targetUrl" => $link),
             'big_picture' => $imgUrl,
             'chrome_big_picture' => $imgUrl,
             'contents' => $content
         );
-        
+
         $fields = json_encode($fields);
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -84,10 +85,10 @@ if (!function_exists("send_onesignal")) {
         curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        
+
         $response = curl_exec($ch);
         curl_close($ch);
-        
+
         /*$data = array("desk_show" => 1);
         if($notification_id)
         {
@@ -104,7 +105,8 @@ if (!function_exists("send_onesignal")) {
  */
 if (!function_exists('get_avatar')) {
 
-    function get_avatar($image = "") {
+    function get_avatar($image = "")
+    {
         if ($image === "system_bot") {
             return base_url("assets/images/avatar-bot.jpg");
         } else if ($image) {
@@ -118,7 +120,6 @@ if (!function_exists('get_avatar')) {
             return base_url("assets/images/avatar.jpg");
         }
     }
-
 }
 
 /**
@@ -129,14 +130,14 @@ if (!function_exists('get_avatar')) {
  */
 if (!function_exists('load_css')) {
 
-    function load_css(array $array) {
+    function load_css(array $array)
+    {
         $version = get_setting("app_version");
 
         foreach ($array as $uri) {
             echo "<link rel='stylesheet' type='text/css' href='" . base_url($uri) . "?v=$version' />";
         }
     }
-
 }
 
 
@@ -148,14 +149,14 @@ if (!function_exists('load_css')) {
  */
 if (!function_exists('load_js')) {
 
-    function load_js(array $array) {
+    function load_js(array $array)
+    {
         $version = get_setting("app_version");
 
         foreach ($array as $uri) {
             echo "<script type='text/javascript'  src='" . base_url($uri) . "?v=$version'></script>";
         }
     }
-
 }
 
 /**
@@ -166,12 +167,12 @@ if (!function_exists('load_js')) {
  */
 if (!function_exists('get_array_value')) {
 
-    function get_array_value(array $array, $key) {
+    function get_array_value(array $array, $key)
+    {
         if (array_key_exists($key, $array)) {
             return $array[$key];
         }
     }
-
 }
 
 /**
@@ -183,7 +184,8 @@ if (!function_exists('get_array_value')) {
  */
 if (!function_exists('js_anchor')) {
 
-    function js_anchor($title = '', $attributes = '') {
+    function js_anchor($title = '', $attributes = '')
+    {
         $title = (string) $title;
         $html_attributes = "";
 
@@ -195,7 +197,6 @@ if (!function_exists('js_anchor')) {
 
         return '<a href="#!"' . $html_attributes . '>' . $title . '</a>';
     }
-
 }
 
 /**
@@ -207,7 +208,8 @@ if (!function_exists('js_anchor')) {
  */
 if (!function_exists('link_anchor')) {
 
-    function link_anchor($link = '',$title = '', $attributes = '') {
+    function link_anchor($link = '', $title = '', $attributes = '')
+    {
         $title = (string) $title;
         $html_attributes = "";
 
@@ -217,9 +219,8 @@ if (!function_exists('link_anchor')) {
             }
         }
 
-        return '<a href="'.$link.'"' . $html_attributes . '>' . $title . '</a>';
+        return '<a href="' . $link . '"' . $html_attributes . '>' . $title . '</a>';
     }
-
 }
 
 
@@ -233,7 +234,8 @@ if (!function_exists('link_anchor')) {
  */
 if (!function_exists('modal_anchor')) {
 
-    function modal_anchor($url, $title = '', $attributes = '') {
+    function modal_anchor($url, $title = '', $attributes = '')
+    {
         $attributes["data-act"] = "ajax-modal";
         if (get_array_value($attributes, "data-modal-title")) {
             $attributes["data-title"] = get_array_value($attributes, "data-modal-title");
@@ -244,7 +246,6 @@ if (!function_exists('modal_anchor')) {
 
         return js_anchor($title, $attributes);
     }
-
 }
 
 /**
@@ -257,12 +258,12 @@ if (!function_exists('modal_anchor')) {
  */
 if (!function_exists('ajax_anchor')) {
 
-    function ajax_anchor($url, $title = '', $attributes = '') {
+    function ajax_anchor($url, $title = '', $attributes = '')
+    {
         $attributes["data-act"] = "ajax-request";
         $attributes["data-action-url"] = $url;
         return js_anchor($title, $attributes);
     }
-
 }
 
 /**
@@ -274,8 +275,9 @@ if (!function_exists('ajax_anchor')) {
  */
 if (!function_exists('active_menu')) {
 
-    function active_menu($menu = "", $submenu = array()) {
-        $ci = & get_instance();
+    function active_menu($menu = "", $submenu = array())
+    {
+        $ci = &get_instance();
         $controller_name = strtolower(get_class($ci));
 
         //compare with controller name. if not found, check in submenu values
@@ -291,7 +293,6 @@ if (!function_exists('active_menu')) {
             }
         }
     }
-
 }
 
 /**
@@ -303,8 +304,9 @@ if (!function_exists('active_menu')) {
  */
 if (!function_exists('active_submenu')) {
 
-    function active_submenu($submenu = "", $is_controller = false) {
-        $ci = & get_instance();
+    function active_submenu($submenu = "", $is_controller = false)
+    {
+        $ci = &get_instance();
         //if submenu is a controller then compare with controller name, otherwise compare with method name
         if ($is_controller && $submenu === strtolower(get_class($ci))) {
             return "active";
@@ -312,7 +314,6 @@ if (!function_exists('active_submenu')) {
             return "active";
         }
     }
-
 }
 
 /**
@@ -322,19 +323,19 @@ if (!function_exists('active_submenu')) {
  */
 if (!function_exists('get_setting')) {
 
-    function get_setting($key = "") {
+    function get_setting($key = "")
+    {
         $ci = get_instance();
         return $ci->config->item($key);
     }
-
 }
 if (!function_exists('set_setting')) {
 
-    function set_setting($key = "",$value="") {
+    function set_setting($key = "", $value = "")
+    {
         $ci = get_instance();
-        $ci->Settings_model->save_setting($key,$value);
+        $ci->Settings_model->save_setting($key, $value);
     }
-
 }
 
 
@@ -348,11 +349,11 @@ if (!function_exists('set_setting')) {
  */
 if (!function_exists('starts_with')) {
 
-    function starts_with($string, $needle) {
+    function starts_with($string, $needle)
+    {
         $string = $string;
         return $needle === "" || strrpos($string, $needle, -strlen($string)) !== false;
     }
-
 }
 
 /**
@@ -364,10 +365,10 @@ if (!function_exists('starts_with')) {
  */
 if (!function_exists('ends_with')) {
 
-    function ends_with($string, $needle) {
+    function ends_with($string, $needle)
+    {
         return $needle === "" || (($temp = strlen($string) - strlen($string)) >= 0 && strpos($string, $needle, $temp) !== false);
     }
-
 }
 
 /**
@@ -379,7 +380,8 @@ if (!function_exists('ends_with')) {
  */
 if (!function_exists('encode_id')) {
 
-    function encode_id($id, $salt) {
+    function encode_id($id, $salt)
+    {
         $ci = get_instance();
         $id = $ci->encryption->encrypt($id . $salt);
         $id = str_replace("=", ".", $id);
@@ -387,7 +389,6 @@ if (!function_exists('encode_id')) {
         $id = str_replace("/", "-", $id);
         return $id;
     }
-
 }
 
 
@@ -400,7 +401,8 @@ if (!function_exists('encode_id')) {
  */
 if (!function_exists('decode_id')) {
 
-    function decode_id($id, $salt) {
+    function decode_id($id, $salt)
+    {
         $ci = get_instance();
         $id = str_replace("_", "+", $id);
         $id = str_replace(".", "=", $id);
@@ -413,7 +415,6 @@ if (!function_exists('decode_id')) {
             return "";
         }
     }
-
 }
 
 /**
@@ -424,12 +425,12 @@ if (!function_exists('decode_id')) {
  */
 if (!function_exists('decode_ajax_post_data')) {
 
-    function decode_ajax_post_data($html) {
+    function decode_ajax_post_data($html)
+    {
         $html = str_replace("~", "=", $html);
         $html = str_replace("^", "&", $html);
         return $html;
     }
-
 }
 
 /**
@@ -440,7 +441,8 @@ if (!function_exists('decode_ajax_post_data')) {
  */
 if (!function_exists('check_required_hidden_fields')) {
 
-    function check_required_hidden_fields($fields = array()) {
+    function check_required_hidden_fields($fields = array())
+    {
         $has_error = false;
         foreach ($fields as $field) {
             if (!$field) {
@@ -452,7 +454,6 @@ if (!function_exists('check_required_hidden_fields')) {
             exit();
         }
     }
-
 }
 
 /**
@@ -462,7 +463,8 @@ if (!function_exists('check_required_hidden_fields')) {
  */
 if (!function_exists('link_it')) {
 
-    function link_it($text) {
+    function link_it($text)
+    {
         if ($text != strip_tags($text)) {
             //contains HTML, return the actual text
             return $text;
@@ -470,7 +472,6 @@ if (!function_exists('link_it')) {
             return preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s]?[^\s]+)?)?)@', '<a href="$1" target="_blank">$1</a>', $text);
         }
     }
-
 }
 
 /**
@@ -481,7 +482,8 @@ if (!function_exists('link_it')) {
  */
 if (!function_exists('convert_mentions')) {
 
-    function convert_mentions($text, $convert_links = true) {
+    function convert_mentions($text, $convert_links = true)
+    {
 
         preg_match_all('#\@\[(.*?)\]#', $text, $matches);
 
@@ -512,7 +514,6 @@ if (!function_exists('convert_mentions')) {
 
         return $text;
     }
-
 }
 
 /**
@@ -522,7 +523,8 @@ if (!function_exists('convert_mentions')) {
  */
 if (!function_exists('get_members_from_mention')) {
 
-    function get_members_from_mention($text) {
+    function get_members_from_mention($text)
+    {
 
         preg_match_all('#\@\[(.*?)\]#', $text, $matchs);
 
@@ -542,7 +544,6 @@ if (!function_exists('get_members_from_mention')) {
 
         return $user_ids;
     }
-
 }
 
 /**
@@ -556,8 +557,9 @@ if (!function_exists('get_members_from_mention')) {
  */
 if (!function_exists('send_app_mail')) {
 
-    function send_app_mail($to, $subject, $message, $optoins = array()) {
-        $email_config = Array(
+    function send_app_mail($to, $subject, $message, $optoins = array())
+    {
+        $email_config = array(
             'charset' => 'utf-8',
             'mailtype' => 'html'
         );
@@ -628,7 +630,6 @@ if (!function_exists('send_app_mail')) {
             return false;
         }
     }
-
 }
 
 
@@ -639,7 +640,8 @@ if (!function_exists('send_app_mail')) {
  */
 if (!function_exists('get_real_ip')) {
 
-    function get_real_ip() {
+    function get_real_ip()
+    {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -649,7 +651,6 @@ if (!function_exists('get_real_ip')) {
         }
         return $ip;
     }
-
 }
 
 /**
@@ -659,7 +660,8 @@ if (!function_exists('get_real_ip')) {
  */
 if (!function_exists('is_localhost')) {
 
-    function is_localhost() {
+    function is_localhost()
+    {
         $known_localhost_ip = array(
             '127.0.0.1',
             '::1'
@@ -668,7 +670,6 @@ if (!function_exists('is_localhost')) {
             return true;
         }
     }
-
 }
 
 
@@ -680,13 +681,13 @@ if (!function_exists('is_localhost')) {
  */
 if (!function_exists('to_url')) {
 
-    function to_url($address = "") {
+    function to_url($address = "")
+    {
         if (strpos($address, 'http://') === false && strpos($address, 'https://') === false) {
             $address = "http://" . $address;
         }
         return $address;
     }
-
 }
 
 /**
@@ -697,7 +698,8 @@ if (!function_exists('to_url')) {
  */
 if (!function_exists('validate_submitted_data')) {
 
-    function validate_submitted_data($fields = array()) {
+    function validate_submitted_data($fields = array())
+    {
         $ci = get_instance();
         foreach ($fields as $field_name => $requirement) {
             $ci->form_validation->set_rules($field_name, $field_name, $requirement);
@@ -713,7 +715,6 @@ if (!function_exists('validate_submitted_data')) {
             exit();
         }
     }
-
 }
 
 
@@ -725,12 +726,12 @@ if (!function_exists('validate_submitted_data')) {
  */
 if (!function_exists('validate_numeric_value')) {
 
-    function validate_numeric_value($value = 0) {
+    function validate_numeric_value($value = 0)
+    {
         if ($value && !is_numeric($value)) {
             die("Invalid value");
         }
     }
-
 }
 
 /**
@@ -744,7 +745,8 @@ if (!function_exists('validate_numeric_value')) {
  */
 if (!function_exists('get_team_member_profile_link')) {
 
-    function get_team_member_profile_link($id = 0, $name = "", $attributes = array()) {
+    function get_team_member_profile_link($id = 0, $name = "", $attributes = array())
+    {
         $ci = get_instance();
         if ($ci->login_user->user_type === "staff") {
             return anchor("team_members/view/" . $id, $name, $attributes);
@@ -752,7 +754,6 @@ if (!function_exists('get_team_member_profile_link')) {
             return js_anchor($name, $attributes);
         }
     }
-
 }
 
 
@@ -767,10 +768,10 @@ if (!function_exists('get_team_member_profile_link')) {
  */
 if (!function_exists('get_client_contact_profile_link')) {
 
-    function get_client_contact_profile_link($id = 0, $name = "", $attributes = array()) {
+    function get_client_contact_profile_link($id = 0, $name = "", $attributes = array())
+    {
         return anchor("clients/contact_profile/" . $id, $name, $attributes);
     }
-
 }
 
 
@@ -782,16 +783,17 @@ if (!function_exists('get_client_contact_profile_link')) {
  */
 if (!function_exists('get_invoice_status_label')) {
 
-    function get_invoice_status_label($invoice_info, $return_html = true) {
+    function get_invoice_status_label($invoice_info, $return_html = true)
+    {
         $invoice_status_class = "label-default";
         $status = "not_paid";
         $now = get_my_local_time("Y-m-d");
 
         //ignore the hidden value. check only 2 decimal place.
-        $intax=isset($invoice_info->tax_value)?$invoice_info->tax_value:0;
+        $intax = isset($invoice_info->tax_value) ? $invoice_info->tax_value : 0;
         // $invoice_info->invoice_value = floor(($invoice_info->invoice_value + $intax) * 100) / 100;
-        $invoice_info->invoice_value =$invoice_info->invoice_value+$invoice_info->tax_after_discount;
-// echo $invoice_info->payment_received .'- '.$invoice_info->invoice_value .'|';
+        $invoice_info->invoice_value = $invoice_info->invoice_value + $invoice_info->tax_after_discount;
+        // echo $invoice_info->payment_received .'- '.$invoice_info->invoice_value .'|';
 
         if ($invoice_info->status == "cancelled") {
             $invoice_status_class = "label-danger";
@@ -810,8 +812,8 @@ if (!function_exists('get_invoice_status_label')) {
             $status = "partially_paid";
         }
         // echo $invoice_info->payment_received.'-'.$invoice_info->id.'-'.$invoice_info->invoice_value.'-';
- 
-       
+
+
         // } else if ($invoice_info->status === "draft") {
         //     $invoice_status_class = "label-default";
         //     $status = "draft";
@@ -824,7 +826,6 @@ if (!function_exists('get_invoice_status_label')) {
             return $status;
         }
     }
-
 }
 
 /**
@@ -835,12 +836,13 @@ if (!function_exists('get_invoice_status_label')) {
  */
 if (!function_exists('get_delivery_status_label')) {
 
-    function get_delivery_status_label($invoice_info, $return_html = true) {
+    function get_delivery_status_label($invoice_info, $return_html = true)
+    {
         $ci = get_instance();
         $invoice_status_class = "label-default";
         $status = "not_delivered";
         $now = get_my_local_time("Y-m-d");
-        $do = $ci->Delivery_notes_model->get_one_where(array("invoice_id"=>$invoice_info->id, "deleted" => 0));
+        $do = $ci->Delivery_notes_model->get_one_where(array("invoice_id" => $invoice_info->id, "deleted" => 0));
         $delivery_total_items = $ci->Delivery_note_items_model->get_sum_items($invoice_info->id)->row();
         $invoice_total_items = $ci->Invoice_items_model->get_sum_items($invoice_info->id)->row();
 
@@ -865,7 +867,6 @@ if (!function_exists('get_delivery_status_label')) {
             return $status;
         }
     }
-
 }
 
 
@@ -877,7 +878,8 @@ if (!function_exists('get_delivery_status_label')) {
  */
 if (!function_exists('get_shipment_status_label')) {
 
-    function get_shipment_status_label($po_info, $return_html = true) {
+    function get_shipment_status_label($po_info, $return_html = true)
+    {
         $ci = get_instance();
         $invoice_status_class = "label-default";
         $status = "not_delivered";
@@ -885,7 +887,7 @@ if (!function_exists('get_shipment_status_label')) {
         $delivery_total_items = $ci->Shipment_items_model->get_sum_items($po_info->id)->row();
         $invoice_total_items = $ci->Purchase_order_items_model->get_sum_items($po_info->id)->row();
 
-/*        var_dump($delivery_total_items->sum);
+        /*        var_dump($delivery_total_items->sum);
         var_dump($invoice_total_items->sum);*/
 
         if ($delivery_total_items->sum == 0) {
@@ -909,7 +911,6 @@ if (!function_exists('get_shipment_status_label')) {
             return $status;
         }
     }
-
 }
 
 /**
@@ -920,7 +921,8 @@ if (!function_exists('get_shipment_status_label')) {
  */
 if (!function_exists('get_do_status_label')) {
 
-    function get_do_status_label($info, $return_html = true) {
+    function get_do_status_label($info, $return_html = true)
+    {
         $status_class = "label-default";
         $status = "draft";
 
@@ -939,7 +941,6 @@ if (!function_exists('get_do_status_label')) {
             return $status;
         }
     }
-
 }
 
 /**
@@ -950,7 +951,8 @@ if (!function_exists('get_do_status_label')) {
  */
 if (!function_exists('get_shipment_status_label')) {
 
-    function get_shipment_status_label($info, $return_html = true) {
+    function get_shipment_status_label($info, $return_html = true)
+    {
         $status_class = "label-default";
         $status = "draft";
 
@@ -969,7 +971,6 @@ if (!function_exists('get_shipment_status_label')) {
             return $status;
         }
     }
-
 }
 
 /**
@@ -980,7 +981,8 @@ if (!function_exists('get_shipment_status_label')) {
  */
 if (!function_exists('get_payment_status_label')) {
 
-    function get_payment_status_label($invoice_info, $return_html = true) {
+    function get_payment_status_label($invoice_info, $return_html = true)
+    {
         $status_class = "label-default";
         $status = "draft";
         $now = get_my_local_time("Y-m-d");
@@ -1000,7 +1002,6 @@ if (!function_exists('get_payment_status_label')) {
             return $status;
         }
     }
-
 }
 
 /**
@@ -1011,7 +1012,8 @@ if (!function_exists('get_payment_status_label')) {
  */
 if (!function_exists('get_approval_status_label')) {
 
-    function get_approval_status_label($invoice_info, $return_html = true) {
+    function get_approval_status_label($invoice_info, $return_html = true)
+    {
         $status_class = "label-default";
         $status = "not_approved";
         $now = get_my_local_time("Y-m-d");
@@ -1031,7 +1033,6 @@ if (!function_exists('get_approval_status_label')) {
             return $status;
         }
     }
-
 }
 
 /**
@@ -1042,7 +1043,8 @@ if (!function_exists('get_approval_status_label')) {
  */
 if (!function_exists('get_purchase_order_status_label')) {
 
-    function get_purchase_order_status_label($invoice_info, $return_html = true) {
+    function get_purchase_order_status_label($invoice_info, $return_html = true)
+    {
         $invoice_status_class = "label-default";
         $status = "draft";
         $now = get_my_local_time("Y-m-d");
@@ -1050,14 +1052,14 @@ if (!function_exists('get_purchase_order_status_label')) {
         // $intax=isset($invoice_info->tax_value)?$invoice_info->tax_value:0;
         // $invoice_info->invoice_value = floor(($invoice_info->invoice_value + $intax) * 100) / 100;
 
-        $invoice_info->purchase_order_value = floor(isset($invoice_info->purchase_order_value)?$invoice_info->purchase_order_value*100:0 * 100) / 100;
+        $invoice_info->purchase_order_value = floor(isset($invoice_info->purchase_order_value) ? $invoice_info->purchase_order_value * 100 : 0 * 100) / 100;
         // echo $invoice_info->payment_received;die('hi');
         // echo $invoice_info->purchase_order_value;die('hi');
 
-        if ($invoice_info->payment_received * 1 && $invoice_info->payment_received >= $invoice_info->purchase_order_value+ $invoice_info->tax_value) {
+        if ($invoice_info->payment_received * 1 && $invoice_info->payment_received >= $invoice_info->purchase_order_value + $invoice_info->tax_value) {
             $invoice_status_class = "label-success";
             $status = "fully_paid";
-        } else if ($invoice_info->payment_received > 0 && $invoice_info->payment_received < $invoice_info->purchase_order_value+$invoice_info->tax_value) {
+        } else if ($invoice_info->payment_received > 0 && $invoice_info->payment_received < $invoice_info->purchase_order_value + $invoice_info->tax_value) {
             $invoice_status_class = "label-primary";
             $status = "partially_paid";
         } else if ($invoice_info->status === "not_paid" && $invoice_info->payment_received <= 0) {
@@ -1072,11 +1074,11 @@ if (!function_exists('get_purchase_order_status_label')) {
             return $status;
         }
     }
-
 }
 if (!function_exists('get_material_request_status_label')) {
 
-    function get_material_request_status_label($invoice_info, $return_html = true) {
+    function get_material_request_status_label($invoice_info, $return_html = true)
+    {
         $invoice_status_class = "label-default";
         $status = "draft";
         $now = get_my_local_time("Y-m-d");
@@ -1102,7 +1104,6 @@ if (!function_exists('get_material_request_status_label')) {
             return $status;
         }
     }
-
 }
 
 /**
@@ -1113,7 +1114,8 @@ if (!function_exists('get_material_request_status_label')) {
  */
 if (!function_exists('get_purchase_order_approval_status_label')) {
 
-    function get_purchase_order_approval_status_label($invoice_info, $return_html = true) {
+    function get_purchase_order_approval_status_label($invoice_info, $return_html = true)
+    {
         $status_class = "label-default";
         $status = "not_approved";
         $now = get_my_local_time("Y-m-d");
@@ -1133,7 +1135,6 @@ if (!function_exists('get_purchase_order_approval_status_label')) {
             return $status;
         }
     }
-
 }
 
 /**
@@ -1144,7 +1145,8 @@ if (!function_exists('get_purchase_order_approval_status_label')) {
  */
 if (!function_exists('get_delivery_note_making_data')) {
 
-    function get_delivery_note_making_data($delivery_note_id) {
+    function get_delivery_note_making_data($delivery_note_id)
+    {
         $ci = get_instance();
         $delivery_note_info = $ci->Delivery_notes_model->get_details(array("id" => $delivery_note_id))->row();
         if ($delivery_note_info) {
@@ -1154,7 +1156,6 @@ if (!function_exists('get_delivery_note_making_data')) {
             return $data;
         }
     }
-
 }
 
 /**
@@ -1165,7 +1166,8 @@ if (!function_exists('get_delivery_note_making_data')) {
  */
 if (!function_exists('get_purchase_return_making_data')) {
 
-    function get_purchase_return_making_data($delivery_note_id) {
+    function get_purchase_return_making_data($delivery_note_id)
+    {
         $ci = get_instance();
         $purchase_return_info = $ci->Purchase_returns_model->get_details(array("id" => $delivery_note_id))->row();
         if ($purchase_return_info) {
@@ -1175,7 +1177,6 @@ if (!function_exists('get_purchase_return_making_data')) {
             return $data;
         }
     }
-
 }
 
 /**
@@ -1186,7 +1187,8 @@ if (!function_exists('get_purchase_return_making_data')) {
  */
 if (!function_exists('prepare_purchase_return_pdf')) {
 
-    function prepare_purchase_return_pdf($delivery_note_data, $mode = "download") {
+    function prepare_purchase_return_pdf($delivery_note_data, $mode = "download")
+    {
         $ci = get_instance();
         $ci->load->library('pdf');
         $ci->pdf->setPrintHeader(false);
@@ -1204,7 +1206,7 @@ if (!function_exists('prepare_purchase_return_pdf')) {
 
             if ($mode != "html") {
                 $align = "";
-                if(is_arabic_personal_language()){
+                if (is_arabic_personal_language()) {
                     $ci->pdf->setRTL(true);
                     $align = "R";
                 }
@@ -1227,7 +1229,6 @@ if (!function_exists('prepare_purchase_return_pdf')) {
             }
         }
     }
-
 }
 
 /**
@@ -1238,7 +1239,8 @@ if (!function_exists('prepare_purchase_return_pdf')) {
  */
 if (!function_exists('prepare_delivery_note_pdf')) {
 
-    function prepare_delivery_note_pdf($delivery_note_data, $mode = "download") {
+    function prepare_delivery_note_pdf($delivery_note_data, $mode = "download")
+    {
         $ci = get_instance();
         $ci->load->library('pdf');
         $ci->pdf->setPrintHeader(false);
@@ -1256,7 +1258,7 @@ if (!function_exists('prepare_delivery_note_pdf')) {
 
             if ($mode != "html") {
                 $align = "";
-                if(is_arabic_personal_language()){
+                if (is_arabic_personal_language()) {
                     $ci->pdf->setRTL(true);
                     $align = "R";
                 }
@@ -1279,7 +1281,6 @@ if (!function_exists('prepare_delivery_note_pdf')) {
             }
         }
     }
-
 }
 
 
@@ -1291,7 +1292,8 @@ if (!function_exists('prepare_delivery_note_pdf')) {
  */
 if (!function_exists('get_shipment_making_data')) {
 
-    function get_shipment_making_data($shipment_id) {
+    function get_shipment_making_data($shipment_id)
+    {
         $ci = get_instance();
         $shipment_info = $ci->Shipments_model->get_details(array("id" => $shipment_id))->row();
         if ($shipment_info) {
@@ -1301,7 +1303,6 @@ if (!function_exists('get_shipment_making_data')) {
             return $data;
         }
     }
-
 }
 
 /**
@@ -1312,7 +1313,8 @@ if (!function_exists('get_shipment_making_data')) {
  */
 if (!function_exists('prepare_shipment_pdf')) {
 
-    function prepare_shipment_pdf($shipment_data, $mode = "download") {
+    function prepare_shipment_pdf($shipment_data, $mode = "download")
+    {
         $ci = get_instance();
         $ci->load->library('pdf');
         $ci->pdf->setPrintHeader(false);
@@ -1348,7 +1350,6 @@ if (!function_exists('prepare_shipment_pdf')) {
             }
         }
     }
-
 }
 
 /**
@@ -1359,7 +1360,8 @@ if (!function_exists('prepare_shipment_pdf')) {
  */
 if (!function_exists('get_invoice_making_data')) {
 
-    function get_invoice_making_data($invoice_id) {
+    function get_invoice_making_data($invoice_id)
+    {
         $ci = get_instance();
         $invoice_info = $ci->Invoices_model->get_details(array("id" => $invoice_id))->row();
 
@@ -1367,7 +1369,7 @@ if (!function_exists('get_invoice_making_data')) {
             $data['invoice_info'] = $invoice_info;
             $data['client_info'] = $ci->Clients_model->get_one($data['invoice_info']->client_id);
             $data['invoice_items'] = $ci->Invoice_items_model->get_details(array("invoice_id" => $invoice_id))->result();
-            $data['invoice_payments']= $ci->Invoice_payments_model->get_details(array("invoice_id" => $invoice_id))->result();
+            $data['invoice_payments'] = $ci->Invoice_payments_model->get_details(array("invoice_id" => $invoice_id))->result();
             // $data['invoice_status_label'] = get_invoice_status_label($invoice_info);
             $data['invoice_status_label'] = get_invoice_status_label($invoice_info);
             $data["invoice_total_summary"] = $ci->Invoices_model->get_invoice_total_summary($invoice_id);
@@ -1377,12 +1379,12 @@ if (!function_exists('get_invoice_making_data')) {
             return $data;
         }
     }
-
 }
 
 if (!function_exists('get_porforma_invoice_making_data')) {
 
-    function get_proforma_invoice_making_data($invoice_id) {
+    function get_proforma_invoice_making_data($invoice_id)
+    {
         $ci = get_instance();
         // $ci->load->model('Proforma_invoices_model');
         $invoice_info = $ci->Proforma_invoices_model->get_details(array("id" => $invoice_id))->row();
@@ -1391,17 +1393,15 @@ if (!function_exists('get_porforma_invoice_making_data')) {
             $data['client_info'] = $ci->Clients_model->get_one($data['invoice_info']->client_id);
             $data['invoice_items'] = $ci->Proforma_invoice_items_model->get_details(array("invoice_id" => $invoice_id))->result();
             $data['invoice_status_label'] = get_invoice_status_label($invoice_info);
-            
+
             $data["invoice_total_summary"] = $ci->Proforma_invoices_model->get_invoice_total_summary($invoice_id);
-            
+
             $data['invoice_info']->custom_fields = $ci->Custom_field_values_model->get_details(array("related_to_type" => "invoices", "show_in_invoice" => true, "related_to_id" => $invoice_id))->result();
             $data['client_info']->custom_fields = $ci->Custom_field_values_model->get_details(array("related_to_type" => "clients", "show_in_invoice" => true, "related_to_id" => $data['invoice_info']->client_id))->result();
-       
+
             return $data;
-            
         }
     }
-
 }
 
 /**
@@ -1412,7 +1412,8 @@ if (!function_exists('get_porforma_invoice_making_data')) {
  */
 if (!function_exists('get_purchase_order_making_data')) {
 
-    function get_purchase_order_making_data($purchase_order_id) {
+    function get_purchase_order_making_data($purchase_order_id)
+    {
         $ci = get_instance();
         $purchase_order_info = $ci->Purchase_orders_model->get_details(array("id" => $purchase_order_id))->row();
         if ($purchase_order_info) {
@@ -1425,11 +1426,11 @@ if (!function_exists('get_purchase_order_making_data')) {
             return $data;
         }
     }
-
 }
 if (!function_exists('get_material_request_making_data')) {
 
-    function get_material_request_making_data($purchase_order_id) {
+    function get_material_request_making_data($purchase_order_id)
+    {
         $ci = get_instance();
         $purchase_order_info = $ci->Material_request_model->get_details(array("id" => $purchase_order_id))->row();
         if ($purchase_order_info) {
@@ -1441,7 +1442,6 @@ if (!function_exists('get_material_request_making_data')) {
             return $data;
         }
     }
-
 }
 
 /**
@@ -1452,7 +1452,8 @@ if (!function_exists('get_material_request_making_data')) {
  */
 if (!function_exists('prepare_purchase_order_pdf')) {
 
-    function prepare_purchase_order_pdf($purchase_order_data, $mode = "download") {
+    function prepare_purchase_order_pdf($purchase_order_data, $mode = "download")
+    {
         $ci = get_instance();
         $ci->load->library('pdf');
         $ci->pdf->setPrintHeader(false);
@@ -1470,7 +1471,7 @@ if (!function_exists('prepare_purchase_order_pdf')) {
 
             if ($mode != "html") {
                 $align = "";
-                if(is_arabic_personal_language()){
+                if (is_arabic_personal_language()) {
                     $ci->pdf->setRTL(true);
                     $align = "R";
                 }
@@ -1493,11 +1494,11 @@ if (!function_exists('prepare_purchase_order_pdf')) {
             }
         }
     }
-
 }
 if (!function_exists('prepare_material_request_pdf')) {
 
-    function prepare_material_request_pdf($purchase_order_data, $mode = "download") {
+    function prepare_material_request_pdf($purchase_order_data, $mode = "download")
+    {
         $ci = get_instance();
         $ci->load->library('pdf');
         $ci->pdf->setPrintHeader(false);
@@ -1533,7 +1534,6 @@ if (!function_exists('prepare_material_request_pdf')) {
             }
         }
     }
-
 }
 
 /**
@@ -1544,7 +1544,8 @@ if (!function_exists('prepare_material_request_pdf')) {
  */
 if (!function_exists('prepare_invoice_pdf')) {
 
-    function prepare_invoice_pdf($invoice_data, $mode = "download") {
+    function prepare_invoice_pdf($invoice_data, $mode = "download")
+    {
         $ci = get_instance();
         $ci->load->library('pdf');
         $ci->pdf->setPrintHeader(false);
@@ -1562,7 +1563,7 @@ if (!function_exists('prepare_invoice_pdf')) {
 
             if ($mode != "html") {
                 $align = "";
-                if(is_arabic_personal_language()){
+                if (is_arabic_personal_language()) {
                     $ci->pdf->setRTL(true);
                     $align = "R";
                 }
@@ -1585,7 +1586,6 @@ if (!function_exists('prepare_invoice_pdf')) {
             }
         }
     }
-
 }
 
 /**
@@ -1596,7 +1596,8 @@ if (!function_exists('prepare_invoice_pdf')) {
  */
 if (!function_exists('prepare_estimate_pdf')) {
 
-    function prepare_estimate_pdf($estimate_data, $mode = "download") {
+    function prepare_estimate_pdf($estimate_data, $mode = "download")
+    {
         $ci = get_instance();
         $ci->load->library('pdf');
         $ci->pdf->setPrintHeader(false);
@@ -1612,7 +1613,7 @@ if (!function_exists('prepare_estimate_pdf')) {
             $html = $ci->load->view("estimates/estimate_pdf", $estimate_data, true);
             if ($mode != "html") {
                 $align = "";
-                if(is_arabic_personal_language()){
+                if (is_arabic_personal_language()) {
                     $ci->pdf->setRTL(true);
                     $align = "R";
                 }
@@ -1635,7 +1636,6 @@ if (!function_exists('prepare_estimate_pdf')) {
             }
         }
     }
-
 }
 
 /**
@@ -1646,12 +1646,12 @@ if (!function_exists('prepare_estimate_pdf')) {
  */
 if (!function_exists('get_delivery_note_id')) {
 
-    function get_delivery_note_id($delivery_note_id) {
+    function get_delivery_note_id($delivery_note_id)
+    {
         //$prefix = get_setting("invoice_prefix");
         $prefix = strtoupper(lang("delivery_note")) . " #";
         return $prefix . $delivery_note_id;
     }
-
 }
 
 /**
@@ -1662,12 +1662,12 @@ if (!function_exists('get_delivery_note_id')) {
  */
 if (!function_exists('get_purchase_return_id')) {
 
-    function get_purchase_return_id($purchase_return_id) {
+    function get_purchase_return_id($purchase_return_id)
+    {
         //$prefix = get_setting("invoice_prefix");
         $prefix = strtoupper(lang("purchase_return")) . " #";
         return $prefix . $purchase_return_id;
     }
-
 }
 
 /**
@@ -1678,12 +1678,12 @@ if (!function_exists('get_purchase_return_id')) {
  */
 if (!function_exists('get_shipment_id')) {
 
-    function get_shipment_id($shipment_id) {
+    function get_shipment_id($shipment_id)
+    {
         //$prefix = get_setting("invoice_prefix");
         $prefix = strtoupper(lang("shipment")) . " #";
         return $prefix . $shipment_id;
     }
-
 }
 
 /**
@@ -1694,30 +1694,28 @@ if (!function_exists('get_shipment_id')) {
  */
 if (!function_exists('get_invoice_id')) {
 
-    function get_invoice_id($invoice_id) {
+    function get_invoice_id($invoice_id)
+    {
         $prefix = get_setting("invoice_prefix");
         $ci = get_instance();
-        if( $ci->db->dbprefix=='Tadqeeq'){
+        if ($ci->db->dbprefix == 'Tadqeeq') {
             $invoice = $ci->Invoices_model->get_one($invoice_id);
-            $prefix = date("ym",strtotime($invoice->bill_date)).'0'.$invoice->count;
+            $prefix = date("ym", strtotime($invoice->bill_date)) . '0' . $invoice->count;
             return $prefix;
-        }else{
+        } else {
             $prefix = $prefix ? $prefix : strtoupper(lang("invoice")) . " #";
             return $prefix . $invoice_id;
         }
-       
-       
     }
-
 }
 if (!function_exists('get_advance_invoice_id')) {
 
-    function get_advance_invoice_id($invoice_id) {
+    function get_advance_invoice_id($invoice_id)
+    {
         $prefix = get_setting("invoice_prefix");
         $prefix = $prefix ? $prefix : strtoupper(lang("advance_payment_invoice")) . " #";
         return $prefix . $invoice_id;
     }
-
 }
 
 /**
@@ -1728,21 +1726,21 @@ if (!function_exists('get_advance_invoice_id')) {
  */
 if (!function_exists('get_purchase_order_id')) {
 
-    function get_purchase_order_id($purchase_order_id) {
+    function get_purchase_order_id($purchase_order_id)
+    {
         //$prefix = get_setting("invoice_prefix");
         $prefix = strtoupper(lang("purchase_order")) . " #";
         return $prefix . $purchase_order_id;
     }
-
 }
 if (!function_exists('get_material_request_id')) {
 
-    function get_material_request_id($material_request_id) {
+    function get_material_request_id($material_request_id)
+    {
         //$prefix = get_setting("invoice_prefix");
         $prefix = strtoupper(lang("material_request")) . " #";
         return $prefix . $material_request_id;
     }
-
 }
 
 /**
@@ -1753,21 +1751,21 @@ if (!function_exists('get_material_request_id')) {
  */
 if (!function_exists('get_estimate_id')) {
 
-    function get_estimate_id($estimate_id) {
+    function get_estimate_id($estimate_id)
+    {
         $prefix = get_setting("estimate_prefix");
         $prefix = $prefix ? $prefix : strtoupper(lang("estimate")) . " #";
         return $prefix . $estimate_id;
     }
-
 }
 if (!function_exists('get_budget_id')) {
 
-    function get_budget_id($estimate_id) {
+    function get_budget_id($estimate_id)
+    {
         $prefix = get_setting("estimate_prefix");
         $prefix = $prefix ? $prefix : strtoupper(lang("Budget")) . " #";
         return $prefix . $estimate_id;
     }
-
 }
 
 /**
@@ -1778,12 +1776,12 @@ if (!function_exists('get_budget_id')) {
  */
 if (!function_exists('get_ticket_id')) {
 
-    function get_ticket_id($ticket_id) {
+    function get_ticket_id($ticket_id)
+    {
         $prefix = get_setting("ticket_prefix");
         $prefix = $prefix ? $prefix : lang("ticket") . " #";
         return $prefix . $ticket_id;
     }
-
 }
 
 
@@ -1795,7 +1793,8 @@ if (!function_exists('get_ticket_id')) {
  */
 if (!function_exists('get_estimate_making_data')) {
 
-    function get_estimate_making_data($estimate_id) {
+    function get_estimate_making_data($estimate_id)
+    {
         $ci = get_instance();
         $estimate_info = $ci->Estimates_model->get_details(array("id" => $estimate_id))->row();
         if ($estimate_info) {
@@ -1808,7 +1807,6 @@ if (!function_exists('get_estimate_making_data')) {
             return $data;
         }
     }
-
 }
 /**
  * get all data to make an budget
@@ -1818,24 +1816,24 @@ if (!function_exists('get_estimate_making_data')) {
  */
 if (!function_exists('get_budgeting_making_data')) {
 
-    function get_budgeting_making_data($estimate_id) {
+    function get_budgeting_making_data($estimate_id)
+    {
         $ci = get_instance();
         $estimate_info = $ci->Budgeting_model->get_details(array("id" => $estimate_id))->row();
 
         if ($estimate_info) {
             $data['estimate_info'] = $estimate_info;
             $data['project_info'] = $ci->Projects_model->get_one($data['estimate_info']->project_id);
-          
+
             $data['estimate_items'] = $ci->Budgeting_items_model->get_details(array("estimate_id" => $estimate_id))->result();
-           
+
             // $data["estimate_total_summary"] = $ci->Budgeting_model->get_estimate_total_summary($estimate_id);
 
             $data['estimate_info']->custom_fields = $ci->Custom_field_values_model->get_details(array("related_to_type" => "estimates", "show_in_estimate" => true, "related_to_id" => $estimate_id))->result();
-            
+
             return $data;
         }
     }
-
 }
 
 
@@ -1846,7 +1844,8 @@ if (!function_exists('get_budgeting_making_data')) {
  */
 if (!function_exists('get_team_members_and_teams_select2_data_list')) {
 
-    function get_team_members_and_teams_select2_data_list() {
+    function get_team_members_and_teams_select2_data_list()
+    {
         $ci = get_instance();
 
         $team_members = $ci->Users_model->get_all_where(array("deleted" => 0, "user_type" => "staff"))->result();
@@ -1863,7 +1862,6 @@ if (!function_exists('get_team_members_and_teams_select2_data_list')) {
 
         return $members_and_teams_dropdown;
     }
-
 }
 
 
@@ -1875,7 +1873,8 @@ if (!function_exists('get_team_members_and_teams_select2_data_list')) {
  */
 if (!function_exists('log_notification')) {
 
-    function log_notification($event, $options = array(), $user_id = 0) {
+    function log_notification($event, $options = array(), $user_id = 0)
+    {
 
         $ci = get_instance();
 
@@ -1912,7 +1911,6 @@ if (!function_exists('log_notification')) {
         curl_exec($ch);
         curl_close($ch);
     }
-
 }
 
 
@@ -1924,7 +1922,8 @@ if (!function_exists('log_notification')) {
  */
 if (!function_exists('save_custom_fields')) {
 
-    function save_custom_fields($related_to_type, $related_to_id, $is_admin = 0, $user_type = "", $activity_log_id = 0, $save_to_related_type = "", $user_id = 0) {
+    function save_custom_fields($related_to_type, $related_to_id, $is_admin = 0, $user_type = "", $activity_log_id = 0, $save_to_related_type = "", $user_id = 0)
+    {
         $ci = get_instance();
 
         $custom_fields = $ci->Custom_fields_model->get_combined_details($related_to_type, $related_to_id, $is_admin, $user_type)->result();
@@ -1985,7 +1984,6 @@ if (!function_exists('save_custom_fields')) {
         //finally save the changes to activity logs table
         return update_custom_fields_changes($related_to_type, $related_to_id, $changes, $activity_log_id);
     }
-
 }
 
 /**
@@ -1993,7 +1991,8 @@ if (!function_exists('save_custom_fields')) {
  */
 if (!function_exists('update_custom_fields_changes')) {
 
-    function update_custom_fields_changes($related_to_type, $related_to_id, $changes, $activity_log_id = 0) {
+    function update_custom_fields_changes($related_to_type, $related_to_id, $changes, $activity_log_id = 0)
+    {
         if ($changes && count($changes)) {
             $ci = get_instance();
 
@@ -2045,7 +2044,6 @@ if (!function_exists('update_custom_fields_changes')) {
             }
         }
     }
-
 }
 
 
@@ -2059,7 +2057,8 @@ if (!function_exists('update_custom_fields_changes')) {
  */
 if (!function_exists("clean_data")) {
 
-    function clean_data($data) {
+    function clean_data($data)
+    {
         $ci = get_instance();
 
         $data = $ci->security->xss_clean($data);
@@ -2071,23 +2070,23 @@ if (!function_exists("clean_data")) {
 
         return $data;
     }
-
 }
 
 
 //return site logo
 if (!function_exists("get_logo_url")) {
 
-    function get_logo_url() {
+    function get_logo_url()
+    {
         return get_file_from_setting("site_logo");
     }
-
 }
 
 //get logo from setting
 if (!function_exists("get_file_from_setting")) {
 
-    function get_file_from_setting($setting_name = "", $only_file_path_with_slash = false) {
+    function get_file_from_setting($setting_name = "", $only_file_path_with_slash = false)
+    {
 
         if ($setting_name) {
             $setting_value = get_setting($setting_name);
@@ -2112,23 +2111,23 @@ if (!function_exists("get_file_from_setting")) {
             }
         }
     }
-
 }
 
 //get site favicon
 if (!function_exists("get_favicon_url")) {
 
-    function get_favicon_url() {
+    function get_favicon_url()
+    {
         $favicon_from_setting = get_file_from_setting('favicon');
         return $favicon_from_setting ? $favicon_from_setting : get_file_uri("assets/images/favicon.png");
     }
-
 }
 
 //add custom variable data
 if (!function_exists("get_custom_variables_data")) {
 
-    function get_custom_variables_data($related_to_type = "", $related_to_id = 0) {
+    function get_custom_variables_data($related_to_type = "", $related_to_id = 0)
+    {
         if ($related_to_type && $related_to_id) {
             $ci = get_instance();
             $variables_array = array();
@@ -2145,7 +2144,6 @@ if (!function_exists("get_custom_variables_data")) {
             return $variables_array;
         }
     }
-
 }
 
 
@@ -2158,7 +2156,8 @@ if (!function_exists("get_custom_variables_data")) {
  */
 if (!function_exists('get_sale_return_making_data')) {
 
-    function get_sale_return_making_data($delivery_note_id) {
+    function get_sale_return_making_data($delivery_note_id)
+    {
         $ci = get_instance();
         $sale_return_info = $ci->Sale_returns_model->get_details(array("id" => $delivery_note_id))->row();
         if ($sale_return_info) {
@@ -2168,7 +2167,6 @@ if (!function_exists('get_sale_return_making_data')) {
             return $data;
         }
     }
-
 }
 
 /**
@@ -2179,7 +2177,8 @@ if (!function_exists('get_sale_return_making_data')) {
  */
 if (!function_exists('prepare_sale_return_pdf')) {
 
-    function prepare_sale_return_pdf($delivery_note_data, $mode = "download") {
+    function prepare_sale_return_pdf($delivery_note_data, $mode = "download")
+    {
         $ci = get_instance();
         $ci->load->library('pdf');
         $ci->pdf->setPrintHeader(false);
@@ -2197,7 +2196,7 @@ if (!function_exists('prepare_sale_return_pdf')) {
 
             if ($mode != "html") {
                 $align = "";
-                if(is_arabic_personal_language()){
+                if (is_arabic_personal_language()) {
                     $ci->pdf->setRTL(true);
                     $align = "R";
                 }
@@ -2220,7 +2219,6 @@ if (!function_exists('prepare_sale_return_pdf')) {
             }
         }
     }
-
 }
 
 /**
@@ -2231,53 +2229,53 @@ if (!function_exists('prepare_sale_return_pdf')) {
  */
 if (!function_exists('get_sale_return_id')) {
 
-    function get_sale_return_id($sale_return_id) {
+    function get_sale_return_id($sale_return_id)
+    {
         //$prefix = get_setting("invoice_prefix");
         $prefix = strtoupper(lang("sale_return")) . " #";
         return $prefix . $sale_return_id;
     }
-
 }
 
 if (!function_exists("pretty_me")) {
-        function pretty_me ($data) {
+    function pretty_me($data)
+    {
 
-            echo "<pre>";
-            print_r($data);
-            echo "</pre>";
-            
-
-        }
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
     }
+}
 
 if (!function_exists("generate_accounts")) {
-    function generate_accounts ($title, $parent, $account_id=0) {
+    function generate_accounts($title, $parent, $account_id = 0)
+    {
         $ci = get_instance();
-        
+
         $parent_code = $ci->Accounts_model->get_one($parent)->acc_code;
 
         $code_count = count($ci->Accounts_model->get_all_where(array("deleted" => 0, "acc_parent" => $parent))->result());
 
         if (!empty($parent_code)) {
             $code_count = $code_count + 1;
-            $acode = $parent_code."-".$code_count;
+            $acode = $parent_code . "-" . $code_count;
         } else {
             $acode = '';
         }
 
-        if(!empty($code)) {
-            $code = $code;  
+        if (!empty($code)) {
+            $code = $code;
         } else {
             $code = $acode;
         }
-       
+
         $data = array(
-            'acc_name' => $title,            
+            'acc_name' => $title,
             'is_primary' => 0,
-      
+
         );
 
-        if(empty($account_id)) {
+        if (empty($account_id)) {
             $data["acc_parent"] = $parent;
             $data["acc_code"] = $code;
         }
@@ -2290,31 +2288,32 @@ if (!function_exists("generate_accounts")) {
 
 
 if (!function_exists("make_transaction")) {
-    function make_transaction ($date, $acc_array = array(), $type) {
-        
-        $ci = get_instance();        
+    function make_transaction($date, $acc_array = array(), $type)
+    {
+
+        $ci = get_instance();
         $data = array(
-                    'date' => $date,
-                    'type' => $type
-                );
+            'date' => $date,
+            'type' => $type
+        );
         $save_id = $ci->Transactions_model->save($data);
-    
+
         if ($save_id) {
             foreach ($acc_array as $acc) {
                 //write a routine to check the validity of the entries i.e total debit = total credit
 
                 $data = array(
-                            'account' => !empty($acc['account_id']) ? $acc['account_id'] : 26,            
-                            'type' => $acc['type'],
-                            'amount' => round($acc['amount'],3),
-                            'narration' => $acc['narration'],
-                            'branch_id' => !empty($acc['branch_id']) ? $acc['branch_id'] : 0,
-                            'unit' => !empty($acc['unit']) ? $acc['unit'] : 0,
-                            'reference' => !empty($acc['reference']) ? $acc['reference'] : 0,
-                            'concerned_person' => !empty($acc['concerned_person']) ? $acc['concerned_person'] : 0,
-                            'trans_id' => $save_id
-                        );
-                $ci->Enteries_model->save($data); 
+                    'account' => !empty($acc['account_id']) ? $acc['account_id'] : 26,
+                    'type' => $acc['type'],
+                    'amount' => round($acc['amount'], 3),
+                    'narration' => $acc['narration'],
+                    'branch_id' => !empty($acc['branch_id']) ? $acc['branch_id'] : 0,
+                    'unit' => !empty($acc['unit']) ? $acc['unit'] : 0,
+                    'reference' => !empty($acc['reference']) ? $acc['reference'] : 0,
+                    'concerned_person' => !empty($acc['concerned_person']) ? $acc['concerned_person'] : 0,
+                    'trans_id' => $save_id
+                );
+                $ci->Enteries_model->save($data);
             }
 
             return $save_id;
@@ -2323,23 +2322,24 @@ if (!function_exists("make_transaction")) {
 }
 
 if (!function_exists("delete_transaction")) {
-    function delete_transaction ($id = 0) {
+    function delete_transaction($id = 0)
+    {
         $ci = get_instance();
-        if($id) {
+        if ($id) {
             $delete_transaction = $ci->Transactions_model->delete($id);
             return $delete_transaction;
         }
-        
     }
 }
 
 if (!function_exists("format_balance")) {
-    function format_balance ($balance, $type) {
+    function format_balance($balance, $type)
+    {
         $format = "<span>";
         if ($balance['total_type'] == 'Cr' && $type == 'asset') {
-             $format = "<span style='color: red'>" ; 
+            $format = "<span style='color: red'>";
         }
-        $format .= number_format($balance['total'], 3) . " OMR (" . $balance['total_type']. ") </span>";
+        $format .= number_format($balance['total'], 3) . " OMR (" . $balance['total_type'] . ") </span>";
 
         return $format;
     }
@@ -2349,116 +2349,110 @@ if (!function_exists("format_balance")) {
 if (!function_exists("number_to_omr")) {
     function number_to_omr($num)
     {
-        $decones = array( 
-        '01' => "One", 
-        '02' => "Two", 
-        '03' => "Three", 
-        '04' => "Four", 
-        '05' => "Five", 
-        '06' => "Six", 
-        '07' => "Seven", 
-        '08' => "Eight", 
-        '09' => "Nine", 
-        10 => "Ten", 
-        11 => "Eleven", 
-        12 => "Twelve", 
-        13 => "Thirteen", 
-        14 => "Fourteen", 
-        15 => "Fifteen", 
-        16 => "Sixteen", 
-        17 => "Seventeen", 
-        18 => "Eighteen", 
-        19 => "Nineteen" 
+        $decones = array(
+            '01' => "One",
+            '02' => "Two",
+            '03' => "Three",
+            '04' => "Four",
+            '05' => "Five",
+            '06' => "Six",
+            '07' => "Seven",
+            '08' => "Eight",
+            '09' => "Nine",
+            10 => "Ten",
+            11 => "Eleven",
+            12 => "Twelve",
+            13 => "Thirteen",
+            14 => "Fourteen",
+            15 => "Fifteen",
+            16 => "Sixteen",
+            17 => "Seventeen",
+            18 => "Eighteen",
+            19 => "Nineteen"
         );
-        $ones = array( 
-                    0 => " ",
-                    1 => "One",     
-                    2 => "Two", 
-                    3 => "Three", 
-                    4 => "Four", 
-                    5 => "Five", 
-                    6 => "Six", 
-                    7 => "Seven", 
-                    8 => "Eight", 
-                    9 => "Nine", 
-                    10 => "Ten", 
-                    11 => "Eleven", 
-                    12 => "Twelve", 
-                    13 => "Thirteen", 
-                    14 => "Fourteen", 
-                    15 => "Fifteen", 
-                    16 => "Sixteen", 
-                    17 => "Seventeen", 
-                    18 => "Eighteen", 
-                    19 => "Nineteen" 
-                    ); 
-        $tens = array( 
-                    0 => "",
-                    2 => "Twenty", 
-                    3 => "Thirty", 
-                    4 => "Forty", 
-                    5 => "Fifty", 
-                    6 => "Sixty", 
-                    7 => "Seventy", 
-                    8 => "Eighty", 
-                    9 => "Ninety" 
-                    ); 
-        $hundreds = array( 
-                    "Hundred", 
-                    "Thousand", 
-                    "Million", 
-                    "Billion", 
-                    "Trillion", 
-                    "Quadrillion" 
-                    ); //limit t quadrillion 
-        $num = number_format($num,3 ,".",","); 
+        $ones = array(
+            0 => " ",
+            1 => "One",
+            2 => "Two",
+            3 => "Three",
+            4 => "Four",
+            5 => "Five",
+            6 => "Six",
+            7 => "Seven",
+            8 => "Eight",
+            9 => "Nine",
+            10 => "Ten",
+            11 => "Eleven",
+            12 => "Twelve",
+            13 => "Thirteen",
+            14 => "Fourteen",
+            15 => "Fifteen",
+            16 => "Sixteen",
+            17 => "Seventeen",
+            18 => "Eighteen",
+            19 => "Nineteen"
+        );
+        $tens = array(
+            0 => "",
+            2 => "Twenty",
+            3 => "Thirty",
+            4 => "Forty",
+            5 => "Fifty",
+            6 => "Sixty",
+            7 => "Seventy",
+            8 => "Eighty",
+            9 => "Ninety"
+        );
+        $hundreds = array(
+            "Hundred",
+            "Thousand",
+            "Million",
+            "Billion",
+            "Trillion",
+            "Quadrillion"
+        ); //limit t quadrillion 
+        $num = number_format($num, 3, ".", ",");
 
-        $num_arr = explode(".",$num); 
-        $wholenum = $num_arr[0]; 
-        $decnum = $num_arr[1]; 
-        $whole_arr = array_reverse(explode(",",$wholenum)); 
-        krsort($whole_arr); 
-        $rettxt = ""; 
-        foreach($whole_arr as $key => $i){ 
-            if($i < 20){ 
-                $rettxt .= $ones[$i]; 
-            }
-            elseif($i < 100){ 
-                $rettxt .= $tens[substr($i,0,1)]; 
-                $rettxt .= " ".$ones[substr($i,1,1)]; 
-            }
-            else{ 
-                $rettxt .= $ones[substr($i,0,1)]." ".$hundreds[0]; 
-                $rettxt .= " ".$ones[substr($i,1,2)]; 
+        $num_arr = explode(".", $num);
+        $wholenum = $num_arr[0];
+        $decnum = $num_arr[1];
+        $whole_arr = array_reverse(explode(",", $wholenum));
+        krsort($whole_arr);
+        $rettxt = "";
+        foreach ($whole_arr as $key => $i) {
+            if ($i < 20) {
+                $rettxt .= $ones[$i];
+            } elseif ($i < 100) {
+                $rettxt .= $tens[substr($i, 0, 1)];
+                $rettxt .= " " . $ones[substr($i, 1, 1)];
+            } else {
+                $rettxt .= $ones[substr($i, 0, 1)] . " " . $hundreds[0];
+                $rettxt .= " " . $ones[substr($i, 1, 2)];
                 //$rettxt .= " ".$ones[substr($i,2,1)]; 
-            } 
-            if($key > 0){ 
-                $rettxt .= " ".$hundreds[$key]." "; 
-            } 
+            }
+            if ($key > 0) {
+                $rettxt .= " " . $hundreds[$key] . " ";
+            }
+        }
+        $rettxt = $rettxt . " Riyal Omani/s";
 
-        } 
-        $rettxt = $rettxt." Riyal Omani/s";
-
-        if($decnum > 0){ 
+        if ($decnum > 0) {
 
             //$decnum = intval($decnum);
-            $rettxt .= " and "; 
-            if($decnum < 20){ 
-                $rettxt .= $ones[$decnum]; 
+            $rettxt .= " and ";
+            if ($decnum < 20) {
+                $rettxt .= $ones[$decnum];
+            } else if ($decnum < 100) {
+
+                $rettxt .= $tens[substr($decnum, 0, 1)];
+            } else {
+                $rettxt .= $ones[substr($decnum, 0, 1)] . " " . $hundreds[0] . ' ';
+                $rettxt .= $tens[substr($decnum, 1, 1)] . ' ';
+                $rettxt .= $ones[substr($decnum, 2, 1)] . ' ';
             }
-            else if($decnum < 100){ 
-                
-                $rettxt .= $tens[substr($decnum,0,1)];
-            }
-            else
-            {
-                $rettxt .= $ones[substr($decnum,0,1)]." ".$hundreds[0].' ';
-                $rettxt .= $tens[substr($decnum,1,1)].' '; 
-                $rettxt .= $ones[substr($decnum,2,1)].' '; 
-            }
-            $rettxt = $rettxt." Baiza/s"; 
-        } 
-        return $rettxt.' only';
+            $rettxt = $rettxt . " Baiza/s";
+        }
+        return $rettxt . ' only';
     }
 }
 
@@ -2472,15 +2466,15 @@ function get_employement_years($user_id)
     $joining_date = $user_info->date_of_hire;
     $current_date = date('Y-m-d');
 
-    $date1=date_create($current_date);
-    $date2=date_create($joining_date);
-    $diff=date_diff($date1,$date2);
+    $date1 = date_create($current_date);
+    $date2 = date_create($joining_date);
+    $diff = date_diff($date1, $date2);
 
-   // $diff = $diff / 365;
+    // $diff = $diff / 365;
 
     //pretty_me($diff);
     //return $current_date;
-    return round($diff->days/365,3);
+    return round($diff->days / 365, 3);
 }
 
 function get_gross_salary($user_id)
@@ -2501,7 +2495,8 @@ function get_gross_salary($user_id)
     return $gross_salary;
 }
 
-function basic_salary($user_id){
+function basic_salary($user_id)
+{
     $ci = get_instance();
     $options = array("id" => $user_id);
     $user_info = $ci->Users_model->get_details($options)->row();
@@ -2515,29 +2510,22 @@ function get_gratuity($user_id = 0, $years_of_employement = 0)
     $ci = get_instance();
     $options = array("id" => $user_id);
     $user_info = $ci->Users_model->get_details($options)->row();
-    if(!$user_info->national)
-    {
+    if (!$user_info->national) {
         $basic_salary = $user_info->salary;
-        $years_of_employement = ($years_of_employement)?$years_of_employement:get_employement_years($user_id);        
+        $years_of_employement = ($years_of_employement) ? $years_of_employement : get_employement_years($user_id);
         $gratuity = ($basic_salary / 2) * $years_of_employement;
 
-        if($years_of_employement >= 3)
-        {
+        if ($years_of_employement >= 3) {
             $gratuity = (($basic_salary / 2) * 3) + ($basic_salary * ($years_of_employement - 3));
-        }
-        elseif($years_of_employement < 1)
-        {
+        } elseif ($years_of_employement < 1) {
             $gratuity = 0;
         }
-    }
-    else
-    {
+    } else {
         $gratuity = 0;
     }
-    
+
 
     return $gratuity;
-
 }
 
 function get_monthly_gratuity($user_id)
@@ -2545,44 +2533,34 @@ function get_monthly_gratuity($user_id)
     $ci = get_instance();
     $options = array("id" => $user_id);
     $user_info = $ci->Users_model->get_details($options)->row();
-    if(!$user_info->national)
-    {
+    if (!$user_info->national) {
         $basic_salary = $user_info->salary;
-        $years_of_employement = get_employement_years($user_id);        
+        $years_of_employement = get_employement_years($user_id);
         $gratuity = ($basic_salary / 2) / 12;
 
-        if($years_of_employement >= 3)
-        {
+        if ($years_of_employement >= 3) {
             $gratuity = $basic_salary / 12;
-        }
-        elseif($years_of_employement < 1)
-        {
+        } elseif ($years_of_employement < 1) {
             $gratuity = 0;
         }
-    }
-    else
-    {
+    } else {
         $gratuity = 0;
     }
-    
+
 
     return $gratuity;
-
 }
 
 function get_company_pasi_share($user_id)
 {
     $ci = get_instance();
     $user_info = $ci->Users_model->get_details(array('id' => $user_id))->row();
-    if($user_info->national && $user_info->pasi)
-    {
+    if ($user_info->national && $user_info->pasi) {
         // $gross_total = get_gross_salary($user_id);
         $gross_total = basic_salary($user_id);
         // $pasi_share = $gross_total * 0.115;
         $pasi_share = $gross_total * 0.125;
-    }
-    else
-    {
+    } else {
         $pasi_share = 0;
     }
 
@@ -2593,15 +2571,12 @@ function get_employee_pasi_share($user_id)
 {
     $ci = get_instance();
     $user_info = $ci->Users_model->get_details(array('id' => $user_id))->row();
-    if($user_info->national && $user_info->pasi)
-    {
+    if ($user_info->national && $user_info->pasi) {
         // $gross_total = get_gross_salary($user_id);
         $gross_total = basic_salary($user_id);
         // $pasi_share = $gross_total * 0.07;
         $pasi_share = $gross_total * 0.08;
-    }
-    else
-    {
+    } else {
         $pasi_share = 0;
     }
 
@@ -2612,16 +2587,13 @@ function get_company_job_s_share($user_id)
 {
     $ci = get_instance();
     $user_info = $ci->Users_model->get_details(array('id' => $user_id))->row();
-    if($user_info->national && $user_info->pasi)
-    {
+    if ($user_info->national && $user_info->pasi) {
         $gross_total = get_gross_salary($user_id);
-        $job_s_share = $gross_total * 0.01; 
-    }
-    else
-    {
+        $job_s_share = $gross_total * 0.01;
+    } else {
         $job_s_share = 0;
     }
-    
+
 
     return $job_s_share;
 }
@@ -2630,16 +2602,13 @@ function get_employee_job_s_share($user_id)
 {
     $ci = get_instance();
     $user_info = $ci->Users_model->get_details(array('id' => $user_id))->row();
-    if($user_info->national && $user_info->pasi)
-    {
+    if ($user_info->national && $user_info->pasi) {
         $gross_total = get_gross_salary($user_id);
         $job_s_share = $gross_total * 0.01;
-    }
-    else
-    {
+    } else {
         $job_s_share = 0;
     }
-    
+
 
     return $job_s_share;
 }
@@ -2708,15 +2677,15 @@ function get_employee_loans($user_id)
 
 if (!function_exists('get_personal_language')) {
     function get_personal_language()
-       {
-           $ci = get_instance();
-           return get_setting('user_' .  $ci->login_user->id . '_personal_language');
-       }
-   }
-   
-   if (!function_exists('is_arabic_personal_language')) {
-        function is_arabic_personal_language(): bool
-       {
-           return get_personal_language() == 'arabic';
-       }
-   }
+    {
+        $ci = get_instance();
+        return get_setting('user_' .  $ci->login_user->id . '_personal_language');
+    }
+}
+
+if (!function_exists('is_arabic_personal_language')) {
+    function is_arabic_personal_language(): bool
+    {
+        return get_personal_language() == 'arabic';
+    }
+}

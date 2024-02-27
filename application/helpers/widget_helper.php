@@ -7,12 +7,12 @@
  */
 if (!function_exists('clock_widget')) {
 
-    function clock_widget($return_as_data = false) {
+    function clock_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["clock_status"] = $ci->Attendance_model->current_clock_in_record($ci->login_user->id);
         return $ci->load->view("attendance/clock_widget", $view_data, $return_as_data);
     }
-
 }
 
 /**
@@ -23,7 +23,8 @@ if (!function_exists('clock_widget')) {
  */
 if (!function_exists('activity_logs_widget')) {
 
-    function activity_logs_widget($params = array(), $return_as_data = false) {
+    function activity_logs_widget($params = array(), $return_as_data = false)
+    {
         $ci = get_instance();
 
         $limit = get_array_value($params, "limit");
@@ -52,7 +53,6 @@ if (!function_exists('activity_logs_widget')) {
 
         return $view_data["result_remaining"] = $ci->load->view("activity_logs/activity_logs_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -64,7 +64,8 @@ if (!function_exists('activity_logs_widget')) {
  */
 if (!function_exists('timeline_widget')) {
 
-    function timeline_widget($params = array(), $return_as_data = false) {
+    function timeline_widget($params = array(), $return_as_data = false)
+    {
         $ci = get_instance();
 
         $limit = get_array_value($params, "limit");
@@ -92,7 +93,6 @@ if (!function_exists('timeline_widget')) {
             return $ci->load->view("timeline/post_list", $view_data, $return_as_data);
         }
     }
-
 }
 
 
@@ -103,13 +103,13 @@ if (!function_exists('timeline_widget')) {
  */
 if (!function_exists('announcements_alert_widget')) {
 
-    function announcements_alert_widget($return_as_data = false) {
+    function announcements_alert_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $announcements = $ci->Announcements_model->get_unread_announcements($ci->login_user->id, $ci->login_user->user_type)->result();
         $view_data["announcements"] = $announcements;
         return $ci->load->view("announcements/alert", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -120,12 +120,12 @@ if (!function_exists('announcements_alert_widget')) {
  */
 if (!function_exists('my_open_tasks_widget')) {
 
-    function my_open_tasks_widget($return_as_data = false) {
+    function my_open_tasks_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["total"] = $ci->Tasks_model->count_my_open_tasks($ci->login_user->id);
         return $ci->load->view("projects/tasks/open_tasks_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -136,14 +136,14 @@ if (!function_exists('my_open_tasks_widget')) {
  */
 if (!function_exists('my_task_stataus_widget')) {
 
-    function my_task_stataus_widget($custom_class = "", $return_as_data = false) {
+    function my_task_stataus_widget($custom_class = "", $return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["task_statuses"] = $ci->Tasks_model->get_task_statistics(array("user_id" => $ci->login_user->id));
         $view_data["custom_class"] = $custom_class;
 
         return $ci->load->view("projects/tasks/my_task_status_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -154,7 +154,8 @@ if (!function_exists('my_task_stataus_widget')) {
  */
 if (!function_exists('events_today_widget')) {
 
-    function events_today_widget($return_as_data = false) {
+    function events_today_widget($return_as_data = false)
+    {
         $ci = get_instance();
 
         $options = array(
@@ -169,7 +170,6 @@ if (!function_exists('events_today_widget')) {
         $view_data["total"] = $ci->Events_model->count_events_today($options);
         return $ci->load->view("events/events_today", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -180,12 +180,12 @@ if (!function_exists('events_today_widget')) {
  */
 if (!function_exists('new_posts_widget')) {
 
-    function new_posts_widget($return_as_data = false) {
+    function new_posts_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["total"] = $ci->Posts_model->count_new_posts();
         return $ci->load->view("timeline/new_posts_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -196,7 +196,8 @@ if (!function_exists('new_posts_widget')) {
  */
 if (!function_exists('events_widget')) {
 
-    function events_widget($return_as_data = false) {
+    function events_widget($return_as_data = false)
+    {
         $ci = get_instance();
 
         $options = array("user_id" => $ci->login_user->id, "limit" => 10, "team_ids" => $ci->login_user->team_ids);
@@ -209,7 +210,6 @@ if (!function_exists('events_widget')) {
 
         return $ci->load->view("events/events_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -220,7 +220,8 @@ if (!function_exists('events_widget')) {
  */
 if (!function_exists('get_event_icon')) {
 
-    function get_event_icon($share_with = "") {
+    function get_event_icon($share_with = "")
+    {
         $icon = "";
         if (!$share_with) {
             $icon = "fa-lock";
@@ -231,7 +232,6 @@ if (!function_exists('get_event_icon')) {
         }
         return $icon;
     }
-
 }
 
 
@@ -242,13 +242,13 @@ if (!function_exists('get_event_icon')) {
  */
 if (!function_exists('my_open_timers')) {
 
-    function my_open_timers($return_as_data = false) {
+    function my_open_timers($return_as_data = false)
+    {
         $ci = get_instance();
         $timers = $ci->Timesheets_model->get_open_timers($ci->login_user->id);
         $view_data["timers"] = $timers->result();
         return $ci->load->view("projects/open_timers", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -259,7 +259,8 @@ if (!function_exists('my_open_timers')) {
  */
 if (!function_exists('income_vs_expenses_widget')) {
 
-    function income_vs_expenses_widget($custom_class = "", $return_as_data = false) {
+    function income_vs_expenses_widget($custom_class = "", $return_as_data = false)
+    {
         $ci = get_instance();
         $info = $ci->Expenses_model->get_income_expenses_info();
         $view_data["income"] = $info->income ? $info->income : 0;
@@ -267,11 +268,11 @@ if (!function_exists('income_vs_expenses_widget')) {
         $view_data["custom_class"] = $custom_class;
         return $ci->load->view("expenses/income_expenses_widget", $view_data, $return_as_data);
     }
-
 }
 if (!function_exists('nationality')) {
 
-    function nationality($custom_class = "", $return_as_data = false) {
+    function nationality($custom_class = "", $return_as_data = false)
+    {
         $ci = get_instance();
         $info = $ci->Expenses_model->get_income_expenses_info();
         $view_data["income"] = $info->income ? $info->income : 0;
@@ -279,7 +280,6 @@ if (!function_exists('nationality')) {
         $view_data["custom_class"] = $custom_class;
         return $ci->load->view("expenses/income_expenses_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -290,7 +290,8 @@ if (!function_exists('nationality')) {
  */
 if (!function_exists('ticket_status_widget')) {
 
-    function ticket_status_widget($return_as_data = false) {
+    function ticket_status_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $statuses = $ci->Tickets_model->get_ticket_status_info()->result();
 
@@ -309,7 +310,6 @@ if (!function_exists('ticket_status_widget')) {
 
         return $ci->load->view("tickets/ticket_status_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -320,7 +320,8 @@ if (!function_exists('ticket_status_widget')) {
  */
 if (!function_exists('invoice_statistics_widget')) {
 
-    function invoice_statistics_widget($return_as_data = false, $options = array()) {
+    function invoice_statistics_widget($return_as_data = false, $options = array())
+    {
         $ci = get_instance();
 
         $currency_symbol = get_array_value($options, "currency");
@@ -369,7 +370,6 @@ if (!function_exists('invoice_statistics_widget')) {
 
         return $ci->load->view("invoices/invoice_statistics_widget/index", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -380,7 +380,8 @@ if (!function_exists('invoice_statistics_widget')) {
  */
 if (!function_exists('project_timesheet_statistics_widget')) {
 
-    function project_timesheet_statistics_widget($type = "", $return_as_data = false) {
+    function project_timesheet_statistics_widget($type = "", $return_as_data = false)
+    {
         $ci = get_instance();
 
         $timesheets = array();
@@ -440,7 +441,6 @@ if (!function_exists('project_timesheet_statistics_widget')) {
         $view_data["ticks"] = json_encode($ticks);
         return $ci->load->view("projects/timesheets/timesheet_wedget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -451,7 +451,8 @@ if (!function_exists('project_timesheet_statistics_widget')) {
  */
 if (!function_exists('timecard_statistics_widget')) {
 
-    function timecard_statistics_widget($return_as_data = false) {
+    function timecard_statistics_widget($return_as_data = false)
+    {
         $ci = get_instance();
 
         $timecards = array();
@@ -502,7 +503,6 @@ if (!function_exists('timecard_statistics_widget')) {
         $view_data["ticks"] = json_encode($ticks);
         return $ci->load->view("attendance/timecard_statistics", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -513,14 +513,14 @@ if (!function_exists('timecard_statistics_widget')) {
  */
 if (!function_exists('count_clock_status_widget')) {
 
-    function count_clock_status_widget($return_as_data = false) {
+    function count_clock_status_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $info = $ci->Attendance_model->count_clock_status();
         $view_data["members_clocked_in"] = $info->members_clocked_in ? $info->members_clocked_in : 0;
         $view_data["members_clocked_out"] = $info->members_clocked_out ? $info->members_clocked_out : 0;
         return $ci->load->view("attendance/count_clock_status_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -532,7 +532,8 @@ if (!function_exists('count_clock_status_widget')) {
  */
 if (!function_exists('count_project_status_widget')) {
 
-    function count_project_status_widget($user_id = 0, $return_as_data = false) {
+    function count_project_status_widget($user_id = 0, $return_as_data = false)
+    {
         $ci = get_instance();
         $options = array(
             "user_id" => $user_id ? $user_id : $ci->login_user->id
@@ -542,7 +543,6 @@ if (!function_exists('count_project_status_widget')) {
         $view_data["project_completed"] = $info->completed;
         return $ci->load->view("projects/widgets/project_status_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -554,7 +554,8 @@ if (!function_exists('count_project_status_widget')) {
  */
 if (!function_exists('count_total_time_widget')) {
 
-    function count_total_time_widget($user_id = 0, $return_as_data = false) {
+    function count_total_time_widget($user_id = 0, $return_as_data = false)
+    {
         $ci = get_instance();
         $options = array("user_id" => $user_id ? $user_id : $ci->login_user->id);
         $info = $ci->Attendance_model->count_total_time($options);
@@ -580,7 +581,6 @@ if (!function_exists('count_total_time_widget')) {
 
         return $ci->load->view("attendance/total_time_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -593,7 +593,8 @@ if (!function_exists('count_total_time_widget')) {
  */
 if (!function_exists('count_total_time_widget_small')) {
 
-    function count_total_time_widget_small($user_id = 0, $widget_type = "", $return_as_data = false) {
+    function count_total_time_widget_small($user_id = 0, $widget_type = "", $return_as_data = false)
+    {
         $ci = get_instance();
         $options = array("user_id" => $user_id ? $user_id : $ci->login_user->id);
         $info = $ci->Attendance_model->count_total_time($options);
@@ -602,7 +603,6 @@ if (!function_exists('count_total_time_widget_small')) {
         $view_data["widget_type"] = $widget_type;
         return $ci->load->view("attendance/total_time_widget_small", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -614,13 +614,13 @@ if (!function_exists('count_total_time_widget_small')) {
  */
 if (!function_exists('social_links_widget')) {
 
-    function social_links_widget($weblinks, $return_as_data = false) {
+    function social_links_widget($weblinks, $return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["weblinks"] = $weblinks;
 
         return $ci->load->view("users/social_links_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -630,11 +630,11 @@ if (!function_exists('social_links_widget')) {
  */
 if (!function_exists('count_unread_message')) {
 
-    function count_unread_message() {
+    function count_unread_message()
+    {
         $ci = get_instance();
         return $ci->Messages_model->count_unread_message($ci->login_user->id);
     }
-
 }
 
 
@@ -645,11 +645,11 @@ if (!function_exists('count_unread_message')) {
  */
 if (!function_exists('count_new_tickets')) {
 
-    function count_new_tickets($ticket_types = "") {
+    function count_new_tickets($ticket_types = "")
+    {
         $ci = get_instance();
         return $ci->Tickets_model->count_new_tickets($ticket_types);
     }
-
 }
 
 
@@ -660,7 +660,8 @@ if (!function_exists('count_new_tickets')) {
  */
 if (!function_exists('all_tasks_kanban_widget')) {
 
-    function all_tasks_kanban_widget($return_as_data = false) {
+    function all_tasks_kanban_widget($return_as_data = false)
+    {
         $ci = get_instance();
 
         $projects = $ci->Tasks_model->get_my_projects_dropdown_list($ci->login_user->id)->result();
@@ -687,7 +688,6 @@ if (!function_exists('all_tasks_kanban_widget')) {
 
         return $ci->load->view("projects/tasks/kanban/all_tasks_kanban_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -698,11 +698,11 @@ if (!function_exists('all_tasks_kanban_widget')) {
  */
 if (!function_exists('todo_list_widget')) {
 
-    function todo_list_widget($return_as_data = false) {
+    function todo_list_widget($return_as_data = false)
+    {
         $ci = get_instance();
         return $ci->load->view("todo/todo_lists_widget", "", $return_as_data);
     }
-
 }
 
 
@@ -713,11 +713,11 @@ if (!function_exists('todo_list_widget')) {
  */
 if (!function_exists('invalid_access_widget')) {
 
-    function invalid_access_widget($return_as_data = false) {
+    function invalid_access_widget($return_as_data = false)
+    {
         $ci = get_instance();
         return $ci->load->view("dashboards/custom_dashboards/invalid_access_widget", "", $return_as_data);
     }
-
 }
 
 
@@ -729,7 +729,8 @@ if (!function_exists('invalid_access_widget')) {
  */
 if (!function_exists('open_projects_widget')) {
 
-    function open_projects_widget($user_id = 0, $return_as_data = false) {
+    function open_projects_widget($user_id = 0, $return_as_data = false)
+    {
         $ci = get_instance();
         $options = array(
             "user_id" => $user_id ? $user_id : $ci->login_user->id
@@ -737,7 +738,6 @@ if (!function_exists('open_projects_widget')) {
         $view_data["project_open"] = $ci->Projects_model->count_project_status($options)->open;
         return $ci->load->view("projects/widgets/open_projects_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -749,7 +749,8 @@ if (!function_exists('open_projects_widget')) {
  */
 if (!function_exists('completed_projects_widget')) {
 
-    function completed_projects_widget($user_id = 0, $return_as_data = false) {
+    function completed_projects_widget($user_id = 0, $return_as_data = false)
+    {
         $ci = get_instance();
         $options = array(
             "user_id" => $user_id ? $user_id : $ci->login_user->id
@@ -757,7 +758,6 @@ if (!function_exists('completed_projects_widget')) {
         $view_data["project_completed"] = $ci->Projects_model->count_project_status($options)->completed;
         return $ci->load->view("projects/widgets/completed_projects_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -768,13 +768,13 @@ if (!function_exists('completed_projects_widget')) {
  */
 if (!function_exists('count_clock_in_widget')) {
 
-    function count_clock_in_widget($return_as_data = false) {
+    function count_clock_in_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $info = $ci->Attendance_model->count_clock_status()->members_clocked_in;
         $view_data["members_clocked_in"] = $info ? $info : 0;
         return $ci->load->view("attendance/count_clock_in_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -785,13 +785,13 @@ if (!function_exists('count_clock_in_widget')) {
  */
 if (!function_exists('count_clock_out_widget')) {
 
-    function count_clock_out_widget($return_as_data = false) {
+    function count_clock_out_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $info = $ci->Attendance_model->count_clock_status()->members_clocked_out;
         $view_data["members_clocked_out"] = $info ? $info : 0;
         return $ci->load->view("attendance/count_clock_out_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -802,7 +802,8 @@ if (!function_exists('count_clock_out_widget')) {
  */
 if (!function_exists('my_open_projects_widget')) {
 
-    function my_open_projects_widget($client_id = 0, $return_as_data = false) {
+    function my_open_projects_widget($client_id = 0, $return_as_data = false)
+    {
         $ci = get_instance();
 
         $options = array(
@@ -817,7 +818,6 @@ if (!function_exists('my_open_projects_widget')) {
         $view_data["projects"] = $ci->Projects_model->get_details($options)->result();
         return $ci->load->view("projects/widgets/my_open_projects_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -829,7 +829,8 @@ if (!function_exists('my_open_projects_widget')) {
  */
 if (!function_exists('my_starred_projects_widget')) {
 
-    function my_starred_projects_widget($user_id = 0, $return_as_data = false) {
+    function my_starred_projects_widget($user_id = 0, $return_as_data = false)
+    {
         $ci = get_instance();
 
         $options = array(
@@ -840,7 +841,6 @@ if (!function_exists('my_starred_projects_widget')) {
         $view_data["projects"] = $ci->Projects_model->get_details($options)->result();
         return $ci->load->view("projects/widgets/my_starred_projects_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -852,11 +852,11 @@ if (!function_exists('my_starred_projects_widget')) {
  */
 if (!function_exists('sticky_note_widget')) {
 
-    function sticky_note_widget($custom_class = "", $return_as_data = false) {
+    function sticky_note_widget($custom_class = "", $return_as_data = false)
+    {
         $ci = get_instance();
         return $ci->load->view("dashboards/sticky_note_widget", array("custom_class" => $custom_class), $return_as_data);
     }
-
 }
 
 
@@ -869,7 +869,8 @@ if (!function_exists('sticky_note_widget')) {
  */
 if (!function_exists('ticket_status_widget_small')) {
 
-    function ticket_status_widget_small($data = array(), $return_as_data = false) {
+    function ticket_status_widget_small($data = array(), $return_as_data = false)
+    {
         $ci = get_instance();
         $allowed_ticket_types = get_array_value($data, "allowed_ticket_types");
         $status = get_array_value($data, "status");
@@ -886,7 +887,6 @@ if (!function_exists('ticket_status_widget_small')) {
 
         return $ci->load->view("tickets/ticket_status_widget_small", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -897,13 +897,13 @@ if (!function_exists('ticket_status_widget_small')) {
  */
 if (!function_exists('all_team_members_widget')) {
 
-    function all_team_members_widget($return_as_data = false) {
+    function all_team_members_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $options = array("status" => "active", "user_type" => "staff");
         $view_data["members"] = $ci->Users_model->get_details($options)->result();
         return $ci->load->view("team_members/team_members_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -915,7 +915,8 @@ if (!function_exists('all_team_members_widget')) {
  */
 if (!function_exists('clocked_in_team_members_widget')) {
 
-    function clocked_in_team_members_widget($data = array(), $return_as_data = false) {
+    function clocked_in_team_members_widget($data = array(), $return_as_data = false)
+    {
         $ci = get_instance();
 
         $options = array(
@@ -929,7 +930,6 @@ if (!function_exists('clocked_in_team_members_widget')) {
 
         return $ci->load->view("team_members/clocked_in_team_members_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -941,7 +941,8 @@ if (!function_exists('clocked_in_team_members_widget')) {
  */
 if (!function_exists('clocked_out_team_members_widget')) {
 
-    function clocked_out_team_members_widget($data = array(), $return_as_data = false) {
+    function clocked_out_team_members_widget($data = array(), $return_as_data = false)
+    {
         $ci = get_instance();
 
         $options = array(
@@ -953,7 +954,6 @@ if (!function_exists('clocked_out_team_members_widget')) {
         $view_data["users"] = $ci->Attendance_model->get_clocked_out_members($options)->result();
         return $ci->load->view("team_members/clocked_out_team_members_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -964,7 +964,8 @@ if (!function_exists('clocked_out_team_members_widget')) {
  */
 if (!function_exists('active_members_and_clients_widget')) {
 
-    function active_members_and_clients_widget($user_type = "", $return_as_data = false) {
+    function active_members_and_clients_widget($user_type = "", $return_as_data = false)
+    {
         $ci = get_instance();
 
         $options = array("user_type" => $user_type, "exclude_user_id" => $ci->login_user->id);
@@ -973,7 +974,6 @@ if (!function_exists('active_members_and_clients_widget')) {
         $view_data["user_type"] = $user_type;
         return $ci->load->view("team_members/active_members_and_clients_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -985,14 +985,14 @@ if (!function_exists('active_members_and_clients_widget')) {
  */
 if (!function_exists('get_invoices_value_widget')) {
 
-    function get_invoices_value_widget($type = "", $return_as_data = false) {
+    function get_invoices_value_widget($type = "", $return_as_data = false)
+    {
         $ci = get_instance();
 
         $view_data["invoices_info"] = $ci->Invoices_model->get_invoices_total_and_paymnts();
         $view_data["type"] = $type;
         return $ci->load->view("invoices/total_invoices_value_widget", $view_data, $return_as_data);
     }
-
 }
 
 
@@ -1003,12 +1003,12 @@ if (!function_exists('get_invoices_value_widget')) {
  */
 if (!function_exists('my_tasks_list_widget')) {
 
-    function my_tasks_list_widget($return_as_data = false) {
+    function my_tasks_list_widget($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data['task_statuses'] = $ci->Task_status_model->get_details()->result();
         return $ci->load->view("projects/tasks/my_tasks_list_widget", $view_data, $return_as_data);
     }
-
 }
 
 /**
@@ -1018,12 +1018,12 @@ if (!function_exists('my_tasks_list_widget')) {
  */
 if (!function_exists('internal_links')) {
 
-    function internal_links($return_as_data = false, $module = "dashboard") {
+    function internal_links($return_as_data = false, $module = "dashboard")
+    {
         $ci = get_instance();
         $view_data["module"] = $module;
         return $ci->load->view("dashboards/custom_widgets/internal_links", $view_data, $return_as_data);
     }
-
 }
 
 /**
@@ -1033,17 +1033,18 @@ if (!function_exists('internal_links')) {
  */
 if (!function_exists('external_links')) {
 
-    function external_links($return_as_data = false) {
+    function external_links($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["external_links"] = $ci->Users_model->get_one($ci->login_user->id)->external_links;
         return $ci->load->view("dashboards/custom_widgets/external_links", $view_data, $return_as_data);
     }
-
 }
 ///////
 if (!function_exists('estimates_statistics_widget')) {
 
-        function estimates_statistics_widget($return_as_data = false) {
+    function estimates_statistics_widget($return_as_data = false)
+    {
 
         $ci = get_instance();
 
@@ -1083,12 +1084,12 @@ if (!function_exists('estimates_statistics_widget')) {
         $invArray = array();
         $payArray = array();
         foreach ($invoices as $key => $data) {
-             $invArray[] = $data[1];
+            $invArray[] = $data[1];
         }
         $view_data["invArray"] = json_encode($invArray);
 
         foreach ($estimates as $key => $data2) {
-             $estArray[] = $data2[1];
+            $estArray[] = $data2[1];
         }
         $view_data["estArray"] = json_encode($estArray);
 
@@ -1104,68 +1105,66 @@ if (!function_exists('estimates_statistics_widget')) {
  */
 if (!function_exists('payment_methods_chart')) {
 
-    function payment_methods_chart($return_as_data = false) {
+    function payment_methods_chart($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["payment_methods"] = $ci->Reports_model->get_payment_statistics();
 
         return $ci->load->view("reports_view/payment_methods_chart", $view_data, $return_as_data);
     }
-
 }
 
 if (!function_exists('projects_status_chart')) {
 
-    function projects_status_chart($return_as_data = false) {
+    function projects_status_chart($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["status"] = $ci->Reports_model->get_project_status_statistics();
 
         return $ci->load->view("reports_view/projects_status_chart", $view_data, $return_as_data);
     }
-
 }
 
 if (!function_exists('expenses_cats_chart')) {
 
-    function expenses_cats_chart($return_as_data = false) {
+    function expenses_cats_chart($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["cats"] = $ci->Reports_model->get_expenses_statistics();
 
         return $ci->load->view("reports_view/expenses_cats_chart", $view_data, $return_as_data);
     }
-
 }
 
 if (!function_exists('expenses_emp_chart')) {
 
-    function expenses_emp_chart($return_as_data = false) {
+    function expenses_emp_chart($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["emps"] = $ci->Reports_model->get_expenses_emp_statistics();
 
         return $ci->load->view("reports_view/expenses_emp_chart", $view_data, $return_as_data);
     }
-
 }
 
 if (!function_exists('expenses_month_chart')) {
 
-    function expenses_month_chart($return_as_data = false) {
+    function expenses_month_chart($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["mons"] = $ci->Reports_model->get_yearly_expenses_chart();
 
         return $ci->load->view("reports_view/expenses_month_chart", $view_data, $return_as_data);
     }
-
 }
 
 if (!function_exists('items_cat_chart')) {
 
-    function items_cat_chart($return_as_data = false) {
+    function items_cat_chart($return_as_data = false)
+    {
         $ci = get_instance();
         $view_data["cats"] = $ci->Reports_model->get_items_cat_statistics();
 
         return $ci->load->view("reports_view/items_cat_chart", $view_data, $return_as_data);
     }
-
 }
-
-

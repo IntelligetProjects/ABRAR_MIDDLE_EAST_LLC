@@ -525,6 +525,8 @@ td a {
 
 img.dashboard-image {
     height: auto;
+    max-width: 100%;
+    width: 45px;
     text-align: center;
     margin: 0 auto;
 }

@@ -19,13 +19,13 @@
                         <label for="logo" class=" col-md-2"><?php echo lang('site_logo'); ?></label>
                         <div class=" col-md-10">
                             <div class="pull-left mr15">
-                                <img id="site-logo-preview" src="<?php echo get_logo_url(); ?>" alt="..." />
+                                <img style="max-width: 60px;" id="site-logo-preview" src="<?php echo get_logo_url(); ?>" alt="..." />
                             </div>
                             <div class="pull-left file-upload btn btn-default btn-xs">
                                 <span>...</span>
                                 <input id="site_logo_file" class="cropbox-upload upload" name="site_logo_file" type="file" data-height="40" data-width="175" data-preview-container="#site-logo-preview" data-input-field="#site_logo" />
                             </div>
-                            <input type="hidden" id="site_logo" name="site_logo" value=""  />
+                            <input type="hidden" id="site_logo" name="site_logo" value="" />
                         </div>
                     </div>
 
@@ -48,10 +48,13 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "show_logo_in_signin_page", array(
-                                "no" => lang("no"),
-                                "yes" => lang("yes")
-                                    ), get_setting('show_logo_in_signin_page'), "class='select2 mini'"
+                                "show_logo_in_signin_page",
+                                array(
+                                    "no" => lang("no"),
+                                    "yes" => lang("yes")
+                                ),
+                                get_setting('show_logo_in_signin_page'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -61,10 +64,13 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "show_background_image_in_signin_page", array(
-                                "no" => lang("no"),
-                                "yes" => lang("yes")
-                                    ), get_setting('show_background_image_in_signin_page'), "class='select2 mini'"
+                                "show_background_image_in_signin_page",
+                                array(
+                                    "no" => lang("no"),
+                                    "yes" => lang("yes")
+                                ),
+                                get_setting('show_background_image_in_signin_page'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -76,7 +82,7 @@
                                 <img id="signin-background-preview" style="max-width: 100px; max-height: 80px;" src="<?php echo get_file_from_setting("signin_page_background"); ?>" alt="..." />
                             </div>
                             <div class="pull-left mr15">
-                                <?php $this->load->view("includes/dropzone_preview"); ?>    
+                                <?php $this->load->view("includes/dropzone_preview"); ?>
                             </div>
                             <div class="pull-left upload-file-button btn btn-default btn-xs">
                                 <span>...</span>
@@ -98,7 +104,7 @@
                             ));
                             ?>
                         </div>
-                    </div> 
+                    </div>
 
 
 
@@ -107,7 +113,10 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "language", $language_dropdown, get_setting('language'), "class='select2 mini'"
+                                "language",
+                                $language_dropdown,
+                                get_setting('language'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -117,7 +126,10 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "timezone", $timezone_dropdown, get_setting('timezone'), "class='select2 mini'"
+                                "timezone",
+                                $timezone_dropdown,
+                                get_setting('timezone'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -127,17 +139,20 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "date_format", array(
-                                "d-m-Y" => "d-m-Y",
-                                "m-d-Y" => "m-d-Y",
-                                "Y-m-d" => "Y-m-d",
-                                "d/m/Y" => "d/m/Y",
-                                "m/d/Y" => "m/d/Y",
-                                "Y/m/d" => "Y/m/d",
-                                "d.m.Y" => "d.m.Y",
-                                "m.d.Y" => "m.d.Y",
-                                "Y.m.d" => "Y.m.d",
-                                    ), get_setting('date_format'), "class='select2 mini'"
+                                "date_format",
+                                array(
+                                    "d-m-Y" => "d-m-Y",
+                                    "m-d-Y" => "m-d-Y",
+                                    "Y-m-d" => "Y-m-d",
+                                    "d/m/Y" => "d/m/Y",
+                                    "m/d/Y" => "m/d/Y",
+                                    "Y/m/d" => "Y/m/d",
+                                    "d.m.Y" => "d.m.Y",
+                                    "m.d.Y" => "m.d.Y",
+                                    "Y.m.d" => "Y.m.d",
+                                ),
+                                get_setting('date_format'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -147,11 +162,14 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "time_format", array(
-                                "capital" => "12 AM",
-                                "small" => "12 am",
-                                "24_hours" => "24 hours"
-                                    ), get_setting('time_format'), "class='select2 mini'"
+                                "time_format",
+                                array(
+                                    "capital" => "12 AM",
+                                    "small" => "12 am",
+                                    "24_hours" => "24 hours"
+                                ),
+                                get_setting('time_format'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -162,15 +180,18 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "first_day_of_week", array(
-                                "0" => "Sunday",
-                                "1" => "Monday",
-                                "2" => "Tuesday",
-                                "3" => "Wednesday",
-                                "4" => "Thursday",
-                                "5" => "Friday",
-                                "6" => "Saturday"
-                                    ), get_setting('first_day_of_week'), "class='select2 mini'"
+                                "first_day_of_week",
+                                array(
+                                    "0" => "Sunday",
+                                    "1" => "Monday",
+                                    "2" => "Tuesday",
+                                    "3" => "Wednesday",
+                                    "4" => "Thursday",
+                                    "5" => "Friday",
+                                    "6" => "Saturday"
+                                ),
+                                get_setting('first_day_of_week'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -179,7 +200,7 @@
                     <div class="form-group">
                         <label for="weekend" class=" col-md-2"><?php echo lang('weekend'); ?></label>
                         <div class="col-md-10">
-                            <input type="text" value= "<?=get_setting('weekend')?>" name="weekend" id="weekend_dropdown" class="w100p validate-hidden" placeholder="<?php echo lang('weekend'); ?>"  />  
+                            <input type="text" value="<?= get_setting('weekend') ?>" name="weekend" id="weekend_dropdown" class="w100p validate-hidden" placeholder="<?php echo lang('weekend'); ?>" />
                         </div>
                     </div>
 
@@ -188,7 +209,10 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "default_currency", $currency_dropdown, get_setting('default_currency'), "class='select2 mini'"
+                                "default_currency",
+                                $currency_dropdown,
+                                get_setting('default_currency'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -214,10 +238,13 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "currency_position", array(
-                                "left" => lang("left"),
-                                "right" => lang("right")
-                                    ), get_setting('currency_position'), "class='select2 mini'"
+                                "currency_position",
+                                array(
+                                    "left" => lang("left"),
+                                    "right" => lang("right")
+                                ),
+                                get_setting('currency_position'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -227,7 +254,10 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "decimal_separator", array("." => "Dot (.)", "," => "Comma (,)"), get_setting('decimal_separator'), "class='select2 mini'"
+                                "decimal_separator",
+                                array("." => "Dot (.)", "," => "Comma (,)"),
+                                get_setting('decimal_separator'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -237,10 +267,13 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "no_of_decimals", array(
-                                "0" => "0",
-                                "2" => "2"
-                                    ), get_setting('no_of_decimals') == "0" ? "0" : "2", "class='select2 mini'"
+                                "no_of_decimals",
+                                array(
+                                    "0" => "0",
+                                    "2" => "2"
+                                ),
+                                get_setting('no_of_decimals') == "0" ? "0" : "2",
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -266,12 +299,15 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "rows_per_page", array(
-                                "10" => "10",
-                                "25" => "25",
-                                "50" => "50",
-                                "100" => "100",
-                                    ), get_setting('rows_per_page'), "class='select2 mini'"
+                                "rows_per_page",
+                                array(
+                                    "10" => "10",
+                                    "25" => "25",
+                                    "50" => "50",
+                                    "100" => "100",
+                                ),
+                                get_setting('rows_per_page'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -281,10 +317,13 @@
                         <div class="col-md-10">
                             <?php
                             echo form_dropdown(
-                                    "scrollbar", array(
-                                "jquery" => "jQuery",
-                                "native" => "Native"
-                                    ), get_setting('scrollbar'), "class='select2 mini'"
+                                "scrollbar",
+                                array(
+                                    "jquery" => "jQuery",
+                                    "native" => "Native"
+                                ),
+                                get_setting('scrollbar'),
+                                "class='select2 mini'"
                             );
                             ?>
                         </div>
@@ -299,10 +338,13 @@
                             <div class="col-md-10">
                                 <?php
                                 echo form_dropdown(
-                                        "enable_rich_text_editor", array(
-                                    "0" => lang("no"),
-                                    "1" => lang("yes")
-                                        ), get_setting('enable_rich_text_editor'), "class='select2 mini'"
+                                    "enable_rich_text_editor",
+                                    array(
+                                        "0" => lang("no"),
+                                        "1" => lang("yes")
+                                    ),
+                                    get_setting('enable_rich_text_editor'),
+                                    "class='select2 mini'"
                                 );
                                 ?>
                             </div>
@@ -323,34 +365,36 @@
 <?php $this->load->view("includes/cropbox"); ?>
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         $("#weekend_dropdown").select2({
             multiple: true,
             data: <?php echo json_encode(array(
-                                array("id" => "0", "text" => "Sunday"),
-                                array("id" => "1", "text" => "Monday"),
-                                array("id" => "2", "text" => "Tuesday"),
-                                array("id" => "3", "text" => "Wednesday"),
-                                array("id" => "4", "text" => "Thursday"),
-                                array("id" => "5", "text" => "Friday"),
-                                array("id" => "6", "text" => "Saturday")
-                                    )); ?>
+                        array("id" => "0", "text" => "Sunday"),
+                        array("id" => "1", "text" => "Monday"),
+                        array("id" => "2", "text" => "Tuesday"),
+                        array("id" => "3", "text" => "Wednesday"),
+                        array("id" => "4", "text" => "Thursday"),
+                        array("id" => "5", "text" => "Friday"),
+                        array("id" => "6", "text" => "Saturday")
+                    )); ?>
         });
 
-        $("#general-settings-form .select2").select2(); 
-        
+        $("#general-settings-form .select2").select2();
+
         $("#general-settings-form").appForm({
             isModal: false,
-            beforeAjaxSubmit: function (data) {
-                $.each(data, function (index, obj) {
+            beforeAjaxSubmit: function(data) {
+                $.each(data, function(index, obj) {
                     if (obj.name === "invoice_logo" || obj.name === "site_logo" || obj.name === "favicon") {
                         var image = replaceAll(":", "~", data[index]["value"]);
                         data[index]["value"] = image;
                     }
                 });
             },
-            onSuccess: function (result) {
-                appAlert.success(result.message, {duration: 10000});
+            onSuccess: function(result) {
+                appAlert.success(result.message, {
+                    duration: 10000
+                });
                 if ($("#site_logo").val() || $("#invoice_logo").val() || $("#favicon").val() || result.reload_page) {
                     location.reload();
                 }
@@ -360,13 +404,15 @@
         var uploadUrl = "<?php echo get_uri("settings/upload_file"); ?>";
         var validationUrl = "<?php echo get_uri("settings/validate_file"); ?>";
 
-        var dropzone = attachDropzoneWithForm("#general-settings-form", uploadUrl, validationUrl, {maxFiles: 1});
+        var dropzone = attachDropzoneWithForm("#general-settings-form", uploadUrl, validationUrl, {
+            maxFiles: 1
+        });
 
 
-        $(".cropbox-upload").change(function () {
+        $(".cropbox-upload").change(function() {
             showCropBox(this);
-        });    
-        
+        });
+
 
     });
 </script>

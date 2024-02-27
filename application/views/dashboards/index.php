@@ -62,14 +62,14 @@
         <div class="col-md-<?php echo $widget_column; ?> col-sm-6  widget-container">
             <?php
             my_open_tasks_widget();
-            ?> 
+            ?>
         </div>
 
         <?php if ($show_event) { ?>
             <div class="col-md-<?php echo $widget_column; ?> col-sm-6  widget-container">
                 <?php
                 events_today_widget();
-                ?> 
+                ?>
             </div>
         <?php } ?>
 
@@ -77,7 +77,7 @@
             <div class="col-md-<?php echo $widget_column; ?> col-sm-6  widget-container">
                 <?php
                 new_posts_widget();
-                ?>  
+                ?>
             </div>
         <?php } ?>
 
@@ -88,64 +88,65 @@
             <?php sticky_note_widget(); ?>
         </div>
         <div class="col-md-4 widget-container">
-        <canvas id="myChart" width="200" height="200"></canvas>
+            <canvas id="myChart" width="200" height="200"></canvas>
         </div>
         <br><br>
     </div>
-    <?php 
-    $sql="SELECT nationality ,COUNT(nationality) as num FROM ".$this->db->dbprefix('users')." WHERE deleted =0 group by nationality";
-    $query=$this->db->query($sql);
-    $da=$query->result_array();
-    
+    <?php
+    $sql = "SELECT nationality ,COUNT(nationality) as num FROM " . $this->db->dbprefix('users') . " WHERE deleted =0 group by nationality";
+    $query = $this->db->query($sql);
+    $da = $query->result_array();
+
     // var_dump($na);die();
     ?>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" integrity="sha256-+8RZJua0aEWg+QVVKg4LEzEEm/8RFez5Tb4JBNiV5xA=" crossorigin="anonymous"></script>
     <script>
-const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: [<?php
-         foreach($da as $d){
-            if(isset($d['nationality'])){
-             echo '"'.$d['nationality'].'",';
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [<?php
+                            foreach ($da as $d) {
+                                if (isset($d['nationality'])) {
+                                    echo '"' . $d['nationality'] . '",';
+                                }
+                            } ?>],
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: [<?php
+                            foreach ($da as $d) {
+                                echo $d['num'] . ',';
+                            } ?>],
+                    backgroundColor: [<?php
+                                        $c = colors(count($da));
+                                        for ($i = 0; $i < count($c); $i++) {
+                                            echo '"' . $c[$i] . '",';
+                                        }
+                                        ?>],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
-        }?>],
-        datasets: [{
-    label: 'My First Dataset',
-    data: [<?php
-         foreach($da as $d){
-        echo $d['num'].',';
-        }?>],
-    backgroundColor: [<?php
-    $c=colors(count($da));
-    for($i=0;$i<count($c);$i++){
-        echo '"'.$c[$i].'",';
-    }
-    ?>],
-    hoverOffset: 4
-  }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
+        });
+    </script>
+    <?php function colors($num)
+    {
+        $col = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)', 'rgb(255,99,71)', 'rgb(124,252,0)', 'rgb(0,191,255)', 'rgb(255,192,203)', 'rgb(105,105,105)', 'rgb(138,43,226)'];
+        $colors = [];
+        for ($x = 0; $x < $num; $x++) {
+            $colors[$x] = $col[$x];
         }
+        // var_dump($colors);die();
+        return $colors;
     }
-});
-</script>
- <?php function colors($num){
-$col=['rgb(255, 99, 132)','rgb(54, 162, 235)', 'rgb(255, 205, 86)','rgb(255,99,71)','rgb(124,252,0)','rgb(0,191,255)','rgb(255,192,203)','rgb(105,105,105)','rgb(138,43,226)'];
-$colors=[];
-for($x=0;$x<$num;$x++){
-$colors[$x]=$col[$x];
-}
-// var_dump($colors);die();
-return $colors;
- }
- ?>
+    ?>
     <!-- <div class="row">
         <div class="col-md-5">
 
@@ -172,12 +173,12 @@ return $colors;
             <div class="row">
                 <div class="col-md-12">
                     <?php
-                    
-                        if ($this->login_user->is_admin) {
-                            project_timesheet_statistics_widget("all_timesheet_statistics");
-                        } else {
-                            project_timesheet_statistics_widget("my_timesheet_statistics");
-                        }
+
+                    if ($this->login_user->is_admin) {
+                        project_timesheet_statistics_widget("all_timesheet_statistics");
+                    } else {
+                        project_timesheet_statistics_widget("my_timesheet_statistics");
+                    }
                     ?> 
                 </div>
             </div>
@@ -215,8 +216,8 @@ return $colors;
 
         <div class="col-md-3 widget-container">
             <?php
-            
-               my_task_stataus_widget();
+
+            my_task_stataus_widget();
             ?>
         </div>
 
@@ -235,57 +236,57 @@ return $colors;
 
 <!--password  Modal -->
 <div style="margin-top: 100px;" class="modal fade" id="pass" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"> Password Change</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      Kindly change your password
-      </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Password Change</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Kindly change your password
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Modal -->
 <div style="margin-top: 100px;" class="modal fade" id="up" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Please Upload Your CR Document</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-       To upload CR document please go to your profile setting 
-      </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Please Upload Your CR Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                To upload CR document please go to your profile setting
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <?php
-         $url = base_url();
-         $urlParts = explode('/', str_ireplace(array('http://', 'https://'), '', $url));
-         $folder_domain= $urlParts[1];
-         ?>
+$url = base_url();
+$urlParts = explode('/', str_ireplace(array('http://', 'https://'), '', $url));
+$folder_domain = $urlParts[1];
+?>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         initScrollbar('#project-timeline-container', {
             setHeight: 955
         });
 
 
         // password modal 
-if(localStorage.getItem('pass')!=0){
-    $('#pass').modal('show');
-    localStorage.setItem('pass',0);
+        if (localStorage.getItem('pass') != 0) {
+            $('#pass').modal('show');
+            localStorage.setItem('pass', 0);
 
-}
-       
+        }
+
 
         //update dashboard link
         $(".dashboard-menu, .dashboard-image").closest("a").attr("href", window.location.href);
@@ -303,11 +304,11 @@ if(localStorage.getItem('pass')!=0){
         // }, "json");
 
     });
-</script>    
+</script>
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         initScrollbar('#project-timeline-container', {
             setHeight: 955
         });
@@ -316,5 +317,4 @@ if(localStorage.getItem('pass')!=0){
         $(".dashboard-menu, .dashboard-image").closest("a").attr("href", window.location.href);
 
     });
-</script>    
-
+</script>
