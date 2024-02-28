@@ -26,11 +26,14 @@
     }
 
     .panel-default>.panel-heading {
-        background: rgb(255 255 255 / 33%) !important;
+        /* background: rgb(255 255 255 / 33%) !important; */
+        background: #fff;
         border-bottom: 1px;
         display: flex;
         align-items: center;
         justify-content: center;
+        margin: 1px;
+        border-radius: 6px;
     }
 
     .signin-box {
